@@ -1,0 +1,9 @@
+sources = ./src/logappend.cpp
+
+logAppendTarget = ./out/logappend.exe
+
+compiler = g++
+
+
+logAppend:
+	$(compiler) $(sources) -o $(logAppendTarget)
