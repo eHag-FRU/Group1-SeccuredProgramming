@@ -1,67 +1,14 @@
+#include "include/logappend.hpp"
 #include <iostream>
 #include <regex>
-#include <string>
-#include <map>
+#include <fstream>
 
 
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; using std::regex_match;
+using std::fstream;
 
-bool sanatizeInput(int argc, char* argv[], map<string, string>& resultingMap) {
-    cout << ("Sanatizing the input!!!!") << endl;
-
-    ///Check for the correct argument count again
-    if (argc != 9 && argc != 11) {
-        return false;
-    }
-
-    //Now make the regex matchers
-    
-    //TimeStamp
-    regex timeStampDashMatcher("-T", std::regex_constants::ECMAScript);
-    regex timeStampMatcher (".*", std::regex_constants::ECMAScript);
-
-    //Run the matcher and check
-    if(regex_match(argv[1], timeStampDashMatcher)) {
-        //Now we have a valid time flag
-        //Now check the time stamp
-        if (regex_match(argv[2], timeStampMatcher)) {
-            //Now sanitized and safe, now put in the map
-            resultingMap["T"] = string(argv[2]);
-        } else {
-            cout << "Timestamp was invalid!" << endl;
-            //The timestamp did not match format
-            return false;
-        }
-    } else {
-        cout << "Timestamp flag was not found!" << endl;
-        //The -T is missing
-        return false;
-    }
-
-
-    //Token
-    regex tokenDashMatcher("-K", std::regex_constants::ECMAScript);
-    regex tokenMatcher("([a-z]|[A-Z]|[0-9])*", std::regex_constants::ECMAScript);
-
-    if (regex_match(argv[3], tokenDashMatcher)) {
-        //Now we have a valid token flag
-        //Now check the token
-        if(regex_match( argv[4], tokenMatcher)) {
-            //Now sanitized and safe, now put in the map
-            resultingMap["K"] = string(argv[4]);
-        } else {
-            // Token was not valid
-            cout << "Token was not valid!" << endl;
-            cout << "Token: |" << argv[4] << "|" << endl;
-            return false;
-        }
-    } else {
-        cout << "Token flag was not present!" << endl;
-        //Token flag was not found
-        return false;
-    }
-
+bool sanatizeEmployeeGuestName(map<string, string>& resultingMap) {
     //Guest OR Employee
     regex guestNameDashMatcher("-G", std::regex_constants::ECMAScript);
     regex employeeNameDashMatcher("-E", std::regex_constants::ECMAScript);
@@ -97,6 +44,61 @@ bool sanatizeInput(int argc, char* argv[], map<string, string>& resultingMap) {
         //Token flag was not found
         return false;
     }
+}
+
+
+bool sanatizeInput(int argc, char* argv[], map<string, string>& resultingMap) {
+    cout << ("Sanatizing the input!!!!") << endl;
+
+    ///Check for the correct argument count again
+    if (argc != 9 && argc != 11) {
+        return false;
+    }
+
+    //Now make the regex matchers
+    
+    //TimeStamp
+    regex timeStampDashMatcher("-T", std::regex_constants::ECMAScript);
+
+    //Run the matcher and check
+    if(regex_match(argv[1], timeStampDashMatcher)) {
+        //Now we have a valid time flag
+        //Now check the time stamp
+        //Valid range 1 to 1073741823 
+        
+    } else {
+        cout << "Timestamp flag was not found!" << endl;
+        //The -T is missing
+        return false;
+    }
+
+
+    //Token
+    regex tokenDashMatcher("-K", std::regex_constants::ECMAScript);
+    regex tokenMatcher("([a-z]|[A-Z]|[0-9])*", std::regex_constants::ECMAScript);
+
+    if (regex_match(argv[3], tokenDashMatcher)) {
+        //Now we have a valid token flag
+        //Now check the token
+        if(regex_match( argv[4], tokenMatcher)) {
+            //Now sanitized and safe, now put in the map
+            resultingMap["K"] = string(argv[4]);
+        } else {
+            // Token was not valid
+            cout << "Token was not valid!" << endl;
+            cout << "Token: |" << argv[4] << "|" << endl;
+            return false;
+        }
+    } else {
+        cout << "Token flag was not present!" << endl;
+        //Token flag was not found
+        return false;
+    }
+
+    //Check for the next flag, either guest/employee OR
+    // arrival or leave
+    
+
 
     //Arrival or leave
 
@@ -114,6 +116,58 @@ bool sanatizeInput(int argc, char* argv[], map<string, string>& resultingMap) {
 
 
     return true;
+}
+
+
+bool appendToLog(map<string, string>& argumentMap) {
+    //Check if the log exits
+    fstream log(argumentMap["logFile"]);
+
+    if (!log.is_open()) {
+
+        return false; 
+    }
+
+    //Log exists, now grab the last line
+
+
+    //Check if the time is 1 - the time in the argument map
+
+    //Passed so now encrypt the line and add it to the file
+
+
+    //Close the file stream
+    log.close(); 
+    
+    //Return the append was successful
+    return true;
+}
+
+
+
+bool batchRunner(int argc, char* argv) {
+    if (argc != 3) {
+        return false;
+    }
+
+    regex batchDashMatcher("-B", std::regex_constants::ECMAScript);
+    regex batchFileNameMatcher(".*", std::regex_constants::ECMAScript);
+
+    //check for valid flag
+    if (regex_match(argv[1], batchDashMatcher)) {
+        //Now grab the file name and open it
+
+        //Until end of file, process each command
+
+        //Sanatize the line
+        
+        //Append to file
+
+        
+
+    } else {
+        return false;
+    }
 }
 
 
@@ -141,6 +195,12 @@ int main(int argc, char* argv[]) {
         }
 
         //Now that is done, now check if the file exists
+        if (appendToLog(sanatizedResult)) {
+
+        } else {
+            cout << "invalid" << endl;
+            return 255;
+        }
 
     } else {
         //Not enough args or too many (by count)
