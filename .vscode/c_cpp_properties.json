@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "includePath": [
+                "C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/14.1.0/../../../../include/c++/14.1.0",
+                "C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/14.1.0/../../../../include/c++/14.1.0/x86_64-w64-mingw32",
+                "C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/14.1.0/../../../../include/c++/14.1.0/backward",
+                "C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/14.1.0/include",
+                "C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/14.1.0/../../../../include",
+                "C:/msys64/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/14.1.0/include-fixed"
+            ],
+            "compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe"
+        }
+    ],
+    "version": 4
+}
