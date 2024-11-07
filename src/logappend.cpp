@@ -1,4 +1,4 @@
-#include "logappend.hpp"
+#include "../include/logappend.hpp"
 #include <iostream>
 #include <regex>
 #include <fstream>
@@ -117,12 +117,67 @@ bool sanatizeInput(int argc, char* argv[], map<string, string>& resultingMap) {
     //Room ID (OPTIONAL ARGUMENT)
     if (argc == 11) {
         //Then there is an actual room id
+        regex roomIDDashMatcher("-R", std::regex_constants::ECMAScript);
+        regex roomIDMatcher("^[0-9]+$", std::regex_constants::ECMAScript);
+
+        if (regex_match(argv[8], roomIDDashMatcher)) {
+            //Now we have a valid room id flag
+            //Now check the room id
+            if(regex_match( argv[9], roomIDMatcher)) {
+                //Now sanitized and safe, now put in the map
+                int roomIDValue = std::stoi(argv[9]);
+                if (roomIDValue >= 0 && roomIDValue <= 1073741823) {
+                    // Room ID is valid
+                    resultingMap["R"] = string(argv[9]);
+                } else {
+                    // Room ID is out of range
+                    cout << "Room ID was out of range!" << endl;
+                    return false;
+                }
+                
+            } else {
+                // Room ID was not valid
+                cout << "Room ID was not valid!" << endl;
+                cout << "Room ID: |" << argv[9] << "|" << endl;
+                return false;
+            }
+        } else {
+            cout << "Room ID flag was not present!" << endl;
+            //Room ID flag was not found
+            return false;
+        }
+
+        //Logfile name
+        //Pattern pulled from: https://stackoverflow.com/questions/9363145/regex-for-extracting-filename-from-path
+        regex logFileNameMatcher("[^\\](.+)\.txt$", std::regex_constants::ECMAScript);
+        if(regex_match(argv[10], logFileNameMatcher)) {
+            //Now we have a valid log file name
+            resultingMap["logFile"] = string(argv[10]);
+        } else {
+            cout << "Log file name was not valid!" << endl;
+            cout << "Log file name: |" << argv[10] << "|" << endl;
+            return false;
+        }
+
+    }
+
+    // Room ID with 9 command line arguments
+    if (argc == 9) {
+        //Logfile name
+        //Pattern pulled from: https://stackoverflow.com/questions/9363145/regex-for-extracting-filename-from-path
+        regex logFileNameMatcher("[^\\](.+)\.txt$", std::regex_constants::ECMAScript);
+        if(regex_match(argv[8], logFileNameMatcher)) {
+            //Now we have a valid log file name
+            resultingMap["logFile"] = string(argv[8]);
+        } else {
+            cout << "Log file name was not valid!" << endl;
+            cout << "Log file name: |" << argv[8] << "|" << endl;
+            return false;
+        }
     }
   
 
-    //Logfile name
-    //Pattern pulled from: https://stackoverflow.com/questions/9363145/regex-for-extracting-filename-from-path
-    regex logFileNameMatcher("[^\\](.+)\.txt$", std::regex_constants::ECMAScript);
+
 
     
    
