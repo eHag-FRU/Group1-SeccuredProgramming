@@ -1,9 +1,15 @@
-sources = ./src/logappend.cpp
+logAppendsources = ./src/logappend.cpp
+logReadsources = ./src/logRead.cpp
 
 logAppendTarget = ./out/logappend.exe
+logReadTarget = ./out/logread.exe
 
 compiler = g++
 
 
 logAppend:
-	$(compiler) $(sources) -o $(logAppendTarget)
+	$(compiler) $(logAppendsources) -I./include/ -o $(logAppendTarget)
+
+
+logRead:
+	$(compiler) $(logReadsources) -I./include/ -o $(logReadTarget)

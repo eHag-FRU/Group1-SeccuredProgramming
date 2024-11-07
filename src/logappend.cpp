@@ -1,4 +1,4 @@
-#include "include/logappend.hpp"
+#include "logappend.hpp"
 #include <iostream>
 #include <regex>
 #include <fstream>
@@ -8,7 +8,7 @@
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; using std::regex_match;
 using std::fstream;
 
-bool sanatizeEmployeeGuestName(map<string, string>& resultingMap) {
+bool sanatizeEmployeeGuestName(char* argv[], map<string, string>& resultingMap) {
     //Guest OR Employee
     regex guestNameDashMatcher("-G", std::regex_constants::ECMAScript);
     regex employeeNameDashMatcher("-E", std::regex_constants::ECMAScript);
@@ -18,7 +18,7 @@ bool sanatizeEmployeeGuestName(map<string, string>& resultingMap) {
     if (regex_match(argv[5], employeeNameDashMatcher)) {
         //Now we have a valid employee flag
         //Now check the employee name
-        if(regex_match( argv[6], tokenMatcher)) {
+        if(regex_match( argv[6], guestEmployeeNameMatcher)) {
             //Now sanitized and safe, now put in the map
             resultingMap["E"] = string(argv[4]);
         } else {
@@ -30,7 +30,7 @@ bool sanatizeEmployeeGuestName(map<string, string>& resultingMap) {
     } else if (regex_match(argv[5], guestNameDashMatcher)) {
         //Now we have a valid guest flag
         //Now check the guest name
-        if(regex_match( argv[6], tokenMatcher)) {
+        if(regex_match( argv[6], guestEmployeeNameMatcher)) {
             //Now sanitized and safe, now put in the map
             resultingMap["G"] = string(argv[4]);
         } else {
@@ -44,8 +44,11 @@ bool sanatizeEmployeeGuestName(map<string, string>& resultingMap) {
         //Token flag was not found
         return false;
     }
+
+    return true;
 }
 
+//bool sanatizeEmployeeGuestName(char* argv[], map<string, string>& resultingMap)
 
 bool sanatizeInput(int argc, char* argv[], map<string, string>& resultingMap) {
     cout << ("Sanatizing the input!!!!") << endl;
@@ -97,10 +100,18 @@ bool sanatizeInput(int argc, char* argv[], map<string, string>& resultingMap) {
 
     //Check for the next flag, either guest/employee OR
     // arrival or leave
+    if (argv[5] == "-G" || argv[5] == "-E") {
+        sanatizeEmployeeGuestName(argv, resultingMap);
+    } else if (argv[5] == "-A" || argv[5] == "-L") {
+        //Arrival or leave
+        cout << "Found arrival or leave!" << endl;
+    } else {
+        //Invalid flag!
+        return false;
+    }
+
+
     
-
-
-    //Arrival or leave
 
     
     //Room ID (OPTIONAL ARGUMENT)
@@ -145,7 +156,7 @@ bool appendToLog(map<string, string>& argumentMap) {
 
 
 
-bool batchRunner(int argc, char* argv) {
+bool batchRunner(int argc, char* argv[]) {
     if (argc != 3) {
         return false;
     }
@@ -168,6 +179,9 @@ bool batchRunner(int argc, char* argv) {
     } else {
         return false;
     }
+
+
+    return true;
 }
 
 
