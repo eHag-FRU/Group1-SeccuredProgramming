@@ -3,186 +3,105 @@
 #include <regex>
 #include <fstream>
 
-
-
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; using std::regex_match;
 using std::fstream;
 
-bool sanatizeEmployeeGuestName(char* argv[], map<string, string>& resultingMap) {
-    //Guest OR Employee
-    regex guestNameDashMatcher("-G", std::regex_constants::ECMAScript);
-    regex employeeNameDashMatcher("-E", std::regex_constants::ECMAScript);
 
-    regex guestEmployeeNameMatcher("([a-z]|[A-Z])*", std::regex_constants::ECMAScript);
+bool sanatizeTime(int argc, char* argv[], map<string,string>& result) {
+    //Now we have a valid time flag
+    //Now check the time stamp
+    //Valid range 1 to 1073741823 
 
-    if (regex_match(argv[5], employeeNameDashMatcher)) {
-        //Now we have a valid employee flag
-        //Now check the employee name
-        if(regex_match( argv[6], guestEmployeeNameMatcher)) {
-            //Now sanitized and safe, now put in the map
-            resultingMap["E"] = string(argv[4]);
+    //convert to int
+    int timeStamp = atoi(argv[2]);
+
+    if (timeStamp != 0) {
+        //Check if with in valid range
+        if (timeStamp >= 1 && timeStamp <= 1073741823) {
+            //Valid timestamp was found, now add to map
+            result.insert({argv[1], argv[2]});
         } else {
-            // Employee name was not valid
-            cout << "Employee name was not valid!" << endl;
-            cout << "Employee Name: |" << argv[6] << "|" << endl;
-            return false;
-        }
-    } else if (regex_match(argv[5], guestNameDashMatcher)) {
-        //Now we have a valid guest flag
-        //Now check the guest name
-        if(regex_match( argv[6], guestEmployeeNameMatcher)) {
-            //Now sanitized and safe, now put in the map
-            resultingMap["G"] = string(argv[4]);
-        } else {
-            // Guest name was not valid
-            cout << "Guest name was not valid!" << endl;
-            cout << "Guest Name: |" << argv[6] << "|" << endl;
+            //Invalid timestamp
+            cout << "Time stamp not in range" << endl;
             return false;
         }
     } else {
-        cout << "Guest OR Employee flag was not present!" << endl;
-        //Token flag was not found
+        //0 means no integer was found, and can not have time stamp 0
+        cout << "Invalid time stamp" << endl;
         return false;
     }
 
     return true;
 }
 
-//bool sanatizeEmployeeGuestName(char* argv[], map<string, string>& resultingMap)
 
-bool sanatizeInput(int argc, char* argv[], map<string, string>& resultingMap) {
+
+bool sanatizeToken(int argc, char* argv[], map<string,string>& result) {
+    regex tokenMatcher("([a-z]|[A-Z]|[0-9])*", std::regex_constants::ECMAScript);
+
+
+    return true;
+}
+
+
+bool sanatizeEmployeeOrGuestName(int argc, char* argv[], map<string,string>& result) {
+
+    return true;
+}
+
+bool sanatizeAriveLeaveTag(int argc, char* argv[], map<string,string>& result) {
+
+    return true;
+}
+
+bool sanatizeRoomID(int argc, char* argv[], map<string,string>& result) {
+
+    return true;
+}
+
+bool sanatizeFilePath(int argc, char* argv[], map<string,string>& result) {
+
+    return true;
+}
+
+
+bool sanatizeInput(int argc, char* argv[], map<string, string>& result) {
     cout << ("Sanatizing the input!!!!") << endl;
 
     ///Check for the correct argument count again
-    if (argc != 9 && argc != 11) {
+    if (argc != 9 || argc != 11) {
         return false;
     }
 
-    //Now make the regex matchers
-    
-    //TimeStamp
+    //
+    //TIME
+    //
+
     regex timeStampDashMatcher("-T", std::regex_constants::ECMAScript);
 
     //Run the matcher and check
     if(regex_match(argv[1], timeStampDashMatcher)) {
-        //Now we have a valid time flag
-        //Now check the time stamp
-        //Valid range 1 to 1073741823 
-        
+        //Good time flag found, now pull in the time
+        sanatizeTime(argc, argv, result);
     } else {
-        cout << "Timestamp flag was not found!" << endl;
-        //The -T is missing
+        //No time flag found
+        cout << "No -T Found" << endl;
         return false;
     }
 
-
-    //Token
+    //
+    //  TOKEN
+    //
     regex tokenDashMatcher("-K", std::regex_constants::ECMAScript);
-    regex tokenMatcher("([a-z]|[A-Z]|[0-9])*", std::regex_constants::ECMAScript);
 
     if (regex_match(argv[3], tokenDashMatcher)) {
         //Now we have a valid token flag
-        //Now check the token
-        if(regex_match( argv[4], tokenMatcher)) {
-            //Now sanitized and safe, now put in the map
-            resultingMap["K"] = string(argv[4]);
-        } else {
-            // Token was not valid
-            cout << "Token was not valid!" << endl;
-            cout << "Token: |" << argv[4] << "|" << endl;
-            return false;
-        }
-    } else {
-        cout << "Token flag was not present!" << endl;
-        //Token flag was not found
-        return false;
-    }
-
-    //Check for the next flag, either guest/employee OR
-    // arrival or leave
-    if (argv[5] == "-G" || argv[5] == "-E") {
-        sanatizeEmployeeGuestName(argv, resultingMap);
-    } else if (argv[5] == "-A" || argv[5] == "-L") {
-        //Arrival or leave
-        cout << "Found arrival or leave!" << endl;
-    } else {
-        //Invalid flag!
-        return false;
-    }
-
-
-    
-
-    
-    //Room ID (OPTIONAL ARGUMENT)
-    if (argc == 11) {
-        //Then there is an actual room id
-    }
-  
-
-    //Logfile name
-    //Pattern pulled from: https://stackoverflow.com/questions/9363145/regex-for-extracting-filename-from-path
-    regex logFileNameMatcher("[^\\](.+)\.txt$", std::regex_constants::ECMAScript);
-
-    
-   
-
-
-    return true;
-}
-
-
-bool appendToLog(map<string, string>& argumentMap) {
-    //Check if the log exits
-    fstream log(argumentMap["logFile"]);
-
-    if (!log.is_open()) {
-
-        return false; 
-    }
-
-    //Log exists, now grab the last line
-
-    //Decrypt the line
-
-
-    //Check if the time is 1 - the time in the argument map
-
-    //Passed so now encrypt the line and add it to the file
-
-
-    //Close the file stream
-    log.close(); 
-    
-    //Return the append was successful
-    return true;
-}
-
-
-
-bool batchRunner(int argc, char* argv[]) {
-    if (argc != 3) {
-        return false;
-    }
-
-    regex batchDashMatcher("-B", std::regex_constants::ECMAScript);
-    regex batchFileNameMatcher(".*", std::regex_constants::ECMAScript);
-
-    //check for valid flag
-    if (regex_match(argv[1], batchDashMatcher)) {
-        //Now grab the file name and open it
-
-        //Until end of file, process each command
-
-        //Sanatize the line
-        
-        //Append to file
-
-        
-
+        sanatizeToken(argc, argv, result);
     } else {
         return false;
     }
+
+
 
 
     return true;
@@ -196,38 +115,23 @@ int main(int argc, char* argv[]) {
     //Inital check of how many arguments
     cout << "Argument count: " << argc << endl;
 
+    //Check the count, determine if batch or if line is full command
     if (argc == 3) {
         cout << "Given batch file" << endl;
     } else if (argc == 9 || argc == 11) {
         //Have a full line of arguments
         cout << "Full line of arguments given" << endl;
-        
-        //Sanatize the input
-        bool validSanatized = sanatizeInput(argc, argv, sanatizedResult);
 
-        //Was it able to match formatting?
-        if (!validSanatized) {
-            //Not correct format, so invalid
+        //Now send off to sanatize the full command
+        //Returns T/F => T = Successful / F = Invalid
+        if (sanatizeInput(argc, argv, sanatizedResult)) {
             cout << "invalid" << endl;
             return 255;
         }
-
-        //Now that is done, now check if the file exists
-        if (appendToLog(sanatizedResult)) {
-
-        } else {
-            cout << "invalid" << endl;
-            return 255;
-        }
-
     } else {
-        //Not enough args or too many (by count)
         cout << "invalid" << endl;
         return 255;
     }
-
-
-    
 
 
     return 0;
