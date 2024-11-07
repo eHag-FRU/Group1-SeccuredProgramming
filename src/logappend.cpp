@@ -121,6 +121,8 @@ bool sanatizeInput(int argc, char* argv[], map<string, string>& resultingMap) {
   
 
     //Logfile name
+    //Pattern pulled from: https://stackoverflow.com/questions/9363145/regex-for-extracting-filename-from-path
+    regex logFileNameMatcher("[^\\](.+)\.txt$", std::regex_constants::ECMAScript);
 
     
    
@@ -140,6 +142,8 @@ bool appendToLog(map<string, string>& argumentMap) {
     }
 
     //Log exists, now grab the last line
+
+    //Decrypt the line
 
 
     //Check if the time is 1 - the time in the argument map
