@@ -58,10 +58,60 @@ bool sanatizeToken(int argc, char* argv[], map<string,string>& result) {
 
 bool sanatizeEmployeeOrGuestName(int argc, char* argv[], map<string,string>& result, int tagPostion) {
 
+    //Guest OR Employee
+    regex guestNameDashMatcher("-G", std::regex_constants::ECMAScript);
+    regex employeeNameDashMatcher("-E", std::regex_constants::ECMAScript);
+
+    regex guestEmployeeNameMatcher("([a-z]|[A-Z])*", std::regex_constants::ECMAScript);
+
+    if (regex_match(argv[tagPostion], employeeNameDashMatcher)) {
+        //Now we have a valid employee flag
+        //Now check the employee name
+        if(regex_match( argv[tagPostion + 1], guestEmployeeNameMatcher)) {
+            //Now sanitized and safe, now put in the map
+            //result["E"] = string(argv[4]);
+            result.insert({argv[tagPostion], argv[tagPostion + 1]});
+        } else {
+            // Employee name was not valid
+            cout << "Employee name was not valid!" << endl;
+            cout << "Employee Name: |" << argv[6] << "|" << endl;
+            return false;
+        }
+    } else if (regex_match(argv[5], guestNameDashMatcher)) {
+        //Now we have a valid guest flag
+        //Now check the guest name
+        if(regex_match( argv[6], guestEmployeeNameMatcher)) {
+            //Now sanitized and safe, now put in the map
+            //resultingMap["G"] = string(argv[4]);
+            result.insert({argv[tagPostion], argv[tagPostion + 1]});
+        } else {
+            // Guest name was not valid
+            cout << "Guest name was not valid!" << endl;
+            cout << "Guest Name: |" << argv[6] << "|" << endl;
+            return false;
+        }
+    } else {
+        cout << "Guest OR Employee flag was not present!" << endl;
+        //Token flag was not found
+        return false;
+    }
+
     return true;
 }
 
 bool sanatizeAriveLeaveTag(int argc, char* argv[], map<string,string>& result, int tagPositon) {
+    regex arrivalDashMatcher("-A", std::regex_constants::ECMAScript);
+    regex leaveDashMatcher("-L", std::regex_constants::ECMAScript);
+
+    if (regex_match(argv[tagPositon], arrivalDashMatcher)) {
+        result.insert({argv[tagPositon], "A"});
+
+    } else if (regex_match(argv[tagPositon], leaveDashMatcher)) {
+        result.insert({argv[tagPositon], "L"});
+
+    } else {
+        return false;
+    }
 
     return true;
 }
@@ -95,30 +145,33 @@ bool sanatizeFilePath(int argc, char* argv[], map<string,string>& result) {
     cout << "argc:" << argc << endl;
 
     //Pattern pulled from: https://stackoverflow.com/questions/9363145/regex-for-extracting-filename-from-path
-    //regex logFileNameMatcher("[^\\](.+)$", std::regex_constants::ECMAScript);
+    //Then adapted and tweaked to allow for optional path characters
+    regex logFileNameMatcher("^(\\\\)*(.+\\\\)*(.+)", std::regex_constants::ECMAScript);
+    cout << regex_match(argv[8], logFileNameMatcher) << endl;
 
     //Two routes, depending on if the room argument is given
     if (argc == 11) {
         cout << "In 11 path" << endl;
         //Room argument path
-        // cout << argv[10] << endl;
-        // if (regex_match(argv[10], logFileNameMatcher)) {
-        //     //Matches, now put in map
-        //      result.insert({"logFile", argv[10]});
-        // } else {
-        //     //No file name found or invalid
-        //     return false;
-        // }
+        cout << argv[10] << endl;
+        if (regex_match(argv[10], logFileNameMatcher)) {
+            //Matches, now put in map
+             result.insert({"logFile", argv[10]});
+        } else {
+            //No file name found or invalid
+            return false;
+        }
     } else if (argc == 9) {
+        cout << "In 9 path" << endl;
         //Non-Room Argument Path
-        //Room argument path
-        // if (regex_match(argv[8], logFileNameMatcher)) {
-        //     //Matches, now put in map
-        //      result.insert({"logFile", argv[8]});
-        // } else {
-        //     //No file name found or invalid
-        //     return false;
-        // }
+        if (regex_match(argv[8], logFileNameMatcher)) {
+            //Matches, now put in map
+             result.insert({"logFile", argv[8]});
+        } else {
+            cout << "FAILED LOGFILE PATH CHECK!" << endl;
+            //No file name found or invalid
+            return false;
+        }
     } else {
         //Not the correct number of arguments!
         return false;
