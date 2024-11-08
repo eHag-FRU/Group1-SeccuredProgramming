@@ -4,7 +4,7 @@
 #include <fstream>
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; using std::regex_match;
-using std::fstream;
+using std::fstream; using std::getline;
 
 
 bool sanatizeTime(int argc, char* argv[], map<string,string>& result) {
@@ -303,6 +303,45 @@ void resultMapToString(map<string,string>& sanatizedResult) {
 }
 
 
+bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile) {
+    cout << "validating time stamp" << endl;
+    cout << "logFile open? : " << logFile.is_open() << endl;
+
+    cout << logFile.get() << endl;
+    cout << "logFile at EOF?: " << logFile.eof() << endl;
+
+    //Cycle through and get the last line
+    string currentLine;
+
+    getline(logFile,currentLine);
+    getline(logFile, currentLine);
+    getline(logFile, currentLine);
+    getline(logFile, currentLine);
+    cout << "currentLine: |" << currentLine << "|" << endl;
+
+    while(getline(logFile, currentLine)) {
+        //char* currentLine = std::cin.getline(logFile, 256);
+        //Unencrypt
+
+        //
+        cout << currentLine << endl;
+    }
+
+    return true;
+}
+
+bool validArrivalLeave(map<string, string>& commandLineArguments) {
+    // No employee or guest should enter a room without first entering the gallery. 
+    //No employee or guest should enter a room without having left a previous room. 
+    //Violation of either of these conditions implies inconsistency with the current 
+    //log state and should result in logappend exiting with an error condition.
+    //Same for leave
+
+    return true;
+}
+
+
+
 int main(int argc, char* argv[]) {
     map<string, string> sanatizedResult;
 
@@ -327,14 +366,35 @@ int main(int argc, char* argv[]) {
         //Print out the resulting map
         resultMapToString(sanatizedResult);
 
+        //Now open the map
+        fstream log;
+
+        log.open(sanatizedResult["logFile"], std::ios::out | std::ios::app);
+
+        //Check if error when opening,
+        //if so, error or as invalid!
+        if (!log.is_open()) {
+            cout << "FILE NOT OPEN!" << endl;
+            cout << "invalid" << endl;
+            return 255;
+        }
+
+        cout << "LOG IS OPEN" << endl;
+
+        //Now open, now check if the timestamp is valid
+        if (!validTimeStamp(sanatizedResult, log)) {
+            cout << "invalid" << endl;
+            return 255;
+        }
+
+
+        //Close the log file
+        log.close();
+
     } else {
         cout << "invalid" << endl;
         return 255;
     }
-
-
-    //Now sanatized!
-    //Now
 
 
     return 0;
