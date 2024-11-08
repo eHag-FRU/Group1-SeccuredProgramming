@@ -10,12 +10,8 @@ compiler = g++
 logAppend:
 	$(compiler) $(logAppendsources) -I./include/ -o $(logAppendTarget)
 
-logAppendTest:
-	$(compiler) ./tests/logAppendTests.cpp -I./include/ -o ./out/logAppendTests.exe
 
 logRead:
 	$(compiler) $(logReadsources) -I./include/ -o $(logReadTarget)
 
 
-logAppend.o : ./src/logAppend.cpp ./include/logAppend.hpp
-	$(compiler) $(compiler) ./tests/logAppendTests.cpp -I./include/ -o ./out/logAppendTests.exe
