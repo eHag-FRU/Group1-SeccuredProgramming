@@ -321,6 +321,15 @@ bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile)
    cout << line << endl;
 
    //We have the last line
+
+    //Empty? => NO FILE CONTENTS!!!, automatically valid!!!
+    if (line.empty()) {
+        //Automatically true
+        //Since the log is EMPTY!
+        return true;
+    }
+
+
    //Now parse into an array of substrings
    //split on the single space
 
@@ -353,12 +362,16 @@ bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile)
     return true;
 }
 
-bool validArrivalLeave(map<string, string>& commandLineArguments) {
+bool validArrivalLeave(map<string, string>& commandLineArguments, fstream& logFile) {
     // No employee or guest should enter a room without first entering the gallery. 
     //No employee or guest should enter a room without having left a previous room. 
     //Violation of either of these conditions implies inconsistency with the current 
     //log state and should result in logappend exiting with an error condition.
     //Same for leave
+
+    cout << "IN validArrivalLeave" << endl;
+
+    cout << "|" << atoi("001") << "|" << endl;
 
     return true;
 }
@@ -396,6 +409,10 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
         return false;
     }
 
+    //Now check for valid arrival/leave details
+    if(!validArrivalLeave(sanatizedResult, log)) {
+        return false; 
+    }
 
     //Close the log file
     log.close();
