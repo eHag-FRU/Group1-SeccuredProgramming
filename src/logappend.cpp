@@ -2,9 +2,10 @@
 #include <iostream>
 #include <regex>
 #include <fstream>
+#include <cstring>
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; using std::regex_match;
-using std::fstream; using std::getline;
+using std::fstream; using std::getline; using std::strtok;
 
 
 bool sanatizeTime(int argc, char* argv[], map<string,string>& result) {
@@ -306,27 +307,49 @@ void resultMapToString(map<string,string>& sanatizedResult) {
 bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile) {
     cout << "validating time stamp" << endl;
     cout << "logFile open? : " << logFile.is_open() << endl;
-
-    cout << logFile.get() << endl;
     cout << "logFile at EOF?: " << logFile.eof() << endl;
 
     //Cycle through and get the last line
-    string currentLine;
+   string line;
 
-    getline(logFile,currentLine);
-    getline(logFile, currentLine);
-    getline(logFile, currentLine);
-    getline(logFile, currentLine);
-    cout << "currentLine: |" << currentLine << "|" << endl;
+   while(getline(logFile, line)) {
+        //Do nothing
+        cout << "Number of chars read previously: " << logFile.gcount() << endl;
+   }
 
-    while(getline(logFile, currentLine)) {
-        //char* currentLine = std::cin.getline(logFile, 256);
-        //Unencrypt
+   cout << "logFile at EOF?: " << logFile.eof() << endl;
+   cout << line << endl;
 
-        //
-        cout << currentLine << endl;
+   //We have the last line
+   //Now parse into an array of substrings
+   //split on the single space
+
+    cout << "Last Time Stamp: " << line[0] << endl;
+    
+    //string lastTimeStampString = {line[0]};
+
+    int lastTimeStamp = atoi(string({line[0]}).c_str());
+
+    if (lastTimeStamp == 0) {
+        //Conversion failed
+        //OR is a 0 time stamp (not valid)
+        return false;
     }
 
+    int newLineTimeStamp = atoi(commandLineArguments["-T"].c_str());
+
+    if (newLineTimeStamp == 0) {
+        //Conversion failed
+        //OR is a 0 time stamp (not valid)
+        return false;
+    }
+
+    if (newLineTimeStamp < lastTimeStamp) {
+        //INVALID TIME STAMP FOUND!!!
+        return false;
+    }
+   
+    //Time stamp is valid!!!
     return true;
 }
 
@@ -340,7 +363,46 @@ bool validArrivalLeave(map<string, string>& commandLineArguments) {
     return true;
 }
 
+bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResult) {
+     //Have a full line of arguments
+    cout << "Full line of arguments given" << endl;
 
+    //Now send off to sanatize the full command
+    //Returns T/F => T = Successful / F = Invalid
+    if (!sanatizeInput(argc, argv, sanatizedResult)) {
+        return false;
+    }
+
+    
+    //Print out the resulting map
+    resultMapToString(sanatizedResult);
+
+    //Now open the map
+    fstream log;
+
+    log.open(sanatizedResult["logFile"]);
+
+    //Check if error when opening,
+    //if so, error or as invalid!
+    if (!log.is_open()) {
+        cout << "FILE NOT OPEN!" << endl;
+        return false;
+    }
+
+    cout << "LOG IS OPEN" << endl;
+
+    //Now open, now check if the timestamp is valid
+    if (!validTimeStamp(sanatizedResult, log)) {
+        return false;
+    }
+
+
+    //Close the log file
+    log.close();
+
+
+    return true;
+}
 
 int main(int argc, char* argv[]) {
     map<string, string> sanatizedResult;
@@ -351,45 +413,36 @@ int main(int argc, char* argv[]) {
     //Check the count, determine if batch or if line is full command
     if (argc == 3) {
         cout << "Given batch file" << endl;
-    } else if (argc == 9 || argc == 11) {
-        //Have a full line of arguments
-        cout << "Full line of arguments given" << endl;
 
-        //Now send off to sanatize the full command
-        //Returns T/F => T = Successful / F = Invalid
-        if (!sanatizeInput(argc, argv, sanatizedResult)) {
+        //Batch file file stream
+        fstream batchFile;
+
+        //Open the batch file
+
+        if(!batchFile.is_open()) {
+            //File could not be opened
             cout << "invalid" << endl;
             return 255;
+        }
+
+        //Grabs each line of input and executes it
+        string currentLine;
+        
+        while(getline(batchFile, currentLine)) {
+            //Split into argument array of c_strs
+
+            //Grab count
+
+            //Parsed, to send to execute each line
         }
 
         
-        //Print out the resulting map
-        resultMapToString(sanatizedResult);
 
-        //Now open the map
-        fstream log;
-
-        log.open(sanatizedResult["logFile"], std::ios::out | std::ios::app);
-
-        //Check if error when opening,
-        //if so, error or as invalid!
-        if (!log.is_open()) {
-            cout << "FILE NOT OPEN!" << endl;
+    } else if (argc == 9 || argc == 11) {
+       if(!commandExecuter(argc, argv, sanatizedResult)) {
             cout << "invalid" << endl;
-            return 255;
-        }
-
-        cout << "LOG IS OPEN" << endl;
-
-        //Now open, now check if the timestamp is valid
-        if (!validTimeStamp(sanatizedResult, log)) {
-            cout << "invalid" << endl;
-            return 255;
-        }
-
-
-        //Close the log file
-        log.close();
+            return false;
+       }
 
     } else {
         cout << "invalid" << endl;
