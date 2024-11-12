@@ -3,9 +3,12 @@
 #include <regex>
 #include <fstream>
 #include <cstring>
+#include <vector>
+#include <openssl/evp.h>
+#include <openssl/conf.h>
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; using std::regex_match;
-using std::fstream; using std::getline; using std::strtok;
+using std::fstream; using std::getline; using std::strtok; using std::vector; using std::ios;
 
 
 bool sanatizeTime(int argc, char* argv[], map<string,string>& result) {
@@ -334,8 +337,6 @@ bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile)
    //split on the single space
 
     cout << "Last Time Stamp: " << line[0] << endl;
-    
-    //string lastTimeStampString = {line[0]};
 
     int lastTimeStamp = atoi(string({line[0]}).c_str());
 
@@ -371,7 +372,26 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, fstream& logFi
 
     cout << "IN validArrivalLeave" << endl;
 
-    cout << "|" << atoi("001") << "|" << endl;
+    //Make a vector that holds the last line of what the guest/employee was doing
+    vector<char*> personLastActionLine;
+
+    //Go through the log
+    string currentLine;
+
+    //Clear the current error flag and EOF flag
+    //Then seek to the top of the file
+    logFile.clear();
+    logFile.seekg(0);
+
+    cout << "logFile at EOF?: " << logFile.eof() << endl;
+
+    while (getline(logFile, currentLine)) {
+        cout << currentLine << endl;
+
+        //Find the guest or employee flag
+        //E OR G will be the first occurance in the log
+        //if ()
+    }
 
     return true;
 }
@@ -414,12 +434,61 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
         return false; 
     }
 
-    //Close the log file
+    //
+    // WRITING TO THE FILE, ALL GOOD SO NOW CAN WRITE!!
+    //
+
+    //Close the log file to reopen for appending only!!
     log.close();
 
+    //Reopen with append privs ONLY!!!
+    log.open(sanatizedResult["logFile"], std::ios::app); 
+
+    string encryptedLine;
+
+    //Encrypt with the key
+
+
+    //Write to the file
+    log.write(encryptedLine.c_str(), encryptedLine.size());
+
+    //Close the file out
+    log.close();
 
     return true;
 }
+
+//
+//  OpenSSL Encryption & Decryption
+//
+
+int encrypt(unsigned char* text, int text_length, unsigned char* key, unsigned char* cipher) {
+    int cipher_len = 0;
+    int len = 0;
+
+    EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+
+    EVP_EncryptInit_ex(ctx, EVP_aes_128_ecb(), NULL, key, NULL);
+
+    EVP_EncryptUpdate(ctx, cipher, &len, text, text_length);
+
+    cipher_len += len;
+
+    EVP_EncryptFinal_ex(ctx, cipher + len, &len);
+
+    cipher_len += len;
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    return cipher_len;
+}
+
+
+
+
+
+
+
 
 int main(int argc, char* argv[]) {
     map<string, string> sanatizedResult;

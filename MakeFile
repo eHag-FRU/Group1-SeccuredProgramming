@@ -8,7 +8,7 @@ compiler = g++
 
 
 logAppend:
-	$(compiler) $(logAppendsources) -I./include/ -o $(logAppendTarget)
+	$(compiler) $(logAppendsources) -I./include/  -o $(logAppendTarget) -lo
 
 
 logRead:
