@@ -1,8 +1,8 @@
 logAppendsources = ./src/logappend.cpp
 logReadsources = ./src/logRead.cpp
 
-logAppendTarget = ./out/logappend.exe
-logReadTarget = ./out/logread.exe
+logAppendTarget = ./out/logappend
+logReadTarget = ./out/logread
 
 compiler = g++
 
