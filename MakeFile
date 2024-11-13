@@ -8,7 +8,7 @@ compiler = g++
 
 
 logAppend:
-	$(compiler) $(logAppendsources) -I./include/  -o $(logAppendTarget) -lo
+	$(compiler) $(logAppendsources) -I./include/ -I./include/cryptopp/ -L./include/cryptopp890/ -lcryptopp -o $(logAppendTarget)
 
 
 logRead:

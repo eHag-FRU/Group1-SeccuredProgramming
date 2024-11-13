@@ -4,8 +4,15 @@
 #include <fstream>
 #include <cstring>
 #include <vector>
-#include <openssl/evp.h>
-#include <openssl/conf.h>
+
+#include <vector>
+#include <cryptlib.h>
+#include <modes.h>
+#include <aes.h>
+#include <filters.h>
+#include <osrng.h>
+#include <base64.h>
+
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; using std::regex_match;
 using std::fstream; using std::getline; using std::strtok; using std::vector; using std::ios;
@@ -459,28 +466,49 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
 }
 
 //
-//  OpenSSL Encryption & Decryption
+//  Crypto++ Encryption & Decryption
+//  Code from: 
 //
 
-int encrypt(unsigned char* text, int text_length, unsigned char* key, unsigned char* cipher) {
-    int cipher_len = 0;
-    int len = 0;
+std::string encrypt(const std::string& input, const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv) {
+    std::string cipher;
 
-    EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+    auto aes = CryptoPP::AES::Encryption(key.data(), key.size());
+    auto aes_cbc = CryptoPP::CBC_Mode_ExternalCipher::Encryption(aes, iv.data());
 
-    EVP_EncryptInit_ex(ctx, EVP_aes_128_ecb(), NULL, key, NULL);
+    CryptoPP::StringSource ss(
+        input,
+        true,
+        new CryptoPP::StreamTransformationFilter(
+            aes_cbc,
+            new CryptoPP::Base64Encoder(
+                new CryptoPP::StringSink(cipher)
+            )
+        )
+    );
 
-    EVP_EncryptUpdate(ctx, cipher, &len, text, text_length);
+    return cipher;
+}
 
-    cipher_len += len;
 
-    EVP_EncryptFinal_ex(ctx, cipher + len, &len);
+std::string decrypt(const std::string& cipher_text, const std::vector<uint8_t>& key, const std::vector<uint8_t>& iv) {
+    std::string plain_text;
 
-    cipher_len += len;
+    auto aes = CryptoPP::AES::Decryption(key.data(), key.size());
+    auto aes_cbc = CryptoPP::CBC_Mode_ExternalCipher::Decryption(aes, iv.data());
 
-    EVP_CIPHER_CTX_free(ctx);
+    CryptoPP::StringSource ss(
+        cipher_text,
+        true,
+        new CryptoPP::Base64Decoder(
+            new CryptoPP::StreamTransformationFilter(
+                aes_cbc,
+                new CryptoPP::StringSink(plain_text)
+            )
+        )
+    );
 
-    return cipher_len;
+    return plain_text;
 }
 
 
