@@ -1,19 +1,10 @@
 #ifndef LOG_APPEND_HPP
 #define LOG_APPEND_HPP
 
-#include <map>
-#include <string>
+void resultMapToString(map<string,string>& sanatizedResult);
+bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile);
+bool validArrivalLeave(map<string, string>& commandLineArguments, fstream& logFile);
 
-bool sanatizeTime(int argc, char* argv[], std::map<std::string,std::string>& result);
-bool sanatizeToken(int argc, char* argv[], std::map<std::string,std::string>& result);
-bool sanatizeEmployeeOrGuestName(int argc, char* argv[], std::map<std::string,std::string>& result);
-bool sanatizeAriveLeaveTag(int argc, char* argv[], std::map<std::string,std::string>& result);
-bool sanatizeRoomID(int argc, char* argv[], std::map<std::string,std::string>& result);
-bool sanatizeFilePath(int argc, char* argv[], std::map<std::string,std::string>& result);
-
-bool sanatizeInput(int argc, char* argv[], std::map<std::string, std::string>& resultingMap);
-
-
-
+bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResult);
 
 #endif

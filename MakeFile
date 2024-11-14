@@ -6,12 +6,25 @@ logReadTarget = ./out/logread
 
 compiler = g++
 
+COMPILER_FLAGS = -I./include/ -I./include/cryptopp/ -L./include/cryptopp890/ -lcryptopp
 
-logAppend:
-	$(compiler) $(logAppendsources) -I./include/ -I./include/cryptopp/ -L./include/cryptopp890/ -lcryptopp -o $(logAppendTarget)
+
+logAppend: inputSanatizer.o encryptionHandler.o
+	$(compiler) $(logAppendsources) ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o $(logAppendTarget)
 
 
 logRead:
 	$(compiler) $(logReadsources) -I./include/ -o $(logReadTarget)
 
 
+inputSanatizer.o:
+	$(compiler) ./src/inputSanatizer.cpp -c -I./include -o ./out/inputSanatizer.o
+
+encryptionHandler.o:
+	$(compiler) ./src/encryptionHandler.cpp -c -I./include -I./include/cryptopp/ -L./include/cryptopp890/ -lcryptopp -o ./out/encryptionHandler.o
+
+clean:
+	rm -f ./out/*.o
+	rm -f ./out/*.exe
+	rm -f ./out/logAppend
+	rm -f ./out/logRead
