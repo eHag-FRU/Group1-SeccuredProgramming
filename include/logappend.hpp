@@ -1,10 +1,14 @@
 #ifndef LOG_APPEND_HPP
 #define LOG_APPEND_HPP
 
-void resultMapToString(map<string,string>& sanatizedResult);
-bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile);
-bool validArrivalLeave(map<string, string>& commandLineArguments, fstream& logFile);
+#include<map>
+#include<string>
+#include<fstream>
 
-bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResult);
+void resultMapToString(std::map<std::string,std::string>& sanatizedResult);
+bool validTimeStamp(std::map<std::string, std::string>& commandLineArguments, std::fstream& logFile);
+bool validArrivalLeave(std::map<std::string, std::string>& commandLineArguments, std::fstream& logFile);
+
+bool commandExecuter(int argc, char* argv[], std::map<std::string, std::string>& sanatizedResult);
 
 #endif
