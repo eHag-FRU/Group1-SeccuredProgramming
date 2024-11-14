@@ -59,6 +59,7 @@ bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile)
 
     //Now decrypt the line
     line = decrypt(line, commandLineArguments["-K"]);
+    cout << "Decrypted Line: " << line << endl;
 
    //Now parse into an array of substrings
    //split on the single space

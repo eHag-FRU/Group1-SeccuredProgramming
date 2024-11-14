@@ -8,7 +8,7 @@
 
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; 
-using std::regex_match; using std::iterator; using std::ifstream;
+using std::regex_match; using std::iterator; using std::ofstream;
 
 
 
@@ -78,6 +78,11 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
     if (!sanatizeFilePath(argc, argv, result)) {
         return false;
     }
+
+    //Open the log file
+    ofstream log;
+
+    log.open(result["logFile"], ios::read);
 
 
     return true;
