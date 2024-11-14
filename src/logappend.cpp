@@ -37,16 +37,28 @@ bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile)
     cout << "logFile open? : " << logFile.is_open() << endl;
     cout << "logFile at EOF?: " << logFile.eof() << endl;
 
+    //Close and reopen on byte stream
+    logFile.close();
+    logFile.open(commandLineArguments["logFile"], std::ios::in | std::ios::binary);
+
     //Cycle through and get the last line
    string line;
 
+   //Flush to go back to the start of the file
+    //Clear the current error flag and EOF flag
+    //Then seek to the top of the file
+    logFile.clear();
+    logFile.seekg(0);
+
    while(getline(logFile, line)) {
         //Do nothing
-        cout << "Number of chars read previously: " << logFile.gcount() << endl;
    }
 
+    //Need to decrypt the line to be able to read it
+    line = decrypt(line, commandLineArguments["-K"]);
+
    cout << "logFile at EOF?: " << logFile.eof() << endl;
-   cout << line << endl;
+   cout << "line: "<< line << endl;
 
    //We have the last line
 
@@ -145,7 +157,7 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
     //Now open the map
     fstream log;
 
-    log.open(sanatizedResult["logFile"]);
+    log.open(sanatizedResult["logFile"], std::ios::app | std::ios::binary);
 
     //Check if error when opening,
     //if so, error or as invalid!
@@ -174,7 +186,7 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
     log.close();
 
     //Reopen with append privs ONLY!!!
-    log.open(sanatizedResult["logFile"], std::ios::app); 
+    log.open(sanatizedResult["logFile"], std::ios::app | std::ios::binary); 
 
     string logLine = sanatizedResult["-T"];
 
@@ -204,6 +216,8 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
 
     }
 
+    //Add an endl to the file
+
     cout << "Line: " << logLine << endl;
 
     string encryptedLine;
@@ -215,6 +229,9 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
 
     //Write to the file
     log.write(encryptedLine.c_str(), encryptedLine.size());
+
+    //Write a endl
+    log << endl;
 
     //Close the file out
     log.close();
