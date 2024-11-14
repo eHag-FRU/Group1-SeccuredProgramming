@@ -21,7 +21,7 @@ std::string encrypt(const std::string& message, const std::string& key, map<stri
             //Insert the number of key.size() - 16 0's to the start
             //of the string
             int numberOf0s = CryptoPP::AES::BLOCKSIZE - int(newKey.size());
-            newKey.insert(int(key.size()) + 1, numberOf0s, '0');
+            newKey.insert(int(key.size()), numberOf0s, '0');
         } else {
             //Keysize is larger
 
@@ -75,7 +75,7 @@ std::string decrypt(const std::string& encryptedMessage, const std::string& key)
             //Insert the number of key.size() - 16 0's to the start
             //of the string
             int numberOf0s = CryptoPP::AES::BLOCKSIZE - int(newKey.size());
-            newKey.insert(int(key.size() + 1), numberOf0s, '0');
+            newKey.insert(int(key.size()), numberOf0s, '0');
         } else {
             //Keysize is larger
 

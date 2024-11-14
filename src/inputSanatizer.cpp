@@ -39,12 +39,12 @@ bool sanatizeTime(int argc, char* argv[], map<string,string>& result) {
 
 
 
-bool sanatizeToken(int argc, char* argv[], map<string,string>& result) {
-    regex tokenMatcher("([a-z]|[A-Z]|[0-9])*", std::regex_constants::ECMAScript);
+ regex tokenMatcher("([a-z]|[A-Z]|[0-9])*", std::regex_constants::ECMAScript);
 
     if(regex_match( argv[4], tokenMatcher)) {
             //Now sanitized and safe, now put in the map
-            //result["K"] = string(argv[4]);
+          bool sanatizeToken(int argc, char* argv[], map<string,string>& result) {
+     //result["K"] = string(argv[4]);
             result.insert({argv[3], argv[4]});
         } else {
             // Token was not valid
