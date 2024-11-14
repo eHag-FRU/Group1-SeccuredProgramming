@@ -1,11 +1,12 @@
-#include "logappend.hpp"
+#include "../include/logappend.hpp"
 #include <iostream>
 #include <regex>
 #include <fstream>
 #include <cstring>
 #include <vector>
-#include <openssl/evp.h>
-#include <openssl/conf.h>
+//#include <openssl/evp.h>
+//#include <openssl/conf.h>
+#include <sstream>
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; using std::regex_match;
 using std::fstream; using std::getline; using std::strtok; using std::vector; using std::ios;
@@ -363,17 +364,20 @@ bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile)
     return true;
 }
 
-bool validArrivalLeave(map<string, string>& commandLineArguments, fstream& logFile) {
+bool validArrivalLeave(map<string, string>& commandLineArguments, fstream& logFile, string name) {
     // No employee or guest should enter a room without first entering the gallery. 
     //No employee or guest should enter a room without having left a previous room. 
     //Violation of either of these conditions implies inconsistency with the current 
     //log state and should result in logappend exiting with an error condition.
     //Same for leave
 
-    cout << "IN validArrivalLeave" << endl;
+	bool justEnteredGallery = false;
+
+    //cout << "IN validArrivalLeave" << endl;
 
     //Make a vector that holds the last line of what the guest/employee was doing
-    vector<char*> personLastActionLine;
+    vector<string> personLastActionLine;
+	vector<string> personLastRoomLine;
 
     //Go through the log
     string currentLine;
@@ -383,20 +387,91 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, fstream& logFi
     logFile.clear();
     logFile.seekg(0);
 
-    cout << "logFile at EOF?: " << logFile.eof() << endl;
+    //cout << "logFile at EOF?: " << logFile.eof() << endl;
 
     while (getline(logFile, currentLine)) {
-        cout << currentLine << endl;
 
         //Find the guest or employee flag
         //E OR G will be the first occurance in the log
-        //if ()
-    }
+		//split by " " and save strings to vector
+		vector<string> currentLineSplit = splitString(currentLine, ' ');
 
-    return true;
+		//Check if the name is in the line and save the initial action for the initial arrival
+        if (currentLine.find(name) != string::npos && personLastActionLine.empty()) {
+			if(commandLineArguments.size() == 6 && commandLineArguments["-A"] == "A") {
+				return true;
+			}else {
+				//save action to personLastActionLine
+				for (int i = 0; i < currentLineSplit.size(); i++) {
+					if(currentLineSplit[i] == "A" || currentLineSplit[i] == "L") {
+						personLastActionLine.push_back(currentLineSplit[i]);
+						justEnteredGallery = true;
+					}
+				}
+				continue;
+			}
+		} 
+		
+		//find last action and room of the person
+		
+		if (currentLine.find(name) != string::npos) {
+			//save action to personLastActionLine
+			for (int i = 0; i < currentLineSplit.size(); i++) {
+					if(currentLineSplit[i] == "A") { 
+						personLastActionLine.push_back(currentLineSplit[i]);
+						personLastRoomLine.push_back(currentLineSplit[i+1]);
+						justEnteredGallery = false;												// this ensures that after a person enters a room that they must leave before entering again
+					} else if (currentLineSplit[i] == "L") {
+						personLastActionLine.push_back(currentLineSplit[i]);
+						justEnteredGallery = false;
+					}
+				}
+		} 
+    }
+	int roomVecSize = personLastRoomLine.size();
+	int actionVecSize = personLastActionLine.size();
+	if (actionVecSize == 0) {
+		//Person has not entered the gallery
+		return false;
+	}
+	//Check if the person is entering or leaving
+	if (commandLineArguments["-A"] == "A") {
+		//Check if the last action was a leave
+		if (personLastActionLine[actionVecSize - 1] == "L" || justEnteredGallery == true) {
+			//Valid
+			return true;
+		} else {
+			std::cerr << "ERROR: " << name << " has not left the previous room" << std::endl;
+			return false;
+		}
+	} else if (commandLineArguments["-L"] == "L") {
+		//Check if the last action was an arrival
+		
+
+		// initial if statement is to check if the person has only entered the gallery, if so then we dont need to check for the room
+		// this is really ugly im sorry
+		if (roomVecSize == 0) {
+			if (personLastActionLine[actionVecSize - 1] == "A" && justEnteredGallery == false) {
+				//Valid
+				return true;
+			} else {
+				std::cerr << "ERROR: " << name << " has not entered the gallery" << std::endl;
+				return false;
+			}
+		} else {
+			if (personLastActionLine[actionVecSize - 1] == "A" && commandLineArguments["-R"] == personLastRoomLine[roomVecSize - 1] && justEnteredGallery == false) {
+				//Valid
+				return true;
+		} else {
+			std::cerr << "ERROR: " << name << " has not entered the gallery" << std::endl;
+			return false;
+		}
+		}
+		
+	}
 }
 
-bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResult) {
+ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResult) {
      //Have a full line of arguments
     cout << "Full line of arguments given" << endl;
 
@@ -458,9 +533,9 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
     return true;
 }
 
-//
-//  OpenSSL Encryption & Decryption
-//
+
+ //OpenSSL Encryption & Decryption
+
 
 int encrypt(unsigned char* text, int text_length, unsigned char* key, unsigned char* cipher) {
     int cipher_len = 0;
@@ -483,6 +558,19 @@ int encrypt(unsigned char* text, int text_length, unsigned char* key, unsigned c
     return cipher_len;
 }
 
+
+// Function to split a string by a delimiter and return a vector of substrings
+vector<string> splitString(const string& str, char delimiter) {
+    vector<string> tokens;
+    std::istringstream stream(str);
+    string token;
+    
+    while (getline(stream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    
+    return tokens;
+}
 
 
 
