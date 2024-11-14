@@ -1,0 +1,7 @@
+1 A G Jeff
+1 A G Lucy
+1 A 1 G Jeff
+1 L 1 G Jeff
+1 A 2 G Jeff
+1 L 2 G Jeff
+1 A 3 G Jeff
