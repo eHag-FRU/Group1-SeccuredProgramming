@@ -14,10 +14,10 @@ logAppend: inputSanatizer.o encryptionHandler.o
 
 
 logRead:
-	$(compiler) $(logReadsources) -I./include/ -o $(logReadTarget)
+	$(compiler) $(logReadsources) ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o $(logReadTarget)
 
 
-inputSanatizer.o:
+inputSanatizer.o: inputSanatizer.o encryptionHandler.o
 	$(compiler) ./src/inputSanatizer.cpp -c -I./include -o ./out/inputSanatizer.o
 
 encryptionHandler.o:
