@@ -12,7 +12,7 @@
 
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; using std::regex_match;
-using std::fstream; using std::getline; using std::strtok; using std::vector; using std::ios;
+using std::fstream; using std::getline; using std::strtok; using std::vector; using std::ios; using std::vector;
 
 
 
@@ -93,7 +93,7 @@ bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile)
 }
 
 // Function to split a string by a delimiter and return a vector of substrings
-vector<string> splitString(const string& str, char delimiter) {
+vector<string> splitStringT(const string& str, char delimiter) {
     vector<string> tokens;
     std::istringstream stream(str);
     string token;
@@ -136,7 +136,7 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, fstream& logFi
         //Find the guest or employee flag
         //E OR G will be the first occurance in the log
 		//split by " " and save strings to vector
-		vector<string> currentLineSplit = splitString(currentLine, ' ');
+		vector<string> currentLineSplit = splitStringT(currentLine, ' ');
 
 		//Check if the name is in the line and save the initial action for the initial arrival
         if (currentLine.find(name) != string::npos && personLastActionLine.empty()) {
@@ -211,6 +211,9 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, fstream& logFi
 		}
 		
 	}
+
+    //Everything is valid, so return true
+    return true;
 }
 
 
@@ -250,8 +253,17 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
         return false;
     }
 
+    //Grab the name
+    string name;
+    if (sanatizedResult.find("-G") != sanatizedResult.end()) {
+        //Guest name
+        name = sanatizedResult["-G"];
+    } else {    //Employee
+        name = sanatizedResult["-E"];
+    }
+
     //Now check for valid arrival/leave details
-    if(!validArrivalLeave(sanatizedResult, log)) {
+    if(!validArrivalLeave(sanatizedResult, log, name)) {
         return false; 
     }
 
