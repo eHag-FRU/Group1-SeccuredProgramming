@@ -2,8 +2,6 @@
 #include <string>
 #include <map>
 #include "../include/logappend.hpp"
-#include "inputSanatizer.hpp"
-#include "encryptionHandler.hpp"
 #include <cassert>
 
 
@@ -43,7 +41,7 @@ void testSanatizeTime() {
 
 
 int main() {
- testSanatizeTime();
+ testSanatize();
 
  return 0;
 }
