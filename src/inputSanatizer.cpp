@@ -4,9 +4,10 @@
 #include <fstream>
 #include <cstring>
 #include <vector>
+#include <utility>
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; using std::regex_match;
-using std::fstream; using std::getline; using std::strtok; using std::vector; using std::ios;
+using std::fstream; using std::getline; using std::strtok; using std::vector; using std::ios; using std::pair;
 
 bool sanatizeTime(int argc, char* argv[], map<string,string>& result) {
     //Now we have a valid time flag
@@ -22,7 +23,7 @@ bool sanatizeTime(int argc, char* argv[], map<string,string>& result) {
         if (timeStamp >= 1 && timeStamp <= 1073741823) {
             cout << "sanatizeTime, line 24: timeStamp >= 1 && timeStamp <= 1073741823!!" << endl;
             //Valid timestamp was found, now add to map
-            result.insert({argv[1], argv[2]});
+            result.insert(pair<string,string>(argv[1], argv[2]));
         } else {
             //Invalid timestamp
             cout << "Time stamp not in range" << endl;
@@ -45,7 +46,7 @@ bool sanatizeToken(int argc, char* argv[], map<string,string>& result) {
             //Now sanitized and safe, now put in the map
             bool sanatizeToken(int argc, char* argv[], map<string,string>& result);
             //result["K"] = string(argv[4]);
-            result.insert({argv[3], argv[4]});
+            result.insert(pair<string,string>(argv[3], argv[4]));
         } else {
             // Token was not valid
             cout << "Token was not valid!" << endl;
@@ -71,7 +72,7 @@ bool sanatizeEmployeeOrGuestName(int argc, char* argv[], map<string,string>& res
         if(regex_match( argv[tagPostion + 1], guestEmployeeNameMatcher)) {
             //Now sanitized and safe, now put in the map
             //result["E"] = string(argv[4]);
-            result.insert({argv[tagPostion], argv[tagPostion + 1]});
+            result.insert(pair<string,string>(argv[tagPostion], argv[tagPostion + 1]));
         } else {
             // Employee name was not valid
             cout << "Employee name was not valid!" << endl;
@@ -84,7 +85,7 @@ bool sanatizeEmployeeOrGuestName(int argc, char* argv[], map<string,string>& res
         if(regex_match( argv[6], guestEmployeeNameMatcher)) {
             //Now sanitized and safe, now put in the map
             //resultingMap["G"] = string(argv[4]);
-            result.insert({argv[tagPostion], argv[tagPostion + 1]});
+            result.insert(pair<string,string>(argv[tagPostion], argv[tagPostion + 1]));
         } else {
             // Guest name was not valid
             cout << "Guest name was not valid!" << endl;
@@ -105,10 +106,10 @@ bool sanatizeAriveLeaveTag(int argc, char* argv[], map<string,string>& result, i
     regex leaveDashMatcher("-L", std::regex_constants::ECMAScript);
 
     if (regex_match(argv[tagPositon], arrivalDashMatcher)) {
-        result.insert({argv[tagPositon], "A"});
+        result.insert(pair<string,string>(argv[tagPositon], "A"));
 
     } else if (regex_match(argv[tagPositon], leaveDashMatcher)) {
-        result.insert({argv[tagPositon], "L"});
+        result.insert(pair<string,string>(argv[tagPositon], "L"));
 
     } else {
         return false;
@@ -128,7 +129,7 @@ bool sanatizeRoomID(int argc, char* argv[], map<string,string>& result) {
         //Check if with in valid range
         if (roomNumber >= 1 && roomNumber <= 1073741823) {
             //Valid room number was found, now add to map
-            result.insert({argv[8], argv[9]});
+            result.insert(pair<string,string>(argv[8], argv[9]));
         } else {
             //Invalid room number
             return false;
@@ -157,7 +158,7 @@ bool sanatizeFilePath(int argc, char* argv[], map<string,string>& result) {
         cout << argv[10] << endl;
         if (regex_match(argv[10], logFileNameMatcher)) {
             //Matches, now put in map
-             result.insert({"logFile", argv[10]});
+             result.insert(pair<string,string>("logFile", argv[10]));
         } else {
             //No file name found or invalid
             return false;
@@ -167,7 +168,7 @@ bool sanatizeFilePath(int argc, char* argv[], map<string,string>& result) {
         //Non-Room Argument Path
         if (regex_match(argv[8], logFileNameMatcher)) {
             //Matches, now put in map
-             result.insert({"logFile", argv[8]});
+             result.insert(pair<string,string>("logFile", argv[8]));
         } else {
             cout << "FAILED LOGFILE PATH CHECK!" << endl;
             //No file name found or invalid

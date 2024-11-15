@@ -4,13 +4,14 @@
 #include <regex>
 #include <iterator>
 #include <fstream>
+#include <utility>
 #include "inputSanatizer.hpp"
 #include "encryptionHandler.hpp"
 
 
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; 
-using std::regex_match; using std::iterator; using std::ifstream;
+using std::regex_match; using std::iterator; using std::ifstream; using std::pair;
 
 //Versions for log read
 bool sanatizeLogReadToken(int argc, char* argv[], map<string,string>& result) {
@@ -19,7 +20,7 @@ bool sanatizeLogReadToken(int argc, char* argv[], map<string,string>& result) {
     if(regex_match(argv[2], tokenMatcher)) {
             //Now sanitized and safe, now put in the map
             //result["K"] = string(argv[4]);
-            result.insert({argv[1], argv[2]});
+            result.insert(pair<string,string>(argv[1], argv[2]));
         } else {
             // Token was not valid
             cout << "Token was not valid!" << endl;
@@ -45,7 +46,7 @@ bool sanatizeLogReadEmployeeOrGuestName(int argc, char* argv[], map<string,strin
         if(regex_match( argv[tagPostion + 1], guestEmployeeNameMatcher)) {
             //Now sanitized and safe, now put in the map
             //result["E"] = string(argv[4]);
-            result.insert({argv[tagPostion], argv[tagPostion + 1]});
+            result.insert(pair<string,string>(argv[tagPostion], argv[tagPostion + 1]));
         } else {
             // Employee name was not valid
             cout << "Employee name was not valid!" << endl;
@@ -58,7 +59,7 @@ bool sanatizeLogReadEmployeeOrGuestName(int argc, char* argv[], map<string,strin
         if(regex_match( argv[6], guestEmployeeNameMatcher)) {
             //Now sanitized and safe, now put in the map
             //resultingMap["G"] = string(argv[4]);
-            result.insert({argv[tagPostion], argv[tagPostion + 1]});
+            result.insert(pair<string,string>(argv[tagPostion], argv[tagPostion + 1]));
         } else {
             // Guest name was not valid
             cout << "Guest name was not valid!" << endl;
@@ -90,7 +91,7 @@ bool sanatizeLogReadFilePath(int argc, char* argv[], map<string,string>& result)
         cout << argv[6] << endl;
         if (regex_match(argv[6], logFileNameMatcher)) {
             //Matches, now put in map
-             result.insert({"logFile", argv[6]});
+             result.insert(pair<string,string>("logFile", argv[6]));
         } else {
             //No file name found or invalid
             return false;
@@ -100,7 +101,7 @@ bool sanatizeLogReadFilePath(int argc, char* argv[], map<string,string>& result)
         //Non-Room Argument Path
         if (regex_match(argv[4], logFileNameMatcher)) {
             //Matches, now put in map
-             result.insert({"logFile", argv[4]});
+             result.insert(pair<string,string>("logFile", argv[4]));
         } else {
             cout << "FAILED LOGFILE PATH CHECK!" << endl;
             //No file name found or invalid
@@ -153,7 +154,7 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
         }
 
        //Now add the -S token to the result
-       result.insert({argv[3], argv[3]});
+       result.insert(pair<string,string>(argv[3], argv[3]));
 
     } else if (argc == 7) {
         //-R is used
