@@ -13,6 +13,7 @@
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; using std::regex_match;
 using std::fstream; using std::getline; using std::strtok; using std::vector; using std::ios; using std::vector;
+using std::ifstream;
 
 
 
@@ -38,16 +39,28 @@ bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile)
     cout << "logFile open? : " << logFile.is_open() << endl;
     cout << "logFile at EOF?: " << logFile.eof() << endl;
 
+    //Close and reopen on byte stream
+    logFile.close();
+    logFile.open(commandLineArguments["logFile"], std::ios::in | std::ios::binary);
+
     //Cycle through and get the last line
    string line;
 
+   //Flush to go back to the start of the file
+    //Clear the current error flag and EOF flag
+    //Then seek to the top of the file
+    logFile.clear();
+    logFile.seekg(0);
+
    while(getline(logFile, line)) {
         //Do nothing
-        cout << "Number of chars read previously: " << logFile.gcount() << endl;
    }
 
+    //Need to decrypt the line to be able to read it
+    line = decrypt(line, commandLineArguments["-K"], commandLineArguments);
+
    cout << "logFile at EOF?: " << logFile.eof() << endl;
-   cout << line << endl;
+   cout << "line: "<< line << endl;
 
    //We have the last line
 
@@ -59,7 +72,7 @@ bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile)
     }
 
     //Now decrypt the line
-    line = decrypt(line, commandLineArguments["-K"]);
+    line = decrypt(line, commandLineArguments["-K"], commandLineArguments);
     cout << "Decrypted Line: " << line << endl;
 
    //Now parse into an array of substrings
@@ -106,12 +119,23 @@ vector<string> splitStringT(const string& str, char delimiter) {
 }
 
 
-bool validArrivalLeave(map<string, string>& commandLineArguments, fstream& logFile, string name) {
+bool validArrivalLeave(map<string, string>& commandLineArguments, string name) {
     // No employee or guest should enter a room without first entering the gallery. 
     //No employee or guest should enter a room without having left a previous room. 
     //Violation of either of these conditions implies inconsistency with the current 
     //log state and should result in logappend exiting with an error condition.
     //Same for leave
+
+    //Open the file
+    ifstream logFile;
+
+    logFile.open(commandLineArguments["logFile"], std::ios::in | std::ios::binary);
+
+    if (!logFile.is_open()) {
+        //Could not open the file
+        cout << "validArrivalLeave: COULD NOT OPEN FILE" << endl;
+        return false;
+    }
 
 	bool justEnteredGallery = false;
 
@@ -126,12 +150,15 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, fstream& logFi
 
     //Clear the current error flag and EOF flag
     //Then seek to the top of the file
-    logFile.clear();
-    logFile.seekg(0);
+    //logFile.clear();
+    //logFile.seekg(0);
 
     //cout << "logFile at EOF?: " << logFile.eof() << endl;
 
     while (getline(logFile, currentLine)) {
+
+        //Decrypt the line
+        currentLine = decrypt(currentLine, commandLineArguments["-K"], commandLineArguments);
 
         //Find the guest or employee flag
         //E OR G will be the first occurance in the log
@@ -221,11 +248,11 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, fstream& logFi
 
 
 bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResult) {
-     //Have a full line of arguments
-    cout << "Full line of arguments given" << endl;
+    //  //Have a full line of arguments
+    // cout << "Full line of arguments given" << endl;
 
-    //Now send off to sanatize the full command
-    //Returns T/F => T = Successful / F = Invalid
+    // //Now send off to sanatize the full command
+    // //Returns T/F => T = Successful / F = Invalid
     if (!sanatizeInput(argc, argv, sanatizedResult)) {
         return false;
     }
@@ -237,21 +264,18 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
     //Now open the map
     fstream log;
 
-    log.open(sanatizedResult["logFile"]);
+    // log.open(sanatizedResult["logFile"], std::ios::app | std::ios::binary);
 
-    //Check if error when opening,
-    //if so, error or as invalid!
-    if (!log.is_open()) {
-        cout << "FILE NOT OPEN!" << endl;
-        return false;
-    }
+    
 
-    cout << "LOG IS OPEN" << endl;
+    
 
-    //Now open, now check if the timestamp is valid
-    if (!validTimeStamp(sanatizedResult, log)) {
-        return false;
-    }
+    // //Now open, now check if the timestamp is valid
+    // if (!validTimeStamp(sanatizedResult, log)) {
+    //     return false;
+    // }
+
+    cout << "NOW VALIDATING ARRIVAL & LEAVE" << endl;
 
     //Grab the name
     string name;
@@ -263,21 +287,31 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
     }
 
     //Now check for valid arrival/leave details
-    if(!validArrivalLeave(sanatizedResult, log, name)) {
-        return false; 
-    }
+    // if(!validArrivalLeave(sanatizedResult, name)) {
+    //     cout << "VALID ARRIVAL/LEAVE FAILED!" << endl;
+    //     return false; 
+    // }
 
-    //
-    // WRITING TO THE FILE, ALL GOOD SO NOW CAN WRITE!!
-    //
+    // //
+    // // WRITING TO THE FILE, ALL GOOD SO NOW CAN WRITE!!
+    // //
 
-    //Close the log file to reopen for appending only!!
-    log.close();
+    // //Close the log file to reopen for appending only!!
+    // log.close();
 
     //Reopen with append privs ONLY!!!
-    log.open(sanatizedResult["logFile"], std::ios::app); 
+    log.open(sanatizedResult["logFile"], std::ios::app | std::ios::binary); 
+
+    //Check if error when opening,
+    //if so, error or as invalid!
+    if (!log.is_open()) {
+        cout << "FILE NOT OPEN!" << endl;
+        return false;
+    }
+
 
     string logLine = sanatizedResult["-T"];
+    //string logLine = "1 A G Jeff";
 
 
 
@@ -305,17 +339,28 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
 
     }
 
+    //Add an endl to the file
+
     cout << "Line: " << logLine << endl;
+    cout << "Key: " << sanatizedResult["-K"] << endl;
 
     string encryptedLine;
+    string decryptedLine;
 
     //Encrypt with the key
-    encryptedLine = encrypt(encryptedLine, sanatizedResult["-K"], sanatizedResult);
+    encryptedLine = encrypt(logLine, sanatizedResult["-K"], sanatizedResult);
 
-    cout << encryptedLine << endl;
+    cout << "ENCYRPTED LINE (329 logappend.cpp): " << encryptedLine << endl;
+
+    decryptedLine = decrypt(encryptedLine, sanatizedResult["-K"], sanatizedResult);
+
+    cout << "DECRYPTED LINE (335 logappend.cpp): " << decryptedLine << endl;
 
     //Write to the file
     log.write(encryptedLine.c_str(), encryptedLine.size());
+
+    //Write a endl
+    log << endl;
 
     //Close the file out
     log.close();

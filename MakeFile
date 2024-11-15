@@ -13,7 +13,7 @@ logAppend: inputSanatizer.o encryptionHandler.o
 	$(compiler) $(logAppendsources) ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o $(logAppendTarget)
 
 
-logRead:
+logRead: inputSanatizer.o encryptionHandler.o
 	$(compiler) $(logReadsources) ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o $(logReadTarget)
 
 
