@@ -186,8 +186,6 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
         return false;
     }
 
-    //Add the file na
-
     return true;
 }
 
@@ -231,39 +229,40 @@ int main(int argc, char* argv[]) {
     //
     //-S argument
     //
-    // if (inputResult.find("-S") != inputResult.end()) {
-    //     //Found the -S, now grab the last 2 lines and print them
-    //     //Valid, now open the file
-    //     cout << "-S command being handled" << endl;
 
-    //     std::ifstream logFile;
+    if (inputResult.find("-S") != inputResult.end()) {
+        //Found the -S, now grab the last 2 lines and print them
+        //Valid, now open the file
+        cout << "-S command being handled" << endl;
 
-    //     logFile.open(inputResult["logFile"], std::ios::in | std::ios::binary);
+        std::ifstream logFile;
 
-    //     //Check if the file is open
-    //     if (!logFile.is_open()) {
-    //         return false;
-    //     }
+        logFile.open(inputResult["logFile"], std::ios::in | std::ios::binary);
 
-    //     //Last 2 lines
-    //     string lastLine1;
-    //     string lastLine2;
+        //Check if the file is open
+        if (!logFile.is_open()) {
+            return false;
+        }
 
-    //     //Curent line, just for getline to throw it into
-    //     string currentLine;
+        //Last 2 lines
+        string lastLine1;
+        string lastLine2;
 
-    //     while(getline(logFile, currentLine)) {
-    //         //Reset each of the lines
-    //         lastLine2 = lastLine1;
-    //         lastLine1 = currentLine;
-    //     }
+        //Curent line, just for getline to throw it into
+        string currentLine;
 
-    //     cout <<"Last line 2" << decrypt(lastLine2, inputResult["-K"]) << endl;
-    //     cout <<"Last line 1" << decrypt(lastLine1, inputResult["-K"]) << endl;
+        while(getline(logFile, currentLine)) {
+            //Reset each of the lines
+            lastLine2 = lastLine1;
+            lastLine1 = currentLine;
+        }
 
-    //     //Close the file
-    //     logFile.close();
-    // }
+        cout <<"Last line 2" << decrypt(lastLine2, inputResult["-K"], inputResult) << endl;
+        cout <<"Last line 1" << decrypt(lastLine1, inputResult["-K"], inputResult) << endl;
+
+        //Close the file
+        logFile.close();
+    }
 
 
     return 0;
