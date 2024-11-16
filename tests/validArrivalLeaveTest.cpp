@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
 	sanatizedResult.insert({"-G", "Jeff"});
 	sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test.txt"});
 
-	assert(!validArrivalLeave(sanatizedResult, logFile, "Fred"));	
+	assert(!validArrivalLeave(sanatizedResult, logFile, "Fred", false));	
 	cout << "false name passed" << endl << endl;
 	}
 	
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test1.txt"});
 
 		resultMapToString(sanatizedResult);
-		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff", false));
+		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "correct name with initially entering gallery passed" << endl << endl;
 	}
 
@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
 		resultMapToString(sanatizedResult);
 
 		//assert
-		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff"));
+		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "correct name and entering room passed" << endl << endl;
 	}
 
@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
 		resultMapToString(sanatizedResult);
 
 		//assert
-		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff"));
+		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "successfully prevented leaving without entering a room" << endl << endl;
 	}
 
@@ -145,7 +145,7 @@ int main(int argc, char* argv[]) {
 		//resultMapToString(sanatizedResult);
 
 		//assert
-		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff"));
+		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "correctly prevented to go to room without leaving" << endl;
 	}
 
@@ -174,7 +174,7 @@ int main(int argc, char* argv[]) {
 		//resultMapToString(sanatizedResult);
 
 		//assert
-		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff"));
+		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "correctly prevented to go to room without first entering the gallery" << endl << endl;
 	}
 
@@ -203,7 +203,7 @@ int main(int argc, char* argv[]) {
 		//resultMapToString(sanatizedResult);
 
 		//assert
-		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff"));
+		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "person can successfully leave a room" << endl;
 	}
 
@@ -232,7 +232,7 @@ int main(int argc, char* argv[]) {
 		//resultMapToString(sanatizedResult);
 
 		//assert
-		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff"));
+		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "passed: person cant enter a room without first entering the gallery" << endl;
 	}
 
@@ -262,7 +262,7 @@ int main(int argc, char* argv[]) {
 		//resultMapToString(sanatizedResult);
 
 		//assert
-		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff"));
+		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "passed: person cant enter a room without leaving a room" << endl;
 	}
 
@@ -292,7 +292,7 @@ int main(int argc, char* argv[]) {
 		//resultMapToString(sanatizedResult);
 
 		//assert
-		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff"));
+		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "passed: person cant leave a room without entering a room" << endl;
 	}
 
@@ -321,7 +321,7 @@ int main(int argc, char* argv[]) {
 		//resultMapToString(sanatizedResult);
 
 		//assert
-		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff"));
+		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "passed: person cant leave a room they are not currently in" << endl;
 	}
 
@@ -350,7 +350,7 @@ int main(int argc, char* argv[]) {
 		//resultMapToString(sanatizedResult);
 
 		//assert
-		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff"));
+		assert(!validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "passed: person cant leave a room they are not currently in" << endl;
 	}
 
@@ -379,7 +379,7 @@ int main(int argc, char* argv[]) {
 		//resultMapToString(sanatizedResult);
 
 		//assert
-		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff"));
+		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "passed: person can leave a room they are currently in" << endl;
 	}
 
@@ -408,7 +408,7 @@ int main(int argc, char* argv[]) {
 		//resultMapToString(sanatizedResult);
 
 		//assert
-		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff"));
+		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "passed: person can leave a room they are currently in" << endl;
 	}
 }
