@@ -40,9 +40,9 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
     
 
     //Now open, now check if the timestamp is valid
-    if (!validTimeStamp(sanatizedResult, log)) {
-        return false;
-    }
+    // if (!validTimeStamp(sanatizedResult, log)) {
+    //     return false;
+    // }
 
     cout << "NOW VALIDATING ARRIVAL & LEAVE" << endl;
 

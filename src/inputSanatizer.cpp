@@ -10,26 +10,43 @@
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; using std::regex_match;
 using std::fstream; using std::getline; using std::strtok; using std::vector; using std::ios; using std::pair;
-using std::ifstream;
+using std::ifstream; using std::stoi;
 
 bool sanatizeTime(int argc, char* argv[], map<string,string>& result) {
     //Now we have a valid time flag
     //Now check the time stamp
     //Valid range 1 to 1073741823 
 
+    regex timeStampDashMatcher("-T", std::regex_constants::ECMAScript);
+    
+
+    //Run the matcher and check
+    if(!regex_match(argv[1], timeStampDashMatcher)) {
+        //Bad time flag
+        cout << "Bad time flag found" << endl;
+       return false;
+    }
+
+    //Ensures its at least 1 digit and ensures its just a number, not with anything extra (%x or other)
+    regex timeStampMatcher("[0-9]+", std::regex_constants::ECMAScript);
+     if(!regex_match(argv[2], timeStampMatcher)) {
+        //Bad time
+        cout << "Bad time found" << endl;
+       return false;
+    }
+
+
     //convert to int
-    int timeStamp = atoi(argv[2]);
+    int timeStamp = stoi(argv[2]);
 
     if (timeStamp != 0) {
-        cout << "sanatizeTime, line 20: timeStamp > 0!!" << endl;
         //Check if with in valid range
         if (timeStamp >= 1 && timeStamp <= 1073741823) {
-            cout << "sanatizeTime, line 24: timeStamp >= 1 && timeStamp <= 1073741823!!" << endl;
             //Valid timestamp was found, now add to map
             result.insert(pair<string,string>(argv[1], argv[2]));
         } else {
             //Invalid timestamp
-            cout << "Time stamp not in range" << endl;
+            //cout << "Time stamp not in range" << endl;
             return false;
         }
     } else {
@@ -309,27 +326,30 @@ void resultMapToString(map<string,string>& sanatizedResult) {
 }
 
 
-bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile) {
+bool validTimeStamp(map<string, string>& commandLineArguments) {
     cout << "validating time stamp" << endl;
-    cout << "logFile open? : " << logFile.is_open() << endl;
-    cout << "logFile at EOF?: " << logFile.eof() << endl;
+    //cout << "logFile open? : " << logFile.is_open() << endl;
+    //cout << "logFile at EOF?: " << logFile.eof() << endl;
 
 //     //Close and reopen on byte stream
 //     logFile.close();
-//     logFile.open(commandLineArguments["logFile"], std::ios::in | std::ios::binary);
 
-//     //Cycle through and get the last line
-//    string line;
+    ifstream logFile;
+    logFile.open(commandLineArguments["logFile"], std::ios::in | std::ios::binary);
 
-//    //Flush to go back to the start of the file
-//     //Clear the current error flag and EOF flag
-//     //Then seek to the top of the file
-//     logFile.clear();
-//     logFile.seekg(0);
+    //Cycle through and get the last line
+   string line;
 
-//    while(getline(logFile, line)) {
-//         //Do nothing
-//    }
+   //Flush to go back to the start of the file
+    //Clear the current error flag and EOF flag
+    //Then seek to the top of the file
+    logFile.clear();
+    logFile.seekg(0);
+
+   while(getline(logFile, line)) {
+        //Do nothing
+        cout << line << endl;
+   }
 
 //     //Need to decrypt the line to be able to read it
 //     line = decrypt(line, commandLineArguments["-K"], commandLineArguments);

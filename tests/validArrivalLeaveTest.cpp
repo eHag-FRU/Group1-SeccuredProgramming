@@ -8,7 +8,7 @@
 using std::cout; using std::endl; using std::string; using std::map;
 
 int main(int argc, char* argv[]) {
-	
+	cout << "==== TESTING VALID ARRIVAL & LEAVE ====" << endl;
 	
 
 	// with false name
@@ -411,4 +411,7 @@ int main(int argc, char* argv[]) {
 		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
 		cout << "passed: person can leave a room they are currently in" << endl;
 	}
+
+
+	cout << endl << "====PASSED VALID ARRIVAL & LEAVE TESTS====" << endl << endl;
 }
