@@ -37,6 +37,7 @@ clean:
 	rm -f ./out/*.exe
 	rm -f ./out/logAppend
 	rm -f ./out/logRead
+	rm -f ./tests/out/*
 
 
 tests: inputSanatizer.o encryptionHandler.o

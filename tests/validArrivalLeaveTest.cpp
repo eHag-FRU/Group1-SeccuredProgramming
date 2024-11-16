@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 	sanatizedResult.insert({"-T", "1"});
 	sanatizedResult.insert({"-K", "secret"});
 	sanatizedResult.insert({"-G", "Jeff"});
-	sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test.txt"});
+	sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test1.txt"});
 
 	assert(!validArrivalLeave(sanatizedResult, logFile, "Fred", false));	
 	cout << "false name passed" << endl << endl;
@@ -80,7 +80,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-A", "A"});
 		sanatizedResult.insert({"-G", "Jeff"});
 		sanatizedResult.insert({"-R", "1"});
-		sanatizedResult.insert({"logFile", "test.txt"});
+		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test1.txt"});
 
 		// test
 		resultMapToString(sanatizedResult);
@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-L", "L"});
 		sanatizedResult.insert({"-G", "Jeff"});
 		sanatizedResult.insert({"-R", "1"});
-		sanatizedResult.insert({"logFile", "test.txt"});
+		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test1.txt"});
 
 		// test
 		resultMapToString(sanatizedResult);
@@ -139,7 +139,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-A", "A"});
 		sanatizedResult.insert({"-G", "Jeff"});
 		sanatizedResult.insert({"-R", "2"});
-		sanatizedResult.insert({"logFile", "test.txt"});
+		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test2.txt"});
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -168,7 +168,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-A", "A"});
 		sanatizedResult.insert({"-G", "Jeff"});
 		sanatizedResult.insert({"-R", "1"});
-		sanatizedResult.insert({"logFile", "test.txt"});
+		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test2.txt"});
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -197,7 +197,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-L", "L"});
 		sanatizedResult.insert({"-G", "Jeff"});
 		sanatizedResult.insert({"-R", "1"});
-		sanatizedResult.insert({"logFile", "test.txt"});
+		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test2.txt"});
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -226,7 +226,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-A", "A"});
 		sanatizedResult.insert({"-G", "Jeff"});
 		sanatizedResult.insert({"-R", "1"});
-		sanatizedResult.insert({"logFile", "test.txt"});
+		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test3.txt"});
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -256,7 +256,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-A", "A"});
 		sanatizedResult.insert({"-G", "Jeff"});
 		sanatizedResult.insert({"-R", "2"});
-		sanatizedResult.insert({"logFile", "test.txt"});
+		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test5.txt"});
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -286,7 +286,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-L", "L"});
 		sanatizedResult.insert({"-G", "Jeff"});
 		sanatizedResult.insert({"-R", "1"});
-		sanatizedResult.insert({"logFile", "test.txt"});
+		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test6.txt"});
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -315,7 +315,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-L", "L"});
 		sanatizedResult.insert({"-G", "Jeff"});
 		sanatizedResult.insert({"-R", "3"});
-		sanatizedResult.insert({"logFile", "test.txt"});
+		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test2.txt"});
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -344,7 +344,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-L", "L"});
 		sanatizedResult.insert({"-G", "Jeff"});
 		sanatizedResult.insert({"-R", "2"});
-		sanatizedResult.insert({"logFile", "test.txt"});
+		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test2.txt"});
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -373,7 +373,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-L", "L"});
 		sanatizedResult.insert({"-G", "Jeff"});
 		sanatizedResult.insert({"-R", "3"});
-		sanatizedResult.insert({"logFile", "test.txt"});
+		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test7.txt"});
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -402,7 +402,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-L", "L"});
 		sanatizedResult.insert({"-G", "Jeff"});
 		sanatizedResult.insert({"-R", "3"});
-		sanatizedResult.insert({"logFile", "test.txt"});
+		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test8.txt"});
 
 		// test
 		//resultMapToString(sanatizedResult);

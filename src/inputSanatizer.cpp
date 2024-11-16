@@ -314,67 +314,67 @@ bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile)
     cout << "logFile open? : " << logFile.is_open() << endl;
     cout << "logFile at EOF?: " << logFile.eof() << endl;
 
-    //Close and reopen on byte stream
-    logFile.close();
-    logFile.open(commandLineArguments["logFile"], std::ios::in | std::ios::binary);
+//     //Close and reopen on byte stream
+//     logFile.close();
+//     logFile.open(commandLineArguments["logFile"], std::ios::in | std::ios::binary);
 
-    //Cycle through and get the last line
-   string line;
+//     //Cycle through and get the last line
+//    string line;
 
-   //Flush to go back to the start of the file
-    //Clear the current error flag and EOF flag
-    //Then seek to the top of the file
-    logFile.clear();
-    logFile.seekg(0);
+//    //Flush to go back to the start of the file
+//     //Clear the current error flag and EOF flag
+//     //Then seek to the top of the file
+//     logFile.clear();
+//     logFile.seekg(0);
 
-   while(getline(logFile, line)) {
-        //Do nothing
-   }
+//    while(getline(logFile, line)) {
+//         //Do nothing
+//    }
 
-    //Need to decrypt the line to be able to read it
-    line = decrypt(line, commandLineArguments["-K"], commandLineArguments);
+//     //Need to decrypt the line to be able to read it
+//     line = decrypt(line, commandLineArguments["-K"], commandLineArguments);
 
-   cout << "logFile at EOF?: " << logFile.eof() << endl;
-   cout << "line: "<< line << endl;
+//    cout << "logFile at EOF?: " << logFile.eof() << endl;
+//    cout << "line: "<< line << endl;
 
-   //We have the last line
+//    //We have the last line
 
-    //Empty? => NO FILE CONTENTS!!!, automatically valid!!!
-    if (line.empty()) {
-        //Automatically true
-        //Since the log is EMPTY!
-        return true;
-    }
+//     //Empty? => NO FILE CONTENTS!!!, automatically valid!!!
+//     if (line.empty()) {
+//         //Automatically true
+//         //Since the log is EMPTY!
+//         return true;
+//     }
 
-    //Now decrypt the line
-    line = decrypt(line, commandLineArguments["-K"], commandLineArguments);
-    cout << "Decrypted Line: " << line << endl;
+//     //Now decrypt the line
+//     line = decrypt(line, commandLineArguments["-K"], commandLineArguments);
+//     cout << "Decrypted Line: " << line << endl;
 
-   //Now parse into an array of substrings
-   //split on the single space
+//    //Now parse into an array of substrings
+//    //split on the single space
 
-    cout << "Last Time Stamp: " << line[0] << endl;
+//     cout << "Last Time Stamp: " << line[0] << endl;
 
-    int lastTimeStamp = atoi(string({line[0]}).c_str());
+//     int lastTimeStamp = atoi(string({line[0]}).c_str());
 
-    if (lastTimeStamp == 0) {
-        //Conversion failed
-        //OR is a 0 time stamp (not valid)
-        return false;
-    }
+//     if (lastTimeStamp == 0) {
+//         //Conversion failed
+//         //OR is a 0 time stamp (not valid)
+//         return false;
+//     }
 
-    int newLineTimeStamp = atoi(commandLineArguments["-T"].c_str());
+//     int newLineTimeStamp = atoi(commandLineArguments["-T"].c_str());
 
-    if (newLineTimeStamp == 0) {
-        //Conversion failed
-        //OR is a 0 time stamp (not valid)
-        return false;
-    }
+//     if (newLineTimeStamp == 0) {
+//         //Conversion failed
+//         //OR is a 0 time stamp (not valid)
+//         return false;
+//     }
 
-    if (newLineTimeStamp < lastTimeStamp) {
-        //INVALID TIME STAMP FOUND!!!
-        return false;
-    }
+//     if (newLineTimeStamp < lastTimeStamp) {
+//         //INVALID TIME STAMP FOUND!!!
+//         return false;
+//     }
    
     //Time stamp is valid!!!
     return true;
