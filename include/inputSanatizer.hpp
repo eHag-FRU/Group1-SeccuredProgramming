@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 
 bool sanatizeTime(int argc, char* argv[], std::map<std::string,std::string>& result);
@@ -14,6 +15,11 @@ bool sanatizeFilePath(int argc, char* argv[], std::map<std::string,std::string>&
 
 bool sanatizeInput(int argc, char* argv[], std::map<std::string, std::string>& resultingMap);
 
+
+void resultMapToString(std::map<std::string,std::string>& sanatizedResult);
+bool validTimeStamp(std::map<std::string, std::string>& commandLineArguments, std::fstream& logFile);
+bool validArrivalLeave(std::map<std::string, std::string>& commandLineArguments, std::fstream& logFileT, std::string name, bool testFlag);
+std::vector<std::string> splitStringT(const std::string& str, char delimiter);
 
 
 

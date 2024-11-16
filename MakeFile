@@ -10,21 +10,39 @@ COMPILER_FLAGS = -I./include/ -I./include/cryptopp/ -L./include/cryptopp890/ -lc
 
 
 logAppend: inputSanatizer.o encryptionHandler.o
-	$(compiler) $(logAppendsources) ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o $(logAppendTarget)
+	$(compiler) $(logAppendsources) ./out/inputSanatizer.o ./out/encryptionHandler.o -fanalyzer $(COMPILER_FLAGS) -o $(logAppendTarget)
 
 
 logRead: inputSanatizer.o encryptionHandler.o
-	$(compiler) $(logReadsources) ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o $(logReadTarget)
+	$(compiler) $(logReadsources) ./out/inputSanatizer.o ./out/encryptionHandler.o  $(COMPILER_FLAGS) -o $(logReadTarget) 
 
-
-inputSanatizer.o: inputSanatizer.o encryptionHandler.o
-	$(compiler) ./src/inputSanatizer.cpp -c -I./include -o ./out/inputSanatizer.o
 
 encryptionHandler.o:
-	$(compiler) ./src/encryptionHandler.cpp -c -I./include -I./include/cryptopp/ -L./include/cryptopp890/ -lcryptopp -o ./out/encryptionHandler.o
+	$(compiler) ./src/encryptionHandler.cpp -c -I./include -I./include/cryptopp/ -fanalyzer -L./include/cryptopp890/ -lcryptopp -o ./out/encryptionHandler.o
+
+inputSanatizer.o: encryptionHandler.o
+	$(compiler) ./src/inputSanatizer.cpp ./out/encryptionHandler.o -c -I./include $(COMPILER_FLAGS) -o ./out/inputSanatizer.o
+	
+
+
+logappend.o: inputSanatizer.o encryptionHandler.o
+	$(compiler) $(logAppendsources) ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o ./out/logappend.o
+
+
+test.o: inputSanatizer.o encryptionHandler.o
+	ld -relocatable ./out/inputSanatizer.o ./out/encryptionHandler.o -o ./out/test.o
 
 clean:
 	rm -f ./out/*.o
 	rm -f ./out/*.exe
 	rm -f ./out/logAppend
 	rm -f ./out/logRead
+
+
+tests: inputSanatizer.o encryptionHandler.o
+ # $(compiler) ./tests/logAppendTests.cpp -I./include -o ./tests/out/logAppendTests
+ #./tests/out/logAppendTests
+
+	$(compiler) ./tests/validArrivalLeaveTest.cpp ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o ./tests/out/validArrivalLeaveTest
+
+	

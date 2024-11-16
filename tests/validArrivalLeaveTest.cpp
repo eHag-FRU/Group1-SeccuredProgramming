@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include "../include/logappend.hpp"
+#include "inputSanatizer.hpp"
 #include <cassert>
 
 using std::cout; using std::endl; using std::string; using std::map;
@@ -15,7 +16,7 @@ int main(int argc, char* argv[]) {
 	//setup
 	cout << "TEST 1" << endl << endl;
 	std::fstream logFile;
-	logFile.open("./testTxtFiles/test1.txt", std::ios::in);
+	logFile.open("./tests/testTxtFiles/test1.txt", std::ios::in);
 
 	if (!logFile) {
         std::cerr << "File could not be opened for writing!" << std::endl;
@@ -27,7 +28,7 @@ int main(int argc, char* argv[]) {
 	sanatizedResult.insert({"-T", "1"});
 	sanatizedResult.insert({"-K", "secret"});
 	sanatizedResult.insert({"-G", "Jeff"});
-	sanatizedResult.insert({"logFile", "test.txt"});
+	sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test.txt"});
 
 	assert(!validArrivalLeave(sanatizedResult, logFile, "Fred"));	
 	cout << "false name passed" << endl << endl;
@@ -40,7 +41,7 @@ int main(int argc, char* argv[]) {
 	//setup
 	cout << "TEST 2" << endl << endl;
 	std::fstream logFile;
-	logFile.open("./testTxtFiles/test1.txt", std::ios::in);
+	logFile.open("./tests/testTxtFiles/test1.txt", std::ios::in);
 
 	if (!logFile) {
         std::cerr << "File could not be opened for writing!" << std::endl;
@@ -53,10 +54,10 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-K", "secret"});
 		sanatizedResult.insert({"-A", "A"});
 		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"logFile", "test.txt"});
+		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test1.txt"});
 
 		resultMapToString(sanatizedResult);
-		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff"));
+		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff", false));
 		cout << "correct name with initially entering gallery passed" << endl << endl;
 	}
 
@@ -65,7 +66,7 @@ int main(int argc, char* argv[]) {
 		// setup
 		cout << "TEST 3" << endl << endl;
 		std::fstream logFile;
-		logFile.open("./testTxtFiles/test1.txt", std::ios::in);
+		logFile.open("./tests/testTxtFiles/test1.txt", std::ios::in);
 
 		if (!logFile) {
 			std::cerr << "File could not be opened for writing!" << std::endl << endl;
@@ -94,7 +95,7 @@ int main(int argc, char* argv[]) {
 		// setup
 		cout << "TEST 4" << endl << endl;
 		std::fstream logFile;
-		logFile.open("./testTxtFiles/test1.txt", std::ios::in);
+		logFile.open("./tests/testTxtFiles/test1.txt", std::ios::in);
 
 		if (!logFile) {
 			std::cerr << "File could not be opened for writing!" << std::endl;
@@ -124,7 +125,7 @@ int main(int argc, char* argv[]) {
 		// setup
 		cout << "TEST 5" << endl << endl;
 		std::fstream logFile;
-		logFile.open("./testTxtFiles/test2.txt", std::ios::in);
+		logFile.open("./tests/testTxtFiles/test2.txt", std::ios::in);
 
 		if (!logFile) {
 			std::cerr << "File could not be opened for writing!" << std::endl;
@@ -153,7 +154,7 @@ int main(int argc, char* argv[]) {
 		// setup
 		cout << "TEST 6" << endl << endl;
 		std::fstream logFile;
-		logFile.open("./testTxtFiles/test2.txt", std::ios::in);
+		logFile.open("./tests/testTxtFiles/test2.txt", std::ios::in);
 
 		if (!logFile) {
 			std::cerr << "File could not be opened for writing!" << std::endl;
@@ -182,7 +183,7 @@ int main(int argc, char* argv[]) {
 		// setup
 		cout << "TEST 7" << endl << endl;
 		std::fstream logFile;
-		logFile.open("./testTxtFiles/test2.txt", std::ios::in);
+		logFile.open("./tests/testTxtFiles/test2.txt", std::ios::in);
 
 		if (!logFile) {
 			std::cerr << "File could not be opened for writing!" << std::endl;
@@ -211,7 +212,7 @@ int main(int argc, char* argv[]) {
 		// setup
 		cout << "TEST 8" << endl << endl;
 		std::fstream logFile;
-		logFile.open("./testTxtFiles/test3.txt", std::ios::in);
+		logFile.open("./tests/testTxtFiles/test3.txt", std::ios::in);
 
 		if (!logFile) {
 			std::cerr << "File could not be opened for writing!" << std::endl;
@@ -241,7 +242,7 @@ int main(int argc, char* argv[]) {
 		// setup
 		cout << "TEST 9" << endl << endl;
 		std::fstream logFile;
-		logFile.open("./testTxtFiles/test5.txt", std::ios::in);
+		logFile.open("./tests/testTxtFiles/test5.txt", std::ios::in);
 
 		if (!logFile) {
 			std::cerr << "File could not be opened for writing!" << std::endl;
@@ -271,7 +272,7 @@ int main(int argc, char* argv[]) {
 		// setup
 		cout << "TEST 10" << endl << endl;
 		std::fstream logFile;
-		logFile.open("./testTxtFiles/test6.txt", std::ios::in);
+		logFile.open("./tests/testTxtFiles/test6.txt", std::ios::in);
 
 		if (!logFile) {
 			std::cerr << "File could not be opened for writing!" << std::endl;
@@ -300,7 +301,7 @@ int main(int argc, char* argv[]) {
 		// setup
 		cout << "TEST 11" << endl << endl;
 		std::fstream logFile;
-		logFile.open("./testTxtFiles/test2.txt", std::ios::in);
+		logFile.open("./tests/testTxtFiles/test2.txt", std::ios::in);
 
 		if (!logFile) {
 			std::cerr << "File could not be opened for writing!" << std::endl;
@@ -329,7 +330,7 @@ int main(int argc, char* argv[]) {
 		// setup
 		cout << "TEST 12" << endl << endl;
 		std::fstream logFile;
-		logFile.open("./testTxtFiles/test2.txt", std::ios::in);
+		logFile.open("./tests/testTxtFiles/test2.txt", std::ios::in);
 
 		if (!logFile) {
 			std::cerr << "File could not be opened for writing!" << std::endl;
@@ -358,7 +359,7 @@ int main(int argc, char* argv[]) {
 		// setup
 		cout << "TEST 13" << endl << endl;
 		std::fstream logFile;
-		logFile.open("./testTxtFiles/test7.txt", std::ios::in);
+		logFile.open("./tests/testTxtFiles/test7.txt", std::ios::in);
 
 		if (!logFile) {
 			std::cerr << "File could not be opened for writing!" << std::endl;
@@ -387,7 +388,7 @@ int main(int argc, char* argv[]) {
 		// setup
 		cout << "TEST 14" << endl << endl;
 		std::fstream logFile;
-		logFile.open("./testTxtFiles/test8.txt", std::ios::in);
+		logFile.open("./tests/testTxtFiles/test8.txt", std::ios::in);
 
 		if (!logFile) {
 			std::cerr << "File could not be opened for writing!" << std::endl;
