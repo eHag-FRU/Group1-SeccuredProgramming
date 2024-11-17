@@ -32,3 +32,6 @@
 *.app
 .vscode/settings.json
 log1
+
+# Ignore the cryptopp890 folder inside the include directory
+include/cryptopp890/

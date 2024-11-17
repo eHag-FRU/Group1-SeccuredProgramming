@@ -5,13 +5,14 @@
 #include <iterator>
 #include <fstream>
 #include <utility>
-#include "inputSanatizer.hpp"
-#include "encryptionHandler.hpp"
+#include <sstream>
+#include "../include/inputSanatizer.hpp"
+#include "../include/encryptionHandler.hpp"
 
 
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; 
-using std::regex_match; using std::iterator; using std::ifstream; using std::pair;
+using std::regex_match; using std::iterator; using std::ifstream; using std::pair; using std::vector;
 
 //Versions for log read
 bool sanatizeLogReadToken(int argc, char* argv[], map<string,string>& result) {
@@ -203,6 +204,20 @@ void resultMapToString(map<string,string>& sanatizedResult) {
         iterator++;
     }
 }
+
+// Function to split a string by a delimiter and return a vector of substrings
+vector<string> splitString(const string& str, char delimiter) {
+    vector<string> tokens;
+    std::istringstream stream(str);
+    string token;
+    
+    while (getline(stream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    
+    return tokens;
+}
+
 
 int main(int argc, char* argv[]) {
     //Need to check the number of arguments

@@ -1,0 +1,5 @@
+1 A E Lucy
+1 A G Bob
+1 A G George
+1 A 1 G Bob
+1 A 2 E Lucy
