@@ -80,8 +80,7 @@ bool validTimeStamp(map<string, string>& commandLineArguments, fstream& logFile)
 
     cout << "Last Time Stamp: " << line[0] << endl;
 
-    int lastTimeStamp = atoi(string({line[0]}).c_str());
-
+	int lastTimeStamp = atoi(std::string(1, line[0]).c_str());
     if (lastTimeStamp == 0) {
         //Conversion failed
         //OR is a 0 time stamp (not valid)
