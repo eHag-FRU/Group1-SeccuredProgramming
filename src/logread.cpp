@@ -8,6 +8,7 @@
 #include <sstream>
 #include "inputSanatizer.hpp"
 #include "encryptionHandler.hpp"
+#include "../include/rTag.hpp"
 
 
 
@@ -167,6 +168,8 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
 
         //Valid, now do the employee/guest check
         //(REQUIRED TO FOLLOW AFTER -R!!!!)
+        
+        sanatizeLogReadEmployeeOrGuestName(argc, argv, result, 4);
 
 
     } else {
@@ -192,31 +195,31 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
     return true;
 }
 
-void resultMapToString(map<string,string>& sanatizedResult) {
-    //Print out the map
-    cout << "Resulting map size: " << sanatizedResult.size() << endl;
+// void resultMapToString(map<string,string>& sanatizedResult) {
+//     //Print out the map
+//     cout << "Resulting map size: " << sanatizedResult.size() << endl;
 
-    auto iterator = sanatizedResult.begin();
+//     auto iterator = sanatizedResult.begin();
 
-    cout << "sanatizedResult: " << endl;
-    while (iterator != sanatizedResult.end()) {
-        cout << "[" << iterator->first << "] = " << iterator->second << endl;
+//     cout << "sanatizedResult: " << endl;
+//     while (iterator != sanatizedResult.end()) {
+//         cout << "[" << iterator->first << "] = " << iterator->second << endl;
 
-        iterator++;
-    }
-}
+//         iterator++;
+//     }
+// }
 
-vector<string> splitString(const string& str, char delimiter) {
-    vector<string> tokens;
-    std::istringstream stream(str);
-    string token;
+// vector<string> splitString(const string& str, char delimiter) {
+//     vector<string> tokens;
+//     std::istringstream stream(str);
+//     string token;
     
-    while (getline(stream, token, delimiter)) {
-        tokens.push_back(token);
-    }
+//     while (getline(stream, token, delimiter)) {
+//         tokens.push_back(token);
+//     }
 
-    return tokens;
-}
+//     return tokens;
+// }
 
 
 
@@ -280,6 +283,8 @@ int main(int argc, char* argv[]) {
 
         //Close the file
         logFile.close();
+    } else if (inputResult.find("-R") != inputResult.end()) {
+        rTagFunctionality(inputResult, false);
     }
 
 

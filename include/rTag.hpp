@@ -7,14 +7,14 @@
 #include <utility>
 #include <sstream>
 #include "../include/inputSanatizer.hpp"
-#include "../include/encryptionHandler.hpp"
+#include "./encryptionHandler.hpp"
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; 
 using std::regex_match; using std::iterator; using std::ifstream; using std::pair; using std::vector;
 
 
 vector<string> splitString(const string& str, char delimiter);
-vector<string> rTagFunctionality(map<string,string>& cmdLine);
+vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode);
 
 
 // Function to split a string by a delimiter and return a vector of substrings
@@ -30,7 +30,7 @@ vector<string> splitString(const string& str, char delimiter) {
     return tokens;
 }
 
-vector<string> rTagFunctionality(map<string,string>& cmdLine) {
+vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode) {
 	//declare tags that could contain the persons name
 	string E = "-E";
 	string G = "-G";
@@ -80,6 +80,11 @@ vector<string> rTagFunctionality(map<string,string>& cmdLine) {
 																		// if the file is not empty, then we can start reading the file	
 		while(getline(logFile, currentLine)) {
 			//cout << "currentLine: " << currentLine << endl;
+
+			//Decrypt the current line
+			if(!debugMode) {
+				currentLine = decrypt(currentLine, cmdLine["-K"], cmdLine);
+			}
 
 			// split the line by space
 			vector<string> line = splitString(currentLine, ' ');

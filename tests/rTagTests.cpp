@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
 		
 
 		// invokation
-		vector<string> roomNumbers = rTagFunctionality(sanatizedResult);
+		vector<string> roomNumbers = rTagFunctionality(sanatizedResult, true);
 
 		cout << "after rtag invokaiton" << endl;
 
@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 		
 
 		// invokation
-		vector<string> roomNumbers = rTagFunctionality(sanatizedResult);
+		vector<string> roomNumbers = rTagFunctionality(sanatizedResult, true);
 		
 
 		// assert
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
 		
 
 		// invokation
-		vector<string> roomNumbers = rTagFunctionality(sanatizedResult);
+		vector<string> roomNumbers = rTagFunctionality(sanatizedResult, true);
 		
 
 		// assert
@@ -91,7 +91,7 @@ int main(int argc, char* argv[]) {
 		
 
 		// invokation
-		vector<string> roomNumbers = rTagFunctionality(sanatizedResult);
+		vector<string> roomNumbers = rTagFunctionality(sanatizedResult, true);
 		
 
 		// assert
@@ -114,7 +114,7 @@ int main(int argc, char* argv[]) {
 		
 
 		// invokation
-		vector<string> roomNumbers = rTagFunctionality(sanatizedResult);
+		vector<string> roomNumbers = rTagFunctionality(sanatizedResult, true);
 		
 
 		// assert
@@ -137,7 +137,7 @@ int main(int argc, char* argv[]) {
 		
 
 		// invokation
-		vector<string> roomNumbers = rTagFunctionality(sanatizedResult);
+		vector<string> roomNumbers = rTagFunctionality(sanatizedResult, true);
 		
 
 		// assert
@@ -161,7 +161,7 @@ int main(int argc, char* argv[]) {
 		
 
 		// invokation
-		vector<string> roomNumbers = rTagFunctionality(sanatizedResult);
+		vector<string> roomNumbers = rTagFunctionality(sanatizedResult, true);
 		
 
 		// assert

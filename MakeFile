@@ -29,9 +29,6 @@ logappend.o: inputSanatizer.o encryptionHandler.o
 	$(compiler) $(logAppendsources) ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o ./out/logappend.o
 
 
-test.o: inputSanatizer.o encryptionHandler.o
-	ld -relocatable ./out/inputSanatizer.o ./out/encryptionHandler.o -o ./out/test.o
-
 clean:
 	rm -f ./out/*.o
 	rm -f ./out/*.exe
