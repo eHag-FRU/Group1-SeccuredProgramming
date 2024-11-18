@@ -33,16 +33,17 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
     //Now open the map
     fstream log;
 
-    // log.open(sanatizedResult["logFile"], std::ios::app | std::ios::binary);
+    //log.open(sanatizedResult["logFile"], std::ios::app | std::ios::binary);
 
     
-
+    //validTimeStamp(sanatizedResult, log);
     
+
 
     //Now open, now check if the timestamp is valid
-    // if (!validTimeStamp(sanatizedResult, log)) {
-    //     return false;
-    // }
+    if (!validTimeStamp(sanatizedResult)) {
+        return false;
+    }
 
     cout << "NOW VALIDATING ARRIVAL & LEAVE" << endl;
 
