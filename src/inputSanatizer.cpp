@@ -10,7 +10,7 @@
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; using std::regex_match;
 using std::fstream; using std::getline; using std::strtok; using std::vector; using std::ios; using std::pair;
-using std::ifstream; using std::stoi;
+using std::ifstream; using std::stoi; using std::cerr;
 
 bool sanatizeTime(int argc, char* argv[], map<string,string>& result) {
     //Now we have a valid time flag
@@ -208,11 +208,12 @@ bool sanatizeFilePath(int argc, char* argv[], map<string,string>& result) {
 }
 
 
-bool sanatizeInput(int argc, char* argv[], map<string, string>& result) {
+bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
     cout << ("Sanatizing the input!!!!") << endl;
 
     //Check for the correct argument count again
-    if (argc != 9 && argc != 11) {
+    if (fargc != 9 && fargc != 11) {
+		cout << "Invalid number of arguments" << endl;
         return false;
     }
 
@@ -223,10 +224,12 @@ bool sanatizeInput(int argc, char* argv[], map<string, string>& result) {
     regex timeStampDashMatcher("-T", std::regex_constants::ECMAScript);
 
     //Run the matcher and check
-    if(regex_match(argv[1], timeStampDashMatcher)) {
+	cout << "argv[1]: " << fargv[1] << endl;
+    if(regex_match(fargv[1], timeStampDashMatcher)) {
         //Good time flag found, now pull in the time
-        if (!sanatizeTime(argc, argv, result)) {
+        if (!sanatizeTime(fargc, fargv, result)) {
             //Bad time stamp
+			cerr << "Invalid time stamp" << endl;
             return false;
         }
     } else {
@@ -240,9 +243,10 @@ bool sanatizeInput(int argc, char* argv[], map<string, string>& result) {
     //
     regex tokenDashMatcher("-K", std::regex_constants::ECMAScript);
 
-    if (regex_match(argv[3], tokenDashMatcher)) {
+    if (regex_match(fargv[3], tokenDashMatcher)) {
         //Now we have a valid token flag
-        if(!sanatizeToken(argc, argv, result)) {
+        if(!sanatizeToken(fargc, fargv, result)) {
+			cerr << "Invalid token" << endl;
             return false;
         }
     } else {
@@ -256,28 +260,32 @@ bool sanatizeInput(int argc, char* argv[], map<string, string>& result) {
     regex nameTagDashMatcher("(-E|-G){1,1}", std::regex_constants::ECMAScript);
     regex arrivalLeaveTagDashMatcher("(-A|-L){1,1}", std::regex_constants::ECMAScript);
 
-    if (regex_match(argv[5], nameTagDashMatcher)) {
-        if (!sanatizeEmployeeOrGuestName(argc, argv, result, 5)) {
+    if (regex_match(fargv[5], nameTagDashMatcher)) {
+        if (!sanatizeEmployeeOrGuestName(fargc, fargv, result, 5)) {
             //Failed to sanatize and parse
+			cerr << "Invalid employee or guest name" << endl;
             return false;
         }
 
         //Now parse the arrive/leave tag
-        if(!sanatizeAriveLeaveTag(argc, argv, result, 7)) {
+        if(!sanatizeAriveLeaveTag(fargc, fargv, result, 7)) {
             //Failed to sanatize and parse
+			cerr << "Invalid arrival or leave tag" << endl;
             return false;
         }
 
-    } else if (regex_match(argv[5], arrivalLeaveTagDashMatcher)) {
+    } else if (regex_match(fargv[5], arrivalLeaveTagDashMatcher)) {
 
         //Now parse the arrive/leave tag
-        if(!sanatizeAriveLeaveTag(argc, argv, result, 5)) {
+        if(!sanatizeAriveLeaveTag(fargc, fargv, result, 5)) {
             //Failed to sanatize and parse
+			cerr << "Invalid arrival or leave tag" << endl;
             return false;
         }
 
-        if (!sanatizeEmployeeOrGuestName(argc, argv, result, 6)) {
+        if (!sanatizeEmployeeOrGuestName(fargc, fargv, result, 6)) {
             //Failed to sanatize and parse
+			cerr << "Invalid employee or guest name" << endl;
             return false;
         }
 
@@ -292,14 +300,16 @@ bool sanatizeInput(int argc, char* argv[], map<string, string>& result) {
     //
     // ROOM
     //
-    if (argc == 11) {
+    if (fargc == 11) {
         regex roomDashMatcher("-R", std::regex_constants::ECMAScript);
-        if (regex_match(argv[8], roomDashMatcher)) {
+        if (regex_match(fargv[8], roomDashMatcher)) {
             //Now we have a valid token flag
-            if (!sanatizeRoomID(argc, argv, result)) {
+            if (!sanatizeRoomID(fargc, fargv, result)) {
+				cerr << "Invalid room ID" << endl;
                 return false;
             }
         } else {
+			cerr << "Invalid room ID" << endl;
             return false;
         }
     }
@@ -307,7 +317,8 @@ bool sanatizeInput(int argc, char* argv[], map<string, string>& result) {
     //
     // LOG FILE
     //
-    if (!sanatizeFilePath(argc, argv, result)) {
+    if (!sanatizeFilePath(fargc, fargv, result)) {
+		cerr << "Invalid file path" << endl;
         return false;
     }
 
@@ -376,7 +387,7 @@ bool validTimeStamp(map<string, string>& commandLineArguments) {
 
     cout << "Last Time Stamp: " << lastLine[0] << endl;
 
-    int lastTimeStamp = atoi(string({lastLine[0]}).c_str());
+	int lastTimeStamp = atoi(string(1, lastLine[0]).c_str());
 
     if (lastTimeStamp == 0) {
         //Conversion failed
