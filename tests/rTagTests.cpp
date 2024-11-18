@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-K", "secret"});
 		sanatizedResult.insert({"-R", "R"});
 		sanatizedResult.insert({"-E", "Jeff"});
-		sanatizedResult.insert({"logFile", "../tests/rTagTxtFiles/test1.txt"});
+		sanatizedResult.insert({"logFile", "./tests/rTagTxtFiles/test1.txt"});
 
 		
 
@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-K", "secret"});
 		sanatizedResult.insert({"-R", "R"});
 		sanatizedResult.insert({"-E", "Jeff"});
-		sanatizedResult.insert({"logFile", "../tests/rTagTxtFiles/test2.txt"});
+		sanatizedResult.insert({"logFile", "./tests/rTagTxtFiles/test2.txt"});
 
 		
 
@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-K", "secret"});
 		sanatizedResult.insert({"-R", "R"});
 		sanatizedResult.insert({"-E", "George"});
-		sanatizedResult.insert({"logFile", "../tests/rTagTxtFiles/test2.txt"});
+		sanatizedResult.insert({"logFile", "./tests/rTagTxtFiles/test2.txt"});
 
 		
 
@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-K", "secret"});
 		sanatizedResult.insert({"-R", "R"});
 		sanatizedResult.insert({"-E", "George"});
-		sanatizedResult.insert({"logFile", "../tests/rTagTxtFiles/test2.txt"});
+		sanatizedResult.insert({"logFile", "./tests/rTagTxtFiles/test2.txt"});
 
 		
 
@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert({"-K", "secret"});
 		sanatizedResult.insert({"-R", "R"});
 		sanatizedResult.insert({"-E", "Lucy"});
-		sanatizedResult.insert({"logFile", "../tests/rTagTxtFiles/test2.txt"});
+		sanatizedResult.insert({"logFile", "./tests/rTagTxtFiles/test2.txt"});
 
 		
 

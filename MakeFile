@@ -50,3 +50,6 @@ tests: inputSanatizer.o encryptionHandler.o
 
 	$(compiler) ./tests/validTimeStampTest.cpp ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o ./tests/out/validTimeStampTest
 	./tests/out/validTimeStampTest.exe 
+
+	$(compiler) ./tests/rTagTests.cpp ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o ./tests/out/rTagTests
+	./tests/out/rTagTests.exe 
