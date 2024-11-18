@@ -1,0 +1,14 @@
+1 A G Lucy
+1 A E Lucy
+1 A 2 G Lucy
+1 A 1 E Lucy
+1 L 1 E Lucy
+1 L 2 G Lucy
+1 A 3 G Lucy
+1 L 3 G Lucy
+1 A 4 G Lucy
+1 A 7 E Lucy
+1 L 4 G Lucy
+1 A 2 G Lucy
+1 A 7 L Lucy
+1 A 8 E Lucy

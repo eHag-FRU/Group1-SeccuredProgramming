@@ -5,6 +5,7 @@
 #include <iterator>
 #include <fstream>
 #include <utility>
+#include <sstream>
 #include "inputSanatizer.hpp"
 #include "encryptionHandler.hpp"
 
@@ -12,6 +13,7 @@
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; 
 using std::regex_match; using std::iterator; using std::ifstream; using std::pair;
+using std::vector; using std::getline;
 
 //Versions for log read
 bool sanatizeLogReadToken(int argc, char* argv[], map<string,string>& result) {
@@ -203,6 +205,21 @@ void resultMapToString(map<string,string>& sanatizedResult) {
         iterator++;
     }
 }
+
+vector<string> splitString(const string& str, char delimiter) {
+    vector<string> tokens;
+    std::istringstream stream(str);
+    string token;
+    
+    while (getline(stream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+
+    return tokens;
+}
+
+
+
 
 int main(int argc, char* argv[]) {
     //Need to check the number of arguments
