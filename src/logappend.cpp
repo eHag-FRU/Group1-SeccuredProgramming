@@ -49,6 +49,7 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
         return false;
     }
 
+    cout << "Valid time stamp" << endl;
    // cout << "NOW VALIDATING ARRIVAL & LEAVE" << endl;
 
     //Grab the name

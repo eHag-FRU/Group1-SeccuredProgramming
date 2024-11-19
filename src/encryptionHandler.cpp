@@ -10,7 +10,7 @@ std::string padKey(std::string& key) {
     //Makes an internal copy of the key incase padding is needed
     string newKey = string(key.c_str());
 
-    cout << key.size() % CryptoPP::AES::BLOCKSIZE << endl;
+    //cout << key.size() % CryptoPP::AES::BLOCKSIZE << endl;
     //Check if the size of the message is a multiple of 16, if not pad until then
     if ((key.size() % CryptoPP::AES::BLOCKSIZE) > 0) {
         //Key is not of factor 16
@@ -55,7 +55,7 @@ std::string encrypt(const std::string& message, const std::string& key, map<stri
         encryption.SetKeyWithIV((const byte*)newKey.data(), newKey.size(), iv);
             StringSource(message, true,
             new StreamTransformationFilter(encryption,
-            new StringSink(encryptedMessage)
+            new StringSink(encryptedMessage), CryptoPP::BlockPaddingSchemeDef::ZEROS_PADDING
             )
         );
     }
@@ -91,7 +91,7 @@ std::string decrypt(const std::string& encryptedMessage, const std::string& key,
     decryption.SetKeyWithIV((const byte*)newKey.data(), newKey.size(), iv);
     StringSource(encryptedMessage, true,
     new StreamTransformationFilter(decryption,
-    new StringSink(decryptedMessage))
+    new StringSink(decryptedMessage), CryptoPP::BlockPaddingSchemeDef::ZEROS_PADDING)
     );
     }
     catch (const Exception& ex)

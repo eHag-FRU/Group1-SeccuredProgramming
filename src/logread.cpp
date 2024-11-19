@@ -5,6 +5,7 @@
 #include <iterator>
 #include <fstream>
 #include <utility>
+#include <algorithm>
 #include <sstream>
 #include "inputSanatizer.hpp"
 #include "encryptionHandler.hpp"
@@ -14,7 +15,161 @@
 
 using std::cout; using std::endl; using std::map; using std::string; using std::regex; 
 using std::regex_match; using std::iterator; using std::ifstream; using std::pair;
-using std::vector; using std::getline;
+using std::vector; using std::getline; using std::multimap; using std::find;
+
+
+bool sTagFunctionality(map<string, string> input, bool debugMode) {
+    //Holds the guest and employee names
+    vector<string> employees;
+    vector<string> guests;
+    multimap<int, string> roomOccupency;
+
+    //Open the file
+    ifstream log(input["logFile"], std::ios::in | std::ios::binary);
+
+    //Holds the previous two lines
+    string currentLine;
+    string previousLine;
+
+    while(getline(log, currentLine) && !currentLine.empty()) {
+        previousLine = currentLine;
+
+       //decrypt the line
+       cout << decrypt(previousLine, input["-K"], input) << endl;
+       previousLine = decrypt(previousLine, input["-K"], input);
+
+       //Now tokenize
+       vector<string> tokens = splitString(previousLine, ' ');
+
+       //Grab arrival/leave tag
+       string arrivalLeaveTag = tokens[1];
+
+        //Grab the room number if present
+       string roomNumber;
+       if (tokens.size() == 5) {
+        //Size allows for room number token
+         roomNumber = tokens[2];
+       }
+
+       //Grab the guest/employee tag
+       string employeeGuestTag;
+        if (tokens.size() == 5) {
+            //Size allows for room number token
+            employeeGuestTag = tokens[3];
+       } else {
+            employeeGuestTag = tokens[2];
+        
+       }
+       
+
+       //Grab the name
+       string name;
+       switch(tokens.size()) {
+        case 5:
+            name = tokens[4];
+            break;
+        default:
+            //This is size of 4
+            name = tokens[3];
+       }
+
+
+       //Build employee / Guest list
+       if (employeeGuestTag == "E") {
+        //Check if its an arrival or leave
+        if (arrivalLeaveTag == "A") {
+            //Its an arrival, so add in
+            employees.push_back(name);
+
+
+            //Add to the map with roomNumber
+            if(!roomNumber.empty()) {
+                cout << "Adding to room occupency multimap" << endl;
+                //We have a room number
+                //Add in the person with their room number they are in as the key
+                roomOccupency.insert(pair<int, string>(stoi(roomNumber), name));
+            }
+        } else if (arrivalLeaveTag == "L") {
+            //Its an leave
+            //Check if name is in the employees vector
+            auto employeeNamePostion = find(employees.begin(), employees.end(), name);
+            if (employeeNamePostion != employees.end()) {
+                //Found the element, remove it
+                employees.erase(employeeNamePostion);
+            } else {
+                //Could not find employee, LOG NOT VALID!!
+                return false;
+            }
+        }
+        
+       } else if (employeeGuestTag == "G") {
+         //Check if its an arrival or leave
+        if (arrivalLeaveTag == "A") {
+            //Its an arrival, so add in
+            guests.push_back(name);
+            //roomOccupency.insert(pair<int, string>(stoi(roomNumber), name));
+            //Add to the map with roomNumber
+            // if(!roomNumber.empty()) {
+            //     //We have a room number
+            //     //Add in the person with their room number they are in as the key
+            //     roomOccupency.insert(pair<int, string>(stoi(roomNumber), name));
+            // }
+        } else if (arrivalLeaveTag == "L") {
+            //Its an leave
+            //Check if name is in the employees vector
+            auto guestNamePostion = find(guests.begin(), guests.end(), name);
+            //Can only remove if leaving the gallery fully and NOT JUST A ROOM!!!!
+            if (guestNamePostion != guests.end()) {
+                //Found the element, remove it
+                guests.erase(guestNamePostion);
+            } else {
+                //Could not find employee, LOG NOT VALID!!
+                return false;
+            }
+        }
+       }
+    }
+
+    //print out each of the lines
+    //Employees
+    for (int i = 0; i < employees.size(); ++i) {
+        cout << employees[i];
+
+        //Determine if the i is the last one
+        if (i < employees.size() - 1) {
+            cout << ", ";
+        }
+    }
+
+    cout << "\n";
+
+    //Guests
+    for (int i = 0; i < guests.size(); ++i) {
+        cout << guests[i];
+
+        //Determine if the i is the last one
+        if (i < guests.size() - 1) {
+            cout << ", ";
+        }
+    }
+
+    cout << "\n";
+
+    //Room
+    for (auto roomNumber = roomOccupency.begin(); roomNumber != roomOccupency.end(); ++roomNumber) {
+        //Now go through the values (people in it) of that key (room number)
+         cout << roomNumber->first << ": ";
+        for(auto person = roomOccupency.begin(); person != roomOccupency.end(); ++person) {
+            if (person->first == roomNumber->first) {
+                cout << person->second << " ";
+            }
+        }
+    }
+
+    //Was successful
+    return true;
+
+}
 
 //Versions for log read
 bool sanatizeLogReadToken(int argc, char* argv[], map<string,string>& result) {
@@ -248,7 +403,7 @@ int main(int argc, char* argv[]) {
     //Now can try to open the file
     
     //
-    //-S argument
+    //-S OR -R argument
     //
 
     if (inputResult.find("-S") != inputResult.end()) {
@@ -256,33 +411,11 @@ int main(int argc, char* argv[]) {
         //Valid, now open the file
         cout << "-S command being handled" << endl;
 
-        std::ifstream logFile;
-
-        logFile.open(inputResult["logFile"], std::ios::in | std::ios::binary);
-
-        //Check if the file is open
-        if (!logFile.is_open()) {
-            return false;
+        if(!sTagFunctionality(inputResult, false)) {
+            //Failed, so now not valid
+            cout << "invalid" << endl;
+            return 255; 
         }
-
-        //Last 2 lines
-        string lastLine1;
-        string lastLine2;
-
-        //Curent line, just for getline to throw it into
-        string currentLine;
-
-        while(getline(logFile, currentLine)) {
-            //Reset each of the lines
-            lastLine2 = lastLine1;
-            lastLine1 = currentLine;
-        }
-
-        cout <<"Last line 2" << decrypt(lastLine2, inputResult["-K"], inputResult) << endl;
-        cout <<"Last line 1" << decrypt(lastLine1, inputResult["-K"], inputResult) << endl;
-
-        //Close the file
-        logFile.close();
     } else if (inputResult.find("-R") != inputResult.end()) {
         rTagFunctionality(inputResult, false);
     }

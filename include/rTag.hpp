@@ -18,7 +18,7 @@ vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode);
 
 
 // Function to split a string by a delimiter and return a vector of substrings
-vector<string> splitString(const string& str, char delimiter) {
+vector<string>   splitString(const string& str, char delimiter) {
     vector<string> tokens;
     std::istringstream stream(str);
     string token;
