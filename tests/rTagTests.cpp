@@ -13,13 +13,11 @@ int main(int argc, char* argv[]) {
 		cout << "========Test 1========" << endl << endl;
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-R", "R"});
-		sanatizedResult.insert({"-E", "Jeff"});
-		sanatizedResult.insert({"logFile", "./tests/rTagTxtFiles/test1.txt"});
-
-		
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-R", "R"));
+		sanatizedResult.insert(std::make_pair("-E", "Jeff"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/rTagTxtFiles/test1.txt"));
 
 		// invokation
 		vector<string> roomNumbers = rTagFunctionality(sanatizedResult, true);
@@ -36,11 +34,11 @@ int main(int argc, char* argv[]) {
 
 		// setup
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-R", "R"});
-		sanatizedResult.insert({"-E", "Jeff"});
-		sanatizedResult.insert({"logFile", "./tests/rTagTxtFiles/test2.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-R", "R"));
+		sanatizedResult.insert(std::make_pair("-E", "Jeff"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/rTagTxtFiles/test2.txt"));
 
 		
 
@@ -59,13 +57,11 @@ int main(int argc, char* argv[]) {
 
 		// setup
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-R", "R"});
-		sanatizedResult.insert({"-E", "George"});
-		sanatizedResult.insert({"logFile", "./tests/rTagTxtFiles/test2.txt"});
-
-		
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-R", "R"));
+		sanatizedResult.insert(std::make_pair("-E", "George"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/rTagTxtFiles/test2.txt"));
 
 		// invokation
 		vector<string> roomNumbers = rTagFunctionality(sanatizedResult, true);
@@ -82,13 +78,11 @@ int main(int argc, char* argv[]) {
 
 		// setup
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-R", "R"});
-		sanatizedResult.insert({"-E", "George"});
-		sanatizedResult.insert({"logFile", "./tests/rTagTxtFiles/test2.txt"});
-
-		
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-R", "R"));
+		sanatizedResult.insert(std::make_pair("-E", "George"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/rTagTxtFiles/test2.txt"));
 
 		// invokation
 		vector<string> roomNumbers = rTagFunctionality(sanatizedResult, true);
@@ -105,13 +99,11 @@ int main(int argc, char* argv[]) {
 
 		// setup
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-R", "R"});
-		sanatizedResult.insert({"-E", "Lucy"});
-		sanatizedResult.insert({"logFile", "./tests/rTagTxtFiles/test2.txt"});
-
-		
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-R", "R"));
+		sanatizedResult.insert(std::make_pair("-E", "Lucy"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/rTagTxtFiles/test2.txt"));
 
 		// invokation
 		vector<string> roomNumbers = rTagFunctionality(sanatizedResult, true);
@@ -128,13 +120,11 @@ int main(int argc, char* argv[]) {
 
 		// setup
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-R", "R"});
-		sanatizedResult.insert({"-G", "Lucy"});
-		sanatizedResult.insert({"logFile", "../tests/rTagTxtFiles/test3.txt"});
-
-		
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-R", "R"));
+		sanatizedResult.insert(std::make_pair("-G", "Lucy"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/rTagTxtFiles/test3.txt"));
 
 		// invokation
 		vector<string> roomNumbers = rTagFunctionality(sanatizedResult, true);
@@ -152,17 +142,14 @@ int main(int argc, char* argv[]) {
 
 		// setup
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-R", "R"});
-		sanatizedResult.insert({"-E", "Lucy"});
-		sanatizedResult.insert({"logFile", "../tests/rTagTxtFiles/test5.txt"});
-
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-R", "R"));
+		sanatizedResult.insert(std::make_pair("-E", "Lucy"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/rTagTxtFiles/test5.txt"));
 		
-
 		// invokation
 		vector<string> roomNumbers = rTagFunctionality(sanatizedResult, true);
-		
 
 		// assert
 		assert(roomNumbers[0] == "1");
@@ -170,6 +157,6 @@ int main(int argc, char* argv[]) {
 		assert(roomNumbers[2] == "8");
 		cout << "Passed: name has entered multiple rooms" << endl << endl;
 	}
-	
+	cout << "======ALL rTAG TEST PASSED======" << endl;
 
 }

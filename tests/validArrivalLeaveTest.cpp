@@ -24,15 +24,14 @@ int main(int argc, char* argv[]) {
     }
 
 	map<string, string> sanatizedResult;
-	sanatizedResult.insert({"programName", "logappend"});
-	sanatizedResult.insert({"-T", "1"});
-	sanatizedResult.insert({"-K", "secret"});
-	sanatizedResult.insert({"-G", "Jeff"});
-	sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test1.txt"});
+	sanatizedResult.insert(std::make_pair("programName", "logappend"));
+	sanatizedResult.insert(std::make_pair("-T", "1"));
+	sanatizedResult.insert(std::make_pair("-K", "secret"));
+	sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+	sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test1.txt"));
 
 	assert(!validArrivalLeave(sanatizedResult, logFile, "Fred", false));	
 	cout << "false name passed" << endl << endl;
-	}
 	
 	
 
@@ -49,12 +48,12 @@ int main(int argc, char* argv[]) {
     }
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-T", "1"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-A", "A"});
-		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test1.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-T", "1"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-A", "A"));
+		sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test1.txt"));
 
 		resultMapToString(sanatizedResult);
 		assert(validArrivalLeave(sanatizedResult, logFile, "Jeff", true));
@@ -74,13 +73,13 @@ int main(int argc, char* argv[]) {
 		}
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-T", "1"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-A", "A"});
-		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"-R", "1"});
-		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test1.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-T", "1"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-A", "A"));
+		sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+		sanatizedResult.insert(std::make_pair("-R", "1"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test1.txt"));
 
 		// test
 		resultMapToString(sanatizedResult);
@@ -103,13 +102,13 @@ int main(int argc, char* argv[]) {
 		}
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-T", "1"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-L", "L"});
-		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"-R", "1"});
-		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test1.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-T", "1"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-L", "L"));
+		sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+		sanatizedResult.insert(std::make_pair("-R", "1"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test1.txt"));
 
 		// test
 		resultMapToString(sanatizedResult);
@@ -133,13 +132,13 @@ int main(int argc, char* argv[]) {
 		}
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-T", "1"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-A", "A"});
-		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"-R", "2"});
-		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test2.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-T", "1"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-A", "A"));
+		sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+		sanatizedResult.insert(std::make_pair("-R", "2"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test2.txt"));
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -162,13 +161,13 @@ int main(int argc, char* argv[]) {
 		}
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-T", "1"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-A", "A"});
-		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"-R", "1"});
-		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test2.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-T", "1"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-A", "A"));
+		sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+		sanatizedResult.insert(std::make_pair("-R", "1"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test2.txt"));
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -191,13 +190,13 @@ int main(int argc, char* argv[]) {
 		}
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-T", "1"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-L", "L"});
-		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"-R", "1"});
-		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test2.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-T", "1"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-L", "L"));
+		sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+		sanatizedResult.insert(std::make_pair("-R", "1"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test2.txt"));
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -220,13 +219,13 @@ int main(int argc, char* argv[]) {
 		}
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-T", "1"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-A", "A"});
-		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"-R", "1"});
-		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test3.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-T", "1"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-A", "A"));
+		sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+		sanatizedResult.insert(std::make_pair("-R", "1"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test3.txt"));
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -250,13 +249,13 @@ int main(int argc, char* argv[]) {
 		}
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-T", "1"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-A", "A"});
-		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"-R", "2"});
-		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test5.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-T", "1"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-A", "A"));
+		sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+		sanatizedResult.insert(std::make_pair("-R", "2"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test5.txt"));
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -280,13 +279,13 @@ int main(int argc, char* argv[]) {
 		}
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-T", "1"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-L", "L"});
-		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"-R", "1"});
-		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test6.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-T", "1"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-L", "L"));
+		sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+		sanatizedResult.insert(std::make_pair("-R", "1"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test6.txt"));
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -309,13 +308,13 @@ int main(int argc, char* argv[]) {
 		}
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-T", "1"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-L", "L"});
-		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"-R", "3"});
-		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test2.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-T", "1"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-L", "L"));
+		sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+		sanatizedResult.insert(std::make_pair("-R", "3"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test2.txt"));
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -338,13 +337,13 @@ int main(int argc, char* argv[]) {
 		}
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-T", "1"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-L", "L"});
-		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"-R", "2"});
-		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test2.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-T", "1"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-L", "L"));
+		sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+		sanatizedResult.insert(std::make_pair("-R", "2"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test2.txt"));
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -367,13 +366,13 @@ int main(int argc, char* argv[]) {
 		}
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-T", "1"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-L", "L"});
-		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"-R", "3"});
-		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test7.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-T", "1"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-L", "L"));
+		sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+		sanatizedResult.insert(std::make_pair("-R", "3"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test7.txt"));
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -396,13 +395,13 @@ int main(int argc, char* argv[]) {
 		}
 
 		map<string, string> sanatizedResult;
-		sanatizedResult.insert({"programName", "logappend"});
-		sanatizedResult.insert({"-T", "1"});
-		sanatizedResult.insert({"-K", "secret"});
-		sanatizedResult.insert({"-L", "L"});
-		sanatizedResult.insert({"-G", "Jeff"});
-		sanatizedResult.insert({"-R", "3"});
-		sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test8.txt"});
+		sanatizedResult.insert(std::make_pair("programName", "logappend"));
+		sanatizedResult.insert(std::make_pair("-T", "1"));
+		sanatizedResult.insert(std::make_pair("-K", "secret"));
+		sanatizedResult.insert(std::make_pair("-L", "L"));
+		sanatizedResult.insert(std::make_pair("-G", "Jeff"));
+		sanatizedResult.insert(std::make_pair("-R", "3"));
+		sanatizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test8.txt"));
 
 		// test
 		//resultMapToString(sanatizedResult);
@@ -414,4 +413,5 @@ int main(int argc, char* argv[]) {
 
 
 	cout << endl << "====PASSED VALID ARRIVAL & LEAVE TESTS====" << endl << endl;
+}
 }

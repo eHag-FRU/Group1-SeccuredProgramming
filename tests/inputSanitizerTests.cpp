@@ -383,13 +383,13 @@ void testSanatizeEmployeeOrGuestName() {
     //Valid Inputs (-G & -E)
     char* input1[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
          const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
-    char* input1[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+    char* input2[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
          const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
-    char* input1[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+    char* input3[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
          const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
-    char* input1[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+    char* input4[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
          const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
-    char* input1[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+    char* input5[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
          const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
 
 

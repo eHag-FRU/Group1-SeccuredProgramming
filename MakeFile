@@ -1,8 +1,18 @@
+# Detect the operating system
+OS := $(shell uname)
+
+# Set the executable extension based on the operating system
+ifeq ($(OS), Darwin)
+    EXE_EXT :=
+else
+    EXE_EXT := .exe
+endif
+
 logAppendsources = ./src/logappend.cpp
 logReadsources = ./src/logRead.cpp
 
-logAppendTarget = ./out/logappend
-logReadTarget = ./out/logread
+logAppendTarget = ./out/logappend$(EXE_EXT)
+logReadTarget = ./out/logread$(EXE_EXT)
 
 compiler = g++
 
@@ -41,14 +51,14 @@ clean:
 
 tests: inputSanatizer.o encryptionHandler.o
 	$(compiler) ./tests/inputSanitizerTests.cpp ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -I./include -o ./tests/out/inputSanitizerTests
-	./tests/out/inputSanitizerTests
+	./tests/out/inputSanitizerTests$(EXE_EXT)
 
 	$(compiler) ./tests/validArrivalLeaveTest.cpp ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o ./tests/out/validArrivalLeaveTest
-	./tests/out/validArrivalLeaveTest.exe 
+	./tests/out/validArrivalLeaveTest$(EXE_EXT)
 	
 
 	$(compiler) ./tests/validTimeStampTest.cpp ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o ./tests/out/validTimeStampTest
-	./tests/out/validTimeStampTest.exe 
+	./tests/out/validTimeStampTest$(EXE_EXT)
 
 	$(compiler) ./tests/rTagTests.cpp ./out/inputSanatizer.o ./out/encryptionHandler.o $(COMPILER_FLAGS) -o ./tests/out/rTagTests
-	./tests/out/rTagTests.exe 
+	./tests/out/rTagTests$(EXE_EXT)

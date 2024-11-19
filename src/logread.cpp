@@ -36,13 +36,17 @@ bool sanatizeLogReadToken(int argc, char* argv[], map<string,string>& result) {
 
 
 bool sanatizeLogReadEmployeeOrGuestName(int argc, char* argv[], map<string,string>& result, int tagPostion) {
-
+	// cout << "map to string: " << endl;
+	// resultMapToString(result);
+	// cout << "map size: " << result.size() << endl;
+	
     //Guest OR Employee
     regex guestNameDashMatcher("-G", std::regex_constants::ECMAScript);
     regex employeeNameDashMatcher("-E", std::regex_constants::ECMAScript);
 
     regex guestEmployeeNameMatcher("([a-z]|[A-Z])*", std::regex_constants::ECMAScript);
-
+	//cout << "tag Position: " << tagPostion << endl;
+	//cout << "argv[4]: " << argv[tagPostion] << endl;
     if (regex_match(argv[tagPostion], employeeNameDashMatcher)) {
         //Now we have a valid employee flag
         //Now check the employee name
@@ -56,10 +60,10 @@ bool sanatizeLogReadEmployeeOrGuestName(int argc, char* argv[], map<string,strin
             cout << "Employee Name: |" << argv[6] << "|" << endl;
             return false;
         }
-    } else if (regex_match(argv[5], guestNameDashMatcher)) {
+    } else if (regex_match(argv[tagPostion], guestNameDashMatcher)) {
         //Now we have a valid guest flag
         //Now check the guest name
-        if(regex_match( argv[6], guestEmployeeNameMatcher)) {
+        if(regex_match( argv[tagPostion + 1], guestEmployeeNameMatcher)) {
             //Now sanitized and safe, now put in the map
             //resultingMap["G"] = string(argv[4]);
             result.insert(pair<string,string>(argv[tagPostion], argv[tagPostion + 1]));
@@ -79,8 +83,8 @@ bool sanatizeLogReadEmployeeOrGuestName(int argc, char* argv[], map<string,strin
 }
 
 bool sanatizeLogReadFilePath(int argc, char* argv[], map<string,string>& result) {
-    cout << "In sanatizeFilePath, line 75" << endl;
-    cout << "argc:" << argc << endl;
+   // cout << "In sanatizeFilePath, line 75" << endl;
+   // cout << "argc:" << argc << endl;
 
     //Pattern pulled from: https://stackoverflow.com/questions/9363145/regex-for-extracting-filename-from-path
     //Then adapted and tweaked to allow for optional path characters
@@ -89,9 +93,9 @@ bool sanatizeLogReadFilePath(int argc, char* argv[], map<string,string>& result)
 
     //Two routes, depending on if the room argument is given
     if (argc == 7) {
-        cout << "In 7 path" << endl;
+        // cout << "In 7 path" << endl;
         //Room argument path
-        cout << argv[6] << endl;
+        // cout << argv[6] << endl;
         if (regex_match(argv[6], logFileNameMatcher)) {
             //Matches, now put in map
              result.insert(pair<string,string>("logFile", argv[6]));
@@ -127,7 +131,7 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
     //
     regex tokenDashMatcher("-K", std::regex_constants::ECMAScript);
     
-    cout << "argv[1]: " << argv[1] << endl;
+   // cout << "argv[1]: " << argv[1] << endl;
 
     if (regex_match(argv[1], tokenDashMatcher)) {
         //Now we have a valid token flag
@@ -153,8 +157,11 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
         //-S is used
         if(!regex_match(argv[3], dashSTokenMatcher)) {
             //Not Valid!!
+			std::cerr << "-S token not valid" << endl;
             return false;
-        }
+        } else {
+			cout << "-S token is valid" << endl;
+		}
 
        //Now add the -S token to the result
        result.insert(pair<string,string>(argv[3], argv[3]));
@@ -163,11 +170,14 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
         //-R is used
         if(!regex_match(argv[3], dashRTokenMatcher)) {
             //Not Valid!!
+			std::cerr << "-R token not valid" << endl;
             return false;
         }
-
         //Valid, now do the employee/guest check
         //(REQUIRED TO FOLLOW AFTER -R!!!!)
+
+		//Now add the -R token to the result
+        result.insert(pair<string,string>(argv[3], argv[3]));
         
         sanatizeLogReadEmployeeOrGuestName(argc, argv, result, 4);
 
@@ -194,20 +204,6 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
 
     return true;
 }
-
-// void resultMapToString(map<string,string>& sanatizedResult) {
-//     //Print out the map
-//     cout << "Resulting map size: " << sanatizedResult.size() << endl;
-
-//     auto iterator = sanatizedResult.begin();
-
-//     cout << "sanatizedResult: " << endl;
-//     while (iterator != sanatizedResult.end()) {
-//         cout << "[" << iterator->first << "] = " << iterator->second << endl;
-
-//         iterator++;
-//     }
-// }
 
 // vector<string> splitString(const string& str, char delimiter) {
 //     vector<string> tokens;
@@ -243,7 +239,7 @@ int main(int argc, char* argv[]) {
     sanatizeLogReadInput(argc, argv, inputResult);
 
 
-    resultMapToString(inputResult);
+    //resultMapToString(inputResult);
 
     //Now can try to open the file
     
@@ -254,7 +250,7 @@ int main(int argc, char* argv[]) {
     if (inputResult.find("-S") != inputResult.end()) {
         //Found the -S, now grab the last 2 lines and print them
         //Valid, now open the file
-        cout << "-S command being handled" << endl;
+        //cout << "-S command being handled" << endl;
 
         std::ifstream logFile;
 
@@ -284,6 +280,7 @@ int main(int argc, char* argv[]) {
         //Close the file
         logFile.close();
     } else if (inputResult.find("-R") != inputResult.end()) {
+		//cout << "-R command being handled" << endl;
         rTagFunctionality(inputResult, false);
     }
 

@@ -9,7 +9,7 @@ using std::cout; using std::endl; using std::string; using std::map;
 
 
 int main() {
-    cout << "====TESTING VALID TIME STAMP====" << endl << endl
+    cout << "====TESTING VALID TIME STAMP====" << endl << endl;
 	
 	{
 	//setup
@@ -22,16 +22,15 @@ int main() {
         return 1;
     }
 
-	map<string, string> sanatizedResult;
-	sanatizedResult.insert({"programName", "logappend"});
-	sanatizedResult.insert({"-T", "1"});
-	sanatizedResult.insert({"-K", "secret"});
-	sanatizedResult.insert({"-G", "Jeff"});
-	sanatizedResult.insert({"logFile", "./tests/testTxtFiles/test1.txt"});
+	map<string, string> sanitizedResult;
+	sanitizedResult.insert(std::make_pair("programName", "logappend"));
+	sanitizedResult.insert(std::make_pair("-T", "1"));
+	sanitizedResult.insert(std::make_pair("-K", "secret"));
+	sanitizedResult.insert(std::make_pair("-G", "Jeff"));
+	sanitizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test1.txt"));
 
-	assert(!validArrivalLeave(sanatizedResult, logFile, "Fred", false));	
+	assert(!validArrivalLeave(sanitizedResult, logFile, "Fred", false));	
 	cout << "false name passed" << endl << endl;
-	}
 	
 
 
@@ -43,6 +42,7 @@ int main() {
     cout << endl << "====PASSED VALID TIME STAMP TESTS====" << endl << endl;
 
     return 0;
+	}
 }
 
 

@@ -10,7 +10,7 @@ std::string padKey(std::string& key) {
     //Makes an internal copy of the key incase padding is needed
     string newKey = string(key.c_str());
 
-    cout << key.size() % CryptoPP::AES::BLOCKSIZE << endl;
+    //cout << key.size() % CryptoPP::AES::BLOCKSIZE << endl;
     //Check if the size of the message is a multiple of 16, if not pad until then
     if ((key.size() % CryptoPP::AES::BLOCKSIZE) > 0) {
         //Key is not of factor 16
