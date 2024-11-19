@@ -20,9 +20,12 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
     //  //Have a full line of arguments
     // cout << "Full line of arguments given" << endl;
 
+	cout << "======EXECUTING COMMAND=======" << endl;
+
     // //Now send off to sanatize the full command
     // //Returns T/F => T = Successful / F = Invalid
     if (!sanatizeInput(argc, argv, sanatizedResult)) {
+		std::cerr << "fails in sanatizeInput in commandExecutor" << endl;
         return false;
     }
 
@@ -42,10 +45,11 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
 
     //Now open, now check if the timestamp is valid
     if (!validTimeStamp(sanatizedResult)) {
+		std::cerr << "Invalid time stamp" << endl;
         return false;
     }
 
-    cout << "NOW VALIDATING ARRIVAL & LEAVE" << endl;
+   // cout << "NOW VALIDATING ARRIVAL & LEAVE" << endl;
 
     //Grab the name
     string name;
@@ -111,8 +115,8 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
 
     //Add an endl to the file
 
-    cout << "Line: " << logLine << endl;
-    cout << "Key: " << sanatizedResult["-K"] << endl;
+    cout << "Line before encryption: " << logLine << endl;
+    //cout << "Key: " << sanatizedResult["-K"] << endl;
 
     string encryptedLine;
     string decryptedLine;
@@ -120,11 +124,11 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
     //Encrypt with the key
     encryptedLine = encrypt(logLine, sanatizedResult["-K"], sanatizedResult);
 
-    cout << "ENCYRPTED LINE (329 logappend.cpp): " << encryptedLine << endl;
+   // cout << "ENCYRPTED LINE (329 logappend.cpp): " << encryptedLine << endl;
 
     decryptedLine = decrypt(encryptedLine, sanatizedResult["-K"], sanatizedResult);
 
-    cout << "DECRYPTED LINE (335 logappend.cpp): " << decryptedLine << endl;
+   // cout << "DECRYPTED LINE (335 logappend.cpp): " << decryptedLine << endl;
 
     //Write to the file
     log.write(encryptedLine.c_str(), encryptedLine.size());
@@ -143,7 +147,7 @@ int main(int argc, char* argv[]) {
     map<string, string> sanatizedResult;
 
     //Inital check of how many arguments
-    cout << "Argument count: " << argc << endl;
+   //cout << "Argument count: " << argc << endl;
 
     //Check the count, determine if batch or if line is full command
     if (argc == 3) {
@@ -152,7 +156,7 @@ int main(int argc, char* argv[]) {
         //Batch file file stream
         fstream batchFile;
 
-		cout << "Batch file name: " << argv[2] << endl;
+		//cout << "Batch file name: " << argv[2] << endl;
         //Open the batch file
 		batchFile.open(argv[2], ios::in | ios::binary);
 
@@ -166,8 +170,9 @@ int main(int argc, char* argv[]) {
         //Grabs each line of input and executes it
         string currentLine;
 		string personStatus;
-        
+        int i = 0;
         while(getline(batchFile, currentLine)) {
+			
             //Split into a vector of strings
 			vector<string> lineVec;
 			lineVec = splitStringT(currentLine, ' ');
@@ -176,10 +181,10 @@ int main(int argc, char* argv[]) {
     		lineVec.insert(lineVec.begin(), "logappend");
 
 			// Iterate through lineVec and print each element
-			cout << "Processing line: " << currentLine << endl;
-			for (const auto& element : lineVec) {
-				cout << "Element: " << element << endl;
-			}
+			//cout << "Processing line: " << currentLine << endl;
+			// for (const auto& element : lineVec) {
+			// 	cout << "Element: " << element << endl;
+			// }
 
 			// Convert vector<string> to vector<char*>
 			vector<char*> argvVec;
@@ -231,20 +236,20 @@ int main(int argc, char* argv[]) {
 				cmdLine[lineVec[4]] = personStatus;
 				cmdLine[lineVec[5]] = lineVec[6];
 				cmdLine[lineVec[7]] = lineVec[8];
-				cmdLine["logFile"] = lineVec[9];        
+				cmdLine["logFile"] = lineVec[10];        
         	} else {
 				std::cerr << "Invalid number of arguments in batch file" << endl;
 				return -1;
 			}
 
-			cout << "Command Line: " << endl;
-			resultMapToString(cmdLine);
+			//cout << "Command Line: " << endl;
+			//resultMapToString(cmdLine);
 
-			cout << "Count: " << count << endl;
+			//cout << "Count: " << count << endl;
 
 			//Parsed, to send to execute each line
 			if (!commandExecuter(count, argvArray, cmdLine)) {
-				cout << "invalid input" << endl;
+				cout << "invalid input on line 251" << endl;
 				return 255;
 			}
 

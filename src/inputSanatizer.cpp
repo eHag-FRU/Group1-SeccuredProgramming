@@ -90,6 +90,8 @@ bool sanatizeEmployeeOrGuestName(int argc, char* argv[], map<string,string>& res
 
     regex guestEmployeeNameMatcher("([a-z]|[A-Z])*", std::regex_constants::ECMAScript);
 
+	int flagPosition;
+	
     if (regex_match(argv[tagPostion], employeeNameDashMatcher)) {
         //Now we have a valid employee flag
         //Now check the employee name
@@ -100,20 +102,20 @@ bool sanatizeEmployeeOrGuestName(int argc, char* argv[], map<string,string>& res
         } else {
             // Employee name was not valid
             cout << "Employee name was not valid!" << endl;
-            cout << "Employee Name: |" << argv[6] << "|" << endl;
+            cout << "Employee Name: |" << argv[tagPostion + 1] << "|" << endl;
             return false;
         }
-    } else if (regex_match(argv[5], guestNameDashMatcher)) {
+    } else if (regex_match(argv[tagPostion], guestNameDashMatcher)) {
         //Now we have a valid guest flag
         //Now check the guest name
-        if(regex_match( argv[6], guestEmployeeNameMatcher)) {
+        if(regex_match( argv[tagPostion + 1], guestEmployeeNameMatcher)) {
             //Now sanitized and safe, now put in the map
             //resultingMap["G"] = string(argv[4]);
             result.insert(pair<string,string>(argv[tagPostion], argv[tagPostion + 1]));
         } else {
             // Guest name was not valid
             cout << "Guest name was not valid!" << endl;
-            cout << "Guest Name: |" << argv[6] << "|" << endl;
+            cout << "Guest Name: |" << argv[tagPostion + 1] << "|" << endl;
             return false;
         }
     } else {
@@ -145,7 +147,7 @@ bool sanatizeAriveLeaveTag(int argc, char* argv[], map<string,string>& result, i
 bool sanatizeRoomID(int argc, char* argv[], map<string,string>& result) {
     //Room IDs are non-negative integer 
     //characters with no spaces (ranging from 0 to 1073741823 inclusively)
-    
+
     //convert to int
     int roomNumber = atoi(argv[9]);
 
@@ -167,19 +169,19 @@ bool sanatizeRoomID(int argc, char* argv[], map<string,string>& result) {
 }
 
 bool sanatizeFilePath(int argc, char* argv[], map<string,string>& result) {
-    cout << "In sanatizeFilePath, line 94" << endl;
-    cout << "argc:" << argc << endl;
+   // cout << "In sanatizeFilePath, line 94" << endl;
+    //cout << "argc:" << argc << endl;
 
     //Pattern pulled from: https://stackoverflow.com/questions/9363145/regex-for-extracting-filename-from-path
     //Then adapted and tweaked to allow for optional path characters
     regex logFileNameMatcher("^(\\\\)*(.+\\\\)*(.+)", std::regex_constants::ECMAScript);
-    cout << regex_match(argv[8], logFileNameMatcher) << endl;
+    //cout << regex_match(argv[8], logFileNameMatcher) << endl;
 
     //Two routes, depending on if the room argument is given
     if (argc == 11) {
-        cout << "In 11 path" << endl;
+        //cout << "In 11 path" << endl;
         //Room argument path
-        cout << argv[10] << endl;
+       // cout << argv[10] << endl;
         if (regex_match(argv[10], logFileNameMatcher)) {
             //Matches, now put in map
              result.insert(pair<string,string>("logFile", argv[10]));
@@ -188,7 +190,7 @@ bool sanatizeFilePath(int argc, char* argv[], map<string,string>& result) {
             return false;
         }
     } else if (argc == 9) {
-        cout << "In 9 path" << endl;
+        //cout << "In 9 path" << endl;
         //Non-Room Argument Path
         if (regex_match(argv[8], logFileNameMatcher)) {
             //Matches, now put in map
@@ -209,7 +211,7 @@ bool sanatizeFilePath(int argc, char* argv[], map<string,string>& result) {
 
 
 bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
-    cout << ("Sanatizing the input!!!!") << endl;
+    //cout << ("Sanatizing the input!!!!") << endl;
 
     //Check for the correct argument count again
     if (fargc != 9 && fargc != 11) {
@@ -224,7 +226,7 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
     regex timeStampDashMatcher("-T", std::regex_constants::ECMAScript);
 
     //Run the matcher and check
-	cout << "argv[1]: " << fargv[1] << endl;
+	//cout << "argv[1]: " << fargv[1] << endl;
     if(regex_match(fargv[1], timeStampDashMatcher)) {
         //Good time flag found, now pull in the time
         if (!sanatizeTime(fargc, fargv, result)) {
@@ -250,6 +252,7 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
             return false;
         }
     } else {
+		cerr << "tokenDashMatcher failed" << endl;
         return false;
     }
 
@@ -261,6 +264,7 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
     regex arrivalLeaveTagDashMatcher("(-A|-L){1,1}", std::regex_constants::ECMAScript);
 
     if (regex_match(fargv[5], nameTagDashMatcher)) {
+		cout << "in the name tag dash matcher" << endl;
         if (!sanatizeEmployeeOrGuestName(fargc, fargv, result, 5)) {
             //Failed to sanatize and parse
 			cerr << "Invalid employee or guest name" << endl;
@@ -275,13 +279,12 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
         }
 
     } else if (regex_match(fargv[5], arrivalLeaveTagDashMatcher)) {
-
         //Now parse the arrive/leave tag
         if(!sanatizeAriveLeaveTag(fargc, fargv, result, 5)) {
             //Failed to sanatize and parse
 			cerr << "Invalid arrival or leave tag" << endl;
             return false;
-        }
+        } 
 
         if (!sanatizeEmployeeOrGuestName(fargc, fargv, result, 6)) {
             //Failed to sanatize and parse
@@ -309,11 +312,11 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
                 return false;
             }
         } else {
-			cerr << "Invalid room ID" << endl;
+			cerr << "roomDashMaster failed" << endl;
             return false;
         }
     }
-    
+
     //
     // LOG FILE
     //
@@ -328,7 +331,7 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
 
 void resultMapToString(map<string,string>& sanatizedResult) {
     //Print out the map
-    cout << "Resulting map size: " << sanatizedResult.size() << endl;
+    //cout << "Resulting map size: " << sanatizedResult.size() << endl;
 
     auto iterator = sanatizedResult.begin();
 
@@ -342,7 +345,7 @@ void resultMapToString(map<string,string>& sanatizedResult) {
 
 
 bool validTimeStamp(map<string, string>& commandLineArguments) {
-    cout << "validating time stamp" << endl;
+   // cout << "validating time stamp" << endl;
     //cout << "logFile open? : " << logFile.is_open() << endl;
     //cout << "logFile at EOF?: " << logFile.eof() << endl;
 
@@ -359,7 +362,7 @@ bool validTimeStamp(map<string, string>& commandLineArguments) {
    string currentLine;
    string lastLine;
 
-    cout << "BEFORE lastLine SET, IS EMPTY?: " << lastLine.empty() << endl;
+   // cout << "BEFORE lastLine SET, IS EMPTY?: " << lastLine.empty() << endl;
 
    while (getline(logFile, currentLine) && !currentLine.empty()) {
         lastLine = currentLine;
@@ -378,20 +381,21 @@ bool validTimeStamp(map<string, string>& commandLineArguments) {
     //Need to decrypt the line to be able to read it
     lastLine = decrypt(lastLine, commandLineArguments["-K"], commandLineArguments);
 
-//    cout << "logFile at EOF?: " << logFile.eof() << endl;
-   cout << "lastLine: "<< lastLine << endl;
+    //cout << "logFile at EOF?: " << logFile.eof() << endl;
+    //cout << "lastLine: "<< lastLine << endl;
 
 
    //Now parse into an array of substrings
    //split on the single space
 
-    cout << "Last Time Stamp: " << lastLine[0] << endl;
+   // cout << "Last Time Stamp: " << lastLine[0] << endl;
 
 	int lastTimeStamp = atoi(string(1, lastLine[0]).c_str());
 
     if (lastTimeStamp == 0) {
         //Conversion failed
         //OR is a 0 time stamp (not valid)
+		cerr << "failed at 400" << endl;
         return false;
     }
 
@@ -400,11 +404,13 @@ bool validTimeStamp(map<string, string>& commandLineArguments) {
     if (newLineTimeStamp == 0) {
         //Conversion failed
         //OR is a 0 time stamp (not valid)
+		cerr << "failed at 408" << endl;
         return false;
     }
 
     if (newLineTimeStamp < lastTimeStamp) {
         //INVALID TIME STAMP FOUND!!!
+		cerr << "failed at 413" << endl;
         return false;
     }
    

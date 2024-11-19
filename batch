@@ -1,4 +1,4 @@
 -T 1 -K secret -A -E John log2
--T 2 -K secret -A -R 0 -E John log2
+-T 2 -K secret -A -E John -R 1 log2
 -T 3 -K secret -A -G James log2
--T 4 -K secret -A -R 0 -G James log2
+-T 4 -K secret -A -G James -R 1 log2
