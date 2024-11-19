@@ -93,23 +93,29 @@ vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode) {
 				// check if the name is in the line
 				auto nameIt = find(line.begin(), line.end(), name);
 				if (nameIt != line.end()) {
+					
 					// check if the person entered a room 
 					auto roomIt = find(line.begin(), line.end(), "A");
-					auto personIt = line.begin();
-					// if the person is an employee, then check the line for "E", then we can add the room number
-					if (isEmployee) {
-						auto personIt = find(line.begin(), line.end(), "E");
-						if (roomIt != line.end() && personIt != line.end()) {
-							// get the room number
-							roomNumbers.push_back(*(roomIt + 1));
-						}
-					} else {
-						auto personIt = find(line.begin(), line.end(), "G");
-						if (roomIt != line.end() && personIt != line.end()) {
-							// get the room number
-							roomNumbers.push_back(*(roomIt + 1));
-						}
-					} 
+					if (roomIt != line.end()) {
+						auto personIt = line.begin();
+						// if the person is an employee, then check the line for "E", then we can add the room number
+						if (isEmployee) {
+							auto personIt = find(line.begin(), line.end(), "E");
+							if (roomIt != line.end() && personIt != line.end()) {
+								// get the room number
+								roomNumbers.push_back(*(roomIt + 1));
+							} 
+						} else {
+							auto personIt = find(line.begin(), line.end(), "G");
+							if (roomIt != line.end() && personIt != line.end()) {
+								// get the room number
+								roomNumbers.push_back(*(roomIt + 1));
+							}
+						} 
+					} else{
+						// probably hit a -L tag
+						continue;
+					}
 				}
 			}
 		}
