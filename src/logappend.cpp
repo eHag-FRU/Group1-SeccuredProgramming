@@ -20,7 +20,7 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
     //  //Have a full line of arguments
     // cout << "Full line of arguments given" << endl;
 
-	cout << "======EXECUTING COMMAND=======" << endl;
+	//cout << "======EXECUTING COMMAND=======" << endl;
 
     // //Now send off to sanatize the full command
     // //Returns T/F => T = Successful / F = Invalid
@@ -45,11 +45,11 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
 
     //Now open, now check if the timestamp is valid
     if (!validTimeStamp(sanatizedResult, false)) {
-		std::cerr << "Invalid time stamp" << endl;
+		//std::cerr << "Invalid time stamp" << endl;
         return false;
     }
 
-    cout << "Valid time stamp" << endl;
+    //cout << "Valid time stamp" << endl;
    // cout << "NOW VALIDATING ARRIVAL & LEAVE" << endl;
 
     //Grab the name
@@ -76,7 +76,7 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
     //Check if error when opening,
     //if so, error or as invalid!
     if (!log.is_open()) {
-        cout << "FILE NOT OPEN!" << endl;
+        //cout << "FILE NOT OPEN!" << endl;
         return false;
     }
 
@@ -112,13 +112,13 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
 
 	//Now check for valid arrival/leave details
     if(!validArrivalLeave(sanatizedResult, name, false)) {
-        cout << "VALID ARRIVAL/LEAVE FAILED!" << endl;
+        //cout << "VALID ARRIVAL/LEAVE FAILED!" << endl;
         return false; 
     }
 
     //Add an endl to the file
 
-    cout << "Line before encryption: " << logLine << endl;
+    //cout << "Line before encryption: " << logLine << endl;
     //cout << "Key: " << sanatizedResult["-K"] << endl;
 
     string encryptedLine;
@@ -162,7 +162,7 @@ int main(int argc, char* argv[]) {
 
     //Check the count, determine if batch or if line is full command
     if (argc == 3) {
-        cout << "Given batch file" << endl;
+        //cout << "Given batch file" << endl;
 
         //Batch file file stream
         fstream batchFile;
@@ -174,7 +174,7 @@ int main(int argc, char* argv[]) {
 
         if(!batchFile.is_open()) {
             //File could not be opened
-            cout << "batch file could not open" << endl;
+            //cout << "batch file could not open" << endl;
             return 255;
         }
 
@@ -260,7 +260,7 @@ int main(int argc, char* argv[]) {
 
 			//Parsed, to send to execute each line
 			if (!commandExecuter(count, argvArray, cmdLine)) {
-				cout << "invalid input on line 251" << endl;
+				//cout << "invalid input on line 251" << endl;
 				return 255;
 			}
 

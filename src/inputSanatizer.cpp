@@ -203,7 +203,7 @@ bool sanatizeFilePath(int argc, char* argv[], map<string,string>& result) {
             //Matches, now put in map
              result.insert(pair<string,string>("logFile", argv[8]));
         } else {
-            cout << "FAILED LOGFILE PATH CHECK!" << endl;
+            //cout << "FAILED LOGFILE PATH CHECK!" << endl;
             //No file name found or invalid
             return false;
         }
@@ -274,7 +274,7 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
     regex arrivalLeaveTagDashMatcher("(-A|-L){1,1}", std::regex_constants::ECMAScript);
 
     if (regex_match(fargv[5], nameTagDashMatcher)) {
-		cout << "in the name tag dash matcher" << endl;
+		//cout << "in the name tag dash matcher" << endl;
         if (!sanatizeEmployeeOrGuestName(fargc, fargv, result, 5)) {
             //Failed to sanatize and parse
 			//cerr << "Invalid employee or guest name" << endl;
@@ -306,7 +306,7 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
 
     } else {
         //Not a valid tag at position
-        cout <<"Failed at 209" << endl;
+        //cout <<"Failed at 209" << endl;
         return false;
     }
 
@@ -354,7 +354,7 @@ void resultMapToString(map<string,string>& sanatizedResult) {
 
 
 bool validTimeStamp(map<string, string>& commandLineArguments, bool debugMode) {
-    cout << commandLineArguments["logFile"] << endl;
+    //cout << commandLineArguments["logFile"] << endl;
     ifstream logFile;
     logFile.open(commandLineArguments["logFile"], std::ios::in | std::ios::binary);
 
@@ -369,14 +369,14 @@ bool validTimeStamp(map<string, string>& commandLineArguments, bool debugMode) {
 
    while (getline(logFile, currentLine) && !currentLine.empty()) {
         lastLine = currentLine;
-        cout << lastLine << endl;
+        //cout << lastLine << endl;
    }
 
     //Empty? => NO FILE CONTENTS!!!, automatically valid!!!
     if (lastLine.empty()) {
         //Automatically true
         //Since the log is EMPTY!
-        cout << "LAST LINE EMPTY!!" << endl;
+        //cout << "LAST LINE EMPTY!!" << endl;
         return true;
     }
    
@@ -385,7 +385,7 @@ bool validTimeStamp(map<string, string>& commandLineArguments, bool debugMode) {
 
     //Need to decrypt the line to be able to read it
    if (!debugMode) {
-    cout << "NOT IN DEBUG MODE!" << endl;
+    //cout << "NOT IN DEBUG MODE!" << endl;
     lastLine = decrypt(lastLine, commandLineArguments["-K"], commandLineArguments);
 
     if (lastLine == "") {
@@ -398,8 +398,8 @@ bool validTimeStamp(map<string, string>& commandLineArguments, bool debugMode) {
    //split on the single space
 
 	int lastTimeStamp = atoi(string(1, lastLine[0]).c_str());
-    cout << "lastTimeStamp: " << lastTimeStamp << endl;
-    cout << "lastLine: " << lastLine << endl;
+    //cout << "lastTimeStamp: " << lastTimeStamp << endl;
+    //cout << "lastLine: " << lastLine << endl;
 
     if (lastTimeStamp == 0) {
         //Conversion failed
@@ -454,7 +454,7 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, string name, b
 	// determines if the person has only entered the gallery
 	bool onlyEnteredGallery = false;
 
-    cout << "in valid arrival/leave" << endl;
+    //cout << "in valid arrival/leave" << endl;
 	resultMapToString(commandLineArguments);
 
 	// if(commandLineArguments["-L"] == "L"){
@@ -465,12 +465,12 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, string name, b
 
     if (!logFile.is_open()) {
         // Could not open the file, attempt to create it
-        cout << "LogFile Name: " << commandLineArguments["logFile"] << endl;
-        cout << "validArrivalLeave: COULD NOT OPEN FILE, CREATING NEW FILE" << endl;
+        //cout << "LogFile Name: " << commandLineArguments["logFile"] << endl;
+        //cout << "validArrivalLeave: COULD NOT OPEN FILE, CREATING NEW FILE" << endl;
 
         std::ofstream newLogFile(commandLineArguments["logFile"], std::ios::out | std::ios::binary);
         if (!newLogFile.is_open()) {
-            cout << "validArrivalLeave: COULD NOT CREATE FILE" << endl;
+            //cout << "validArrivalLeave: COULD NOT CREATE FILE" << endl;
             return false;
         }
         newLogFile.close();
@@ -478,7 +478,7 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, string name, b
         // Reopen the file as input
         logFile.open(commandLineArguments["logFile"], std::ios::in | std::ios::binary);
         if (!logFile.is_open()) {
-            cout << "validArrivalLeave: COULD NOT OPEN NEWLY CREATED FILE" << endl;
+            //cout << "validArrivalLeave: COULD NOT OPEN NEWLY CREATED FILE" << endl;
             return false;
         }
     }
@@ -504,12 +504,12 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, string name, b
 	// Check if the file is empty and then only return true when the command line arguments are -A A and the size of the command line arguments is 6
 	logFile.seekg(0, ios::end);
 	if (logFile.tellg() == 0 && commandLineArguments.size() == 6) {
-		cout << "The log file is empty." << endl;
+		//cout << "The log file is empty." << endl;
 		return true;
 	}
 
 	if(commandLineArguments["-A"] == "A" && commandLineArguments.size() == 6){
-		cout << name << " just entered the gallery." << endl;
+		//cout << name << " just entered the gallery." << endl;
 		return true;
 	}
 
@@ -538,7 +538,7 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, string name, b
 				for (int i = 0; i < currentLineSplit.size(); i++) {
 					if(currentLineSplit[i] == "A" || currentLineSplit[i] == "L") {
 						if (currentLineSplit[i] == "L") {
-							cout << "L is found when saving action" << endl;
+							//cout << "L is found when saving action" << endl;
 						}
 						
 						personLastActionLine.push_back(currentLineSplit[i]);

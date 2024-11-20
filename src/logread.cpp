@@ -34,8 +34,8 @@ bool sanatizeLogReadToken(int argc, char* argv[], map<string,string>& result) {
             result.insert(pair<string,string>(argv[1], argv[2]));
         } else {
             // Token was not valid
-            cout << "Token was not valid!" << endl;
-            cout << "Token: |" << argv[1] << "|" << endl;
+            //cout << "Token was not valid!" << endl;
+            //cout << "Token: |" << argv[1] << "|" << endl;
             return false;
         }
 
@@ -64,8 +64,8 @@ bool sanatizeLogReadEmployeeOrGuestName(int argc, char* argv[], map<string,strin
             result.insert(pair<string,string>(argv[tagPostion], argv[tagPostion + 1]));
         } else {
             // Employee name was not valid
-            cout << "Employee name was not valid!" << endl;
-            cout << "Employee Name: |" << argv[6] << "|" << endl;
+           // cout << "Employee name was not valid!" << endl;
+            //cout << "Employee Name: |" << argv[6] << "|" << endl;
             return false;
         }
     } else if (regex_match(argv[tagPostion], guestNameDashMatcher)) {
@@ -77,12 +77,12 @@ bool sanatizeLogReadEmployeeOrGuestName(int argc, char* argv[], map<string,strin
             result.insert(pair<string,string>(argv[tagPostion], argv[tagPostion + 1]));
         } else {
             // Guest name was not valid
-            cout << "Guest name was not valid!" << endl;
-            cout << "Guest Name: |" << argv[6] << "|" << endl;
+            //cout << "Guest name was not valid!" << endl;
+           // cout << "Guest Name: |" << argv[6] << "|" << endl;
             return false;
         }
     } else {
-        cout << "Guest OR Employee flag was not present!" << endl;
+        //cout << "Guest OR Employee flag was not present!" << endl;
         //Token flag was not found
         return false;
     }
@@ -112,13 +112,13 @@ bool sanatizeLogReadFilePath(int argc, char* argv[], map<string,string>& result)
             return false;
         }
     } else if (argc == 5) {
-        cout << "In 5 path" << endl;
+        //cout << "In 5 path" << endl;
         //Non-Room Argument Path
         if (regex_match(argv[4], logFileNameMatcher)) {
             //Matches, now put in map
              result.insert(pair<string,string>("logFile", argv[4]));
         } else {
-            cout << "FAILED LOGFILE PATH CHECK!" << endl;
+            //cout << "FAILED LOGFILE PATH CHECK!" << endl;
             //No file name found or invalid
             return false;
         }
@@ -166,10 +166,10 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
         //-S is used
         if(!regex_match(argv[3], dashSTokenMatcher) && !regex_match(argv[3], dash0TokenMatcher)) {
             //Not Valid!!
-			std::cerr << "-S OR -0 token not valid" << endl;
+			//std::cerr << "-S OR -0 token not valid" << endl;
             return false;
         } else {
-			cout << "-S token is valid" << endl;
+			//cout << "-S token is valid" << endl;
 		}
 
        //Now add the -S OR -0 token to the result
@@ -179,7 +179,7 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
         //-R is used
         if(!regex_match(argv[3], dashRTokenMatcher)) {
             //Not Valid!!
-			std::cerr << "-R token not valid" << endl;
+			//std::cerr << "-R token not valid" << endl;
             return false;
         }
         //Valid, now do the employee/guest check
@@ -195,7 +195,7 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
         //Check for the -I or -T
         if (regex_match(argv[3], dashITokenMatcher) || regex_match(argv[3], dashTTokenMatcher)) {
             //Not implemented
-            cout << "unimplemented" << endl;
+            //cout << "unimplemented" << endl;
             return false;
         } else if (regex_match(argv[3], dash0TokenMatcher)) {
             result.insert(pair<string,string>(argv[3], argv[3]));
@@ -216,18 +216,6 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
     return true;
 }
 
-// vector<string> splitString(const string& str, char delimiter) {
-//     vector<string> tokens;
-//     std::istringstream stream(str);
-//     string token;
-    
-//     while (getline(stream, token, delimiter)) {
-//         tokens.push_back(token);
-//     }
-
-//     return tokens;
-// }
-
 
 
 
@@ -247,12 +235,6 @@ int main(int argc, char* argv[]) {
         return 255;
     }
 
-   
-
-
-    //resultMapToString(inputResult);
-
-    //Now can try to open the file
     
     //
     //-S OR -R argument
@@ -269,7 +251,7 @@ int main(int argc, char* argv[]) {
             return 255; 
         }
     } else if (inputResult.find("-R") != inputResult.end()) {
-		cout << "-R command being handled" << endl;
+		//cout << "-R command being handled" << endl;
 
         rTagFunctionality(inputResult, false);
     } else if (inputResult.find("-0") != inputResult.end()) {
@@ -286,11 +268,11 @@ int main(int argc, char* argv[]) {
             string decryptedLine = decrypt(previousLine, inputResult["-K"], inputResult);
 
             if (decryptedLine == "") {
-                cout << "invalid" << endl;
+                //cout << "invalid" << endl;
                 return 255;
             }
 
-            cout << decryptedLine << endl;
+            //cout << decryptedLine << endl;
         }
 
     }
