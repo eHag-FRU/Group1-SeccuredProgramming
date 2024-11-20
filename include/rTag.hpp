@@ -16,7 +16,45 @@ using std::regex_match; using std::iterator; using std::ifstream; using std::pai
 vector<string> splitString(const string& str, char delimiter);
 vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode);
 
+// Trim from start (in place)
+static inline void ltrim(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }));
+}
 
+// Trim from end (in place)
+static inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+}
+
+// Trim from both ends (in place)
+static inline void trim(std::string &s) {
+    ltrim(s);
+    rtrim(s);
+}
+
+// Remove null characters from a string
+static inline void removeNulls(std::string &s) {
+    s.erase(std::remove(s.begin(), s.end(), '\0'), s.end());
+}
+
+// Function to split a string by a delimiter and return a vector of substrings
+vector<string> splitString2(const string& str, char delimiter) {
+    vector<string> tokens;
+    std::istringstream stream(str);
+    string token;
+    
+    while (getline(stream, token, delimiter)) {
+        removeNulls(token); // Remove null characters
+        trim(token); // Trim whitespace
+        tokens.push_back(token);
+    }
+    
+    return tokens;
+}
 // Function to split a string by a delimiter and return a vector of substrings
 vector<string>   splitString(const string& str, char delimiter) {
     vector<string> tokens;
@@ -37,15 +75,17 @@ vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode) {
 	string name;
 	bool isEmployee;
 
+	cout << "in rTagFunctionality" << endl;
+
 	if (cmdLine.find(G) != cmdLine.end()) {
 		//Guest name
 		isEmployee = false;
 		name = cmdLine[G];
-	} else {
+	} else if (cmdLine.find(E) != cmdLine.end()) {
 		//Employee name
 		isEmployee = true;
 		name = cmdLine[E];	
-	}
+	} 
 
 	//Open the file
 	ifstream logFile;
@@ -79,7 +119,7 @@ vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode) {
 		logFile.seekg(0, std::ios::beg); 								// Reset to beginning of the file
 																		// if the file is not empty, then we can start reading the file	
 		while(getline(logFile, currentLine)) {
-			//cout << "currentLine: " << currentLine << endl;
+			
 
 			//Decrypt the current line
 			if(!debugMode) {
@@ -87,13 +127,14 @@ vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode) {
 			}
 
 			// split the line by space
-			vector<string> line = splitString(currentLine, ' ');
+			vector<string> line = splitString2(currentLine, ' ');
+
+			// cout << "line size: " << line.size() << endl;
 			// check if a room number is input. if it doesnt the vector will have a size of 4
 			if (line.size() > 4) {
 				// check if the name is in the line
 				auto nameIt = find(line.begin(), line.end(), name);
 				if (nameIt != line.end()) {
-					
 					// check if the person entered a room 
 					auto roomIt = find(line.begin(), line.end(), "A");
 					if (roomIt != line.end()) {
