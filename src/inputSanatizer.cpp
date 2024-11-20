@@ -30,7 +30,7 @@ bool sanatizeTime(int argc, char* argv[], map<string,string>& result) {
     //Run the matcher and check
     if(!regex_match(argv[1], timeStampDashMatcher)) {
         //Bad time flag
-        cout << "Bad time flag found" << endl;
+        //cout << "Bad time flag found" << endl;
        return false;
     }
 
@@ -38,7 +38,7 @@ bool sanatizeTime(int argc, char* argv[], map<string,string>& result) {
     regex timeStampMatcher("[0-9]+", std::regex_constants::ECMAScript);
      if(!regex_match(argv[2], timeStampMatcher)) {
         //Bad time
-        cout << "Bad time found" << endl;
+       // cout << "Bad time found" << endl;
        return false;
     }
 
@@ -108,8 +108,8 @@ bool sanatizeEmployeeOrGuestName(int argc, char* argv[], map<string,string>& res
             result.insert(pair<string,string>(argv[tagPostion], argv[tagPostion + 1]));
         } else {
             // Employee name was not valid
-            cout << "Employee name was not valid!" << endl;
-            cout << "Employee Name: |" << argv[tagPostion + 1] << "|" << endl;
+            //cout << "Employee name was not valid!" << endl;
+            //cout << "Employee Name: |" << argv[tagPostion + 1] << "|" << endl;
             return false;
         }
     } else if (regex_match(argv[tagPostion], guestNameDashMatcher)) {
@@ -121,12 +121,12 @@ bool sanatizeEmployeeOrGuestName(int argc, char* argv[], map<string,string>& res
             result.insert(pair<string,string>(argv[tagPostion], argv[tagPostion + 1]));
         } else {
             // Guest name was not valid
-            cout << "Guest name was not valid!" << endl;
-            cout << "Guest Name: |" << argv[tagPostion + 1] << "|" << endl;
+            //cout << "Guest name was not valid!" << endl;
+            //cout << "Guest Name: |" << argv[tagPostion + 1] << "|" << endl;
             return false;
         }
     } else {
-        cout << "Guest OR Employee flag was not present!" << endl;
+        //cout << "Guest OR Employee flag was not present!" << endl;
         //Token flag was not found
         return false;
     }
@@ -203,7 +203,7 @@ bool sanatizeFilePath(int argc, char* argv[], map<string,string>& result) {
             //Matches, now put in map
              result.insert(pair<string,string>("logFile", argv[8]));
         } else {
-            cout << "FAILED LOGFILE PATH CHECK!" << endl;
+            //cout << "FAILED LOGFILE PATH CHECK!" << endl;
             //No file name found or invalid
             return false;
         }
@@ -222,7 +222,7 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
 
     //Check for the correct argument count again
     if (fargc != 9 && fargc != 11) {
-		cout << "Invalid number of arguments" << endl;
+		//cout << "Invalid number of arguments" << endl;
         return false;
     }
 
@@ -238,12 +238,12 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
         //Good time flag found, now pull in the time
         if (!sanatizeTime(fargc, fargv, result)) {
             //Bad time stamp
-			cerr << "Invalid time stamp" << endl;
+			//cerr << "Invalid time stamp" << endl;
             return false;
         }
     } else {
         //No time flag found
-        cout << "No -T Found" << endl;
+        //cout << "No -T Found" << endl;
         return false;
     }
 
@@ -255,11 +255,11 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
     if (regex_match(fargv[3], tokenDashMatcher)) {
         //Now we have a valid token flag
         if(!sanatizeToken(fargc, fargv, result)) {
-			cerr << "Invalid token" << endl;
+			//cerr << "Invalid token" << endl;
             return false;
         }
     } else {
-		cerr << "tokenDashMatcher failed" << endl;
+		//cerr << "tokenDashMatcher failed" << endl;
         return false;
     }
 
@@ -274,14 +274,14 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
 		cout << "in the name tag dash matcher" << endl;
         if (!sanatizeEmployeeOrGuestName(fargc, fargv, result, 5)) {
             //Failed to sanatize and parse
-			cerr << "Invalid employee or guest name" << endl;
+			//cerr << "Invalid employee or guest name" << endl;
             return false;
         }
 
         //Now parse the arrive/leave tag
         if(!sanatizeAriveLeaveTag(fargc, fargv, result, 7)) {
             //Failed to sanatize and parse
-			cerr << "Invalid arrival or leave tag" << endl;
+			//cerr << "Invalid arrival or leave tag" << endl;
             return false;
         }
 
@@ -289,13 +289,13 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
         //Now parse the arrive/leave tag
         if(!sanatizeAriveLeaveTag(fargc, fargv, result, 5)) {
             //Failed to sanatize and parse
-			cerr << "Invalid arrival or leave tag" << endl;
+			//cerr << "Invalid arrival or leave tag" << endl;
             return false;
         } 
 
         if (!sanatizeEmployeeOrGuestName(fargc, fargv, result, 6)) {
             //Failed to sanatize and parse
-			cerr << "Invalid employee or guest name" << endl;
+			//cerr << "Invalid employee or guest name" << endl;
             return false;
         }
 
@@ -315,11 +315,11 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
         if (regex_match(fargv[8], roomDashMatcher)) {
             //Now we have a valid token flag
             if (!sanatizeRoomID(fargc, fargv, result)) {
-				cerr << "Invalid room ID" << endl;
+				//cerr << "Invalid room ID" << endl;
                 return false;
             }
         } else {
-			cerr << "roomDashMaster failed" << endl;
+			//cerr << "roomDashMaster failed" << endl;
             return false;
         }
     }
@@ -328,7 +328,7 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
     // LOG FILE
     //
     if (!sanatizeFilePath(fargc, fargv, result)) {
-		cerr << "Invalid file path" << endl;
+		//cerr << "Invalid file path" << endl;
         return false;
     }
 
@@ -338,7 +338,6 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
 
 void resultMapToString(map<string,string>& sanatizedResult) {
     //Print out the map
-    //cout << "Resulting map size: " << sanatizedResult.size() << endl;
 
     auto iterator = sanatizedResult.begin();
 
@@ -351,14 +350,8 @@ void resultMapToString(map<string,string>& sanatizedResult) {
 }
 
 
-bool validTimeStamp(map<string, string>& commandLineArguments) {
-   // cout << "validating time stamp" << endl;
-    //cout << "logFile open? : " << logFile.is_open() << endl;
-    //cout << "logFile at EOF?: " << logFile.eof() << endl;
-
-//     //Close and reopen on byte stream
-//     logFile.close();
-
+bool validTimeStamp(map<string, string>& commandLineArguments, bool debugMode) {
+    cout << commandLineArguments["logFile"] << endl;
     ifstream logFile;
     logFile.open(commandLineArguments["logFile"], std::ios::in | std::ios::binary);
 
@@ -373,12 +366,14 @@ bool validTimeStamp(map<string, string>& commandLineArguments) {
 
    while (getline(logFile, currentLine) && !currentLine.empty()) {
         lastLine = currentLine;
+        cout << lastLine << endl;
    }
 
     //Empty? => NO FILE CONTENTS!!!, automatically valid!!!
     if (lastLine.empty()) {
         //Automatically true
         //Since the log is EMPTY!
+        cout << "LAST LINE EMPTY!!" << endl;
         return true;
     }
    
@@ -386,22 +381,22 @@ bool validTimeStamp(map<string, string>& commandLineArguments) {
     //We have the last line
 
     //Need to decrypt the line to be able to read it
+   if (!debugMode) {
+    cout << "NOT IN DEBUG MODE!" << endl;
     lastLine = decrypt(lastLine, commandLineArguments["-K"], commandLineArguments);
 
     if (lastLine == "") {
         return false;
     }
-
-    //cout << "logFile at EOF?: " << logFile.eof() << endl;
-    //cout << "lastLine: "<< lastLine << endl;
+   }
 
 
    //Now parse into an array of substrings
    //split on the single space
 
-   // cout << "Last Time Stamp: " << lastLine[0] << endl;
-
 	int lastTimeStamp = atoi(string(1, lastLine[0]).c_str());
+    cout << "lastTimeStamp: " << lastTimeStamp << endl;
+    cout << "lastLine: " << lastLine << endl;
 
     if (lastTimeStamp == 0) {
         //Conversion failed
@@ -457,8 +452,8 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, std::fstream& 
 
     if (!logFile.is_open()) {
         //Could not open the file
-        cout << "LogFile Name: " << commandLineArguments["logFile"] << endl;
-        cout << "validArrivalLeave: COULD NOT OPEN FILE" << endl;
+        //cout << "LogFile Name: " << commandLineArguments["logFile"] << endl;
+        //cout << "validArrivalLeave: COULD NOT OPEN FILE" << endl;
         return false;
     }
 
@@ -544,7 +539,7 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, std::fstream& 
 			//Valid
 			return true;
 		} else {
-			std::cerr << "ERROR: " << name << " has not left the previous room" << std::endl;
+			//std::cerr << "ERROR: " << name << " has not left the previous room" << std::endl;
 			return false;
 		}
 	} else if (commandLineArguments["-L"] == "L") {
@@ -558,7 +553,7 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, std::fstream& 
 				//Valid
 				return true;
 			} else {
-				std::cerr << "ERROR: " << name << " has not entered the gallery" << std::endl;
+				//std::cerr << "ERROR: " << name << " has not entered the gallery" << std::endl;
 				return false;
 			}
 		} else {
@@ -566,7 +561,7 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, std::fstream& 
 				//Valid
 				return true;
 		} else {
-			std::cerr << "ERROR: " << name << " has not entered the gallery" << std::endl;
+			//std::cerr << "ERROR: " << name << " has not entered the gallery" << std::endl;
 			return false;
 		}
 		}
