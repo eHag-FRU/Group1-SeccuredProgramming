@@ -428,9 +428,45 @@ void testSanatizeFilePath() {
         map<string, string> result;
         cout << "TEST 1" << endl;
         cout << "Using valid input of:  log1, should return true" << endl;
-        assert(!sanatizeFilePath(9, input1, result));
+        assert(sanatizeFilePath(9, input1, result));
+        assert(result["logFile"] == "log1");
         result.clear();
         cout << "TEST 1 PASSED" << endl << endl;
+    }{
+        map<string, string> result;
+        cout << "TEST 2" << endl;
+        cout << "Using valid input of:  ./tests/testTxtFiles/test1.txt, should return true" << endl;
+        assert(sanatizeFilePath(9, input2, result));
+        assert(result["logFile"] == "./tests/testTxtFiles/test1.txt");
+        result.clear();
+        cout << "TEST 2 PASSED" << endl << endl;
+    }
+
+    {
+        map<string, string> result;
+        cout << "TEST 3" << endl;
+        cout << "Using valid input of:  .\\tt\\log1, should return false" << endl;
+        assert(sanatizeFilePath(9, input3, result));
+        result.clear();
+        cout << "TEST 3 PASSED" << endl << endl;
+    }
+
+    {
+        map<string, string> result;
+        cout << "TEST 4" << endl;
+        cout << "Using valid input of:  , should return false" << endl;
+        assert(!sanatizeFilePath(9, input4, result));
+        result.clear();
+        cout << "TEST 4 PASSED" << endl << endl;
+    }
+
+    {
+        map<string, string> result;
+        cout << "TEST 5" << endl;
+        cout << "Using valid input of:  ./%X%X%X%X/../, should return true" << endl;
+        assert(sanatizeFilePath(9, input5, result));
+        result.clear();
+        cout << "TEST 5 PASSED" << endl << endl;
     }
 
 

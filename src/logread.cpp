@@ -10,6 +10,7 @@
 #include "inputSanatizer.hpp"
 #include "encryptionHandler.hpp"
 #include "../include/rTag.hpp"
+#include "../include/logread.hpp"
 
 
 
