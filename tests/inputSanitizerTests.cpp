@@ -414,15 +414,25 @@ void testSanatizeRoomID() {
 void testSanatizeFilePath() {
     cout << "====TESTING SANITIZE FILE PATH====" << endl << endl;
     char* input1[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
-         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
+         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
     char* input2[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
-         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
+         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("Fred"), const_cast<char*>("./tests/testTxtFiles/test1.txt")};
     char* input3[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
-         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
+         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("Fred"), const_cast<char*>("./tt/log1")};
     char* input4[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
-         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
+         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("Fred"), const_cast<char*>("")};
     char* input5[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
-         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
+         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("Fred"), const_cast<char*>("./%X%X%X%X/../")};
+
+     {
+        map<string, string> result;
+        cout << "TEST 1" << endl;
+        cout << "Using valid input of:  log1, should return true" << endl;
+        assert(!sanatizeFilePath(9, input1, result));
+        result.clear();
+        cout << "TEST 1 PASSED" << endl << endl;
+    }
+
 
     cout << endl << "====PASSED SANITIZE FILE PATH====" << endl << endl;
 }

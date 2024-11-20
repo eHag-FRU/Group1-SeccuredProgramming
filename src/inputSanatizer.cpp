@@ -203,7 +203,7 @@ bool sanatizeFilePath(int argc, char* argv[], map<string,string>& result) {
             //Matches, now put in map
              result.insert(pair<string,string>("logFile", argv[8]));
         } else {
-            //cout << "FAILED LOGFILE PATH CHECK!" << endl;
+            cout << "FAILED LOGFILE PATH CHECK!" << endl;
             //No file name found or invalid
             return false;
         }
