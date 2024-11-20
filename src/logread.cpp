@@ -511,7 +511,8 @@ int main(int argc, char* argv[]) {
             return 255; 
         }
     } else if (inputResult.find("-R") != inputResult.end()) {
-		//cout << "-R command being handled" << endl;
+		cout << "-R command being handled" << endl;
+
         rTagFunctionality(inputResult, false);
     } else if (inputResult.find("-0") != inputResult.end()) {
         //Open the file

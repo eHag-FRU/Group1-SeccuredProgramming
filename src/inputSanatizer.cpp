@@ -508,7 +508,7 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, string name, b
 	//cout << "command line arguments size: " << commandLineArguments.size() << endl;
 	// Check if the file is empty and then only return true when the command line arguments are -A A and the size of the command line arguments is 6
 	logFile.seekg(0, ios::end);
-	if (logFile.tellg() == 0) {
+	if (logFile.tellg() == 0 && commandLineArguments.size() == 6) {
 		cout << "The log file is empty." << endl;
 		return true;
 	}
