@@ -29,7 +29,7 @@ int main() {
 	sanitizedResult.insert(std::make_pair("-G", "Jeff"));
 	sanitizedResult.insert(std::make_pair("logFile", "./tests/testTxtFiles/test1.txt"));
 
-	assert(!validArrivalLeave(sanitizedResult, logFile, "Fred", false));	
+	assert(!validArrivalLeave(sanitizedResult, "Fred", false));	
 	cout << "false name passed" << endl << endl;
 	
 
