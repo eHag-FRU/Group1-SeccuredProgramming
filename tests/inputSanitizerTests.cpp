@@ -379,26 +379,157 @@ void testSanatizeToken() {
 }
 
 void testSanatizeEmployeeOrGuestName() {
-    cout << "====TESTING SANITIZE EMPLOYEE OR GUEST NAME====" << endl << endl;
-    //Valid Inputs (-G & -E)
-    char* input1[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
-         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
-    char* input2[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
-         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
-    char* input3[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
-         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
-    char* input4[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
-         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
-    char* input5[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
-         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
+    
+		cout << "====TESTING SANITIZE EMPLOYEE OR GUEST NAME====" << endl << endl;
+		//Valid Inputs (-G & -E)
+		char* input1[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+			 const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
+		char* input2[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+			 const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
+		char* input3[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+			 const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Alice"), const_cast<char*>("log1")};
+		char* input4[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+			 const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("Bob"), const_cast<char*>("log1")};
+		char* input5[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+			 const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Charlie"), const_cast<char*>("log1")};
 
+		//Invalid Inputs
+		char* input6[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+			 const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-X"), const_cast<char*>("Fred"), const_cast<char*>("log1")};
+		char* input7[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+			 const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>(""), const_cast<char*>("log1")};
+		char* input8[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+			 const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>(""), const_cast<char*>("log1")};
+		char* input9[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+			 const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("123"), const_cast<char*>("log1")};
+		char* input10[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+			 const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-G"), const_cast<char*>("@&*"), const_cast<char*>("log1")};
+
+		{
+			map<string, string> result;
+
+			cout << "TEST 1" << endl;
+			cout << "Using valid input of: -E Fred" << endl;
+			assert(sanatizeEmployeeOrGuestName(9, input1, result, 6));
+			assert(result["-E"] == "Fred");
+			result.clear();
+			cout << "TEST 1 PASSED" << endl << endl;
+		}
+
+		{
+			map<string, string> result;
+
+			cout << "TEST 2" << endl;
+			cout << "Using valid input of: -G Fred" << endl;
+			assert(sanatizeEmployeeOrGuestName(9, input2, result,6));
+			assert(result["-G"] == "Fred");
+			result.clear();
+			cout << "TEST 2 PASSED" << endl << endl;
+		}
+
+		{
+			map<string, string> result;
+
+			cout << "TEST 3" << endl;
+			cout << "Using valid input of: -E Alice" << endl;
+			assert(sanatizeEmployeeOrGuestName(9, input3, result,6));
+			assert(result["-E"] == "Alice");
+			result.clear();
+			cout << "TEST 3 PASSED" << endl << endl;
+		}
+
+		{
+			map<string, string> result;
+
+			cout << "TEST 4" << endl;
+			cout << "Using valid input of: -G Bob" << endl;
+			assert(sanatizeEmployeeOrGuestName(9, input4, result,6));
+			assert(result["-G"] == "Bob");
+			result.clear();
+			cout << "TEST 4 PASSED" << endl << endl;
+		}
+
+		{
+			map<string, string> result;
+
+			cout << "TEST 5" << endl;
+			cout << "Using valid input of: -E Charlie" << endl;
+			assert(sanatizeEmployeeOrGuestName(9, input5, result,6));
+			assert(result["-E"] == "Charlie");
+			result.clear();
+			cout << "TEST 5 PASSED" << endl << endl;
+		}
+
+		{
+			map<string, string> result;
+
+			cout << "TEST 6" << endl;
+			cout << "Using invalid input of: -X Fred, should return false" << endl;
+			assert(!sanatizeEmployeeOrGuestName(9, input6, result,6));
+			result.clear();
+			cout << "TEST 6 PASSED" << endl << endl;
+		}
+
+		{
+			map<string, string> result;
+
+			cout << "TEST 9" << endl;
+			cout << "Using invalid input of: -E 123, should return false" << endl;
+			assert(!sanatizeEmployeeOrGuestName(9, input9, result,6));
+			result.clear();
+			cout << "TEST 9 PASSED" << endl << endl;
+		}
+
+		{
+			map<string, string> result;
+
+			cout << "TEST 10" << endl;
+			cout << "Using invalid input of: -G @&*, should return false" << endl;
+			assert(!sanatizeEmployeeOrGuestName(9, input10, result,6));
+			result.clear();
+			cout << "TEST 10 PASSED" << endl << endl;
+		}
 
     cout << endl << "====PASSED SANITIZE EMPLOYEE OR GUEST NAME TESTS====" << endl << endl;
 }
 
 void testSanatizeAriveLeaveTag() {
     cout << "====TESTING SANITIZE ARRIVE LEAVE TAG====" << endl << endl;
+	 std::map<std::string, std::string> result;
 
+    // Test 1: Valid input for arrival
+    cout << "Using valid input of: -A, should return true" << endl;
+    char* input1[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+                      const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("log1")};
+    assert(sanatizeAriveLeaveTag(7, input1, result,5));
+    result.clear();
+    cout << "TEST 1 PASSED" << endl << endl;
+
+    // Test 2: Valid input for leave
+    cout << "Using valid input of: -L, should return true" << endl;
+    char* input2[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+                      const_cast<char*>("secret"), const_cast<char*>("-L"), const_cast<char*>("log1")};
+    assert(sanatizeAriveLeaveTag(7, input2, result,5));
+    result.clear();
+    cout << "TEST 2 PASSED" << endl << endl;
+
+    // Test 3: Invalid input with missing tag
+    cout << "Using invalid input of: -X, should return false" << endl;
+    char* input3[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+                      const_cast<char*>("secret"), const_cast<char*>("-X"), const_cast<char*>("log1")};
+    assert(!sanatizeAriveLeaveTag(7, input3, result,5));
+    result.clear();
+    cout << "TEST 3 PASSED" << endl << endl;
+
+    // Test 4: Invalid input with no tag
+    cout << "Using invalid input with no tag, should return false" << endl;
+    char* input4[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+                      const_cast<char*>("secret"), const_cast<char*>("log1")};
+    assert(!sanatizeAriveLeaveTag(6, input4, result,5));
+    result.clear();
+    cout << "TEST 4 PASSED" << endl << endl;
+
+    cout << endl << "====PASSED SANITIZE ARRIVE LEAVE TAG TESTS====" << endl << endl;
 
     cout << endl << "====PASSED SANITIZE ARRIVE LEAVE TAG TESTS====" << endl << endl;
 }
@@ -406,9 +537,40 @@ void testSanatizeAriveLeaveTag() {
 void testSanatizeRoomID() {
     cout << "====TESTING SANITIZE ROOM ID====" << endl << endl;
 
+    std::map<std::string, std::string> result;
+
+    // Test 1: Valid input for room ID
+    cout << "Using valid input of: -R 101, should return true" << endl;
+    char* input1[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("-R"), const_cast<char*>("101"), const_cast<char*>("log1")};
+    assert(sanatizeRoomID(8, input1, result));
+    result.clear();
+    cout << "TEST 1 PASSED" << endl << endl;
+
+    // Test 2: Valid input for room ID
+    cout << "Using valid input of: -R 202, should return true" << endl;
+    char* input2[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("-R"), const_cast<char*>("202"), const_cast<char*>("log1")};
+    assert(sanatizeRoomID(8, input2, result));
+    result.clear();
+    cout << "TEST 2 PASSED" << endl << endl;
+
+    // Test 3: Invalid input with non-numeric room ID
+    cout << "Using invalid input of: -R ABC, should return false" << endl;
+    char* input3[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("-R"), const_cast<char*>("ABC"), const_cast<char*>("log1")};
+    result.clear();
+    cout << "TEST 3 PASSED" << endl << endl;
+
+    // Test 4: Invalid input with missing room ID
+    cout << "Using invalid input with missing room ID, should return false" << endl;
+    char* input4[] = {const_cast<char*>("logappend"), const_cast<char*>("-T"), const_cast<char*>("1"), const_cast<char*>("-K"),
+         const_cast<char*>("secret"), const_cast<char*>("-A"), const_cast<char*>("-E"), const_cast<char*>("Fred"), const_cast<char*>("-R"), const_cast<char*>("log1")};
+    assert(!sanatizeRoomID(7, input4, result));
+    result.clear();
+    cout << "TEST 4 PASSED" << endl << endl;
 
     cout << endl << "====PASSED SANITIZE ROOM ID TESTS====" << endl << endl;
-
 }
 
 void testSanatizeFilePath() {
