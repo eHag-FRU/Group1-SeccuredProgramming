@@ -31,7 +31,7 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
 
     
     //Print out the resulting map
-    resultMapToString(sanatizedResult);
+    //resultMapToString(sanatizedResult);
 
     //Now open the map
     fstream log;
@@ -61,11 +61,7 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
         name = sanatizedResult["-E"];
     }
 
-    //Now check for valid arrival/leave details
-    // if(!validArrivalLeave(sanatizedResult, name)) {
-    //     cout << "VALID ARRIVAL/LEAVE FAILED!" << endl;
-    //     return false; 
-    // }
+    
 
     // //
     // // WRITING TO THE FILE, ALL GOOD SO NOW CAN WRITE!!
@@ -112,6 +108,12 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
         //Employee
         logLine.append(" E " + sanatizedResult["-E"]);
 
+    }
+
+	//Now check for valid arrival/leave details
+    if(!validArrivalLeave(sanatizedResult, name, false)) {
+        cout << "VALID ARRIVAL/LEAVE FAILED!" << endl;
+        return false; 
     }
 
     //Add an endl to the file

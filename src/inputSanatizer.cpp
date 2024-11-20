@@ -226,6 +226,9 @@ bool sanatizeInput(int fargc, char* fargv[], map<string, string>& result) {
         return false;
     }
 
+	// insert inittial argv value
+	result["programName"] = "logappend";
+
     //
     //TIME
     //
@@ -443,7 +446,7 @@ vector<string> splitStringT(const string& str, char delimiter) {
 }
 
 
-bool validArrivalLeave(map<string, string>& commandLineArguments, std::fstream& logFileT, string name, bool testFlag) {
+bool validArrivalLeave(map<string, string>& commandLineArguments, string name, bool testFlag) {
     // No employee or guest should enter a room without first entering the gallery. 
     //No employee or guest should enter a room without having left a previous room. 
     //Violation of either of these conditions implies inconsistency with the current 
@@ -453,16 +456,39 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, std::fstream& 
     //Open the file
     ifstream logFile;
 
+	// determines if the person has only entered the gallery
+	bool onlyEnteredGallery = false;
+
+    cout << "in valid arrival/leave" << endl;
+	resultMapToString(commandLineArguments);
+
+	// if(commandLineArguments["-L"] == "L"){
+	// 	cout << name << "it can find the L" << endl;
+	// }
+
     logFile.open(commandLineArguments["logFile"], std::ios::in | std::ios::binary);
 
     if (!logFile.is_open()) {
-        //Could not open the file
+        // Could not open the file, attempt to create it
         cout << "LogFile Name: " << commandLineArguments["logFile"] << endl;
-        cout << "validArrivalLeave: COULD NOT OPEN FILE" << endl;
-        return false;
+        cout << "validArrivalLeave: COULD NOT OPEN FILE, CREATING NEW FILE" << endl;
+
+        std::ofstream newLogFile(commandLineArguments["logFile"], std::ios::out | std::ios::binary);
+        if (!newLogFile.is_open()) {
+            cout << "validArrivalLeave: COULD NOT CREATE FILE" << endl;
+            return false;
+        }
+        newLogFile.close();
+
+        // Reopen the file as input
+        logFile.open(commandLineArguments["logFile"], std::ios::in | std::ios::binary);
+        if (!logFile.is_open()) {
+            cout << "validArrivalLeave: COULD NOT OPEN NEWLY CREATED FILE" << endl;
+            return false;
+        }
     }
 
-	bool justEnteredGallery = false;
+	
 
     //cout << "IN validArrivalLeave" << endl;
 
@@ -475,13 +501,28 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, std::fstream& 
 
     //Clear the current error flag and EOF flag
     //Then seek to the top of the file
-    //logFile.clear();
-    //logFile.seekg(0);
+    logFile.clear();
+    logFile.seekg(0);
 
-    //cout << "logFile at EOF?: " << logFile.eof() << endl;
+   // cout << "logFile at EOF?: " << logFile.eof() << endl;
+	//cout << "command line arguments size: " << commandLineArguments.size() << endl;
+	// Check if the file is empty and then only return true when the command line arguments are -A A and the size of the command line arguments is 6
+	logFile.seekg(0, ios::end);
+	if (logFile.tellg() == 0) {
+		cout << "The log file is empty." << endl;
+		return true;
+	}
+
+	if(commandLineArguments["-A"] == "A" && commandLineArguments.size() == 6){
+		cout << name << " just entered the gallery." << endl;
+		return true;
+	}
+
+	//Reset the file to the beginning
+
+	logFile.seekg(0, ios::beg); // Reset to beginning of the file
 
     while (getline(logFile, currentLine)) {
-
         //Decrypt the line
         if (!testFlag) {
             currentLine = decrypt(currentLine, commandLineArguments["-K"], commandLineArguments);
@@ -492,23 +533,27 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, std::fstream& 
             }
 
         }
-        
 
         //Find the guest or employee flag
         //E OR G will be the first occurance in the log
 		//split by " " and save strings to vector
 		vector<string> currentLineSplit = splitStringT(currentLine, ' ');
-
+		
 		//Check if the name is in the line and save the initial action for the initial arrival
         if (currentLine.find(name) != string::npos && personLastActionLine.empty()) {
+			
 			if(commandLineArguments.size() == 6 && commandLineArguments["-A"] == "A") {
 				return true;
 			}else {
 				//save action to personLastActionLine
 				for (int i = 0; i < currentLineSplit.size(); i++) {
 					if(currentLineSplit[i] == "A" || currentLineSplit[i] == "L") {
+						if (currentLineSplit[i] == "L") {
+							cout << "L is found when saving action" << endl;
+						}
+						
 						personLastActionLine.push_back(currentLineSplit[i]);
-						justEnteredGallery = true;
+						onlyEnteredGallery = true;
 					}
 				}
 				continue;
@@ -523,10 +568,10 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, std::fstream& 
 					if(currentLineSplit[i] == "A") { 
 						personLastActionLine.push_back(currentLineSplit[i]);
 						personLastRoomLine.push_back(currentLineSplit[i+1]);
-						justEnteredGallery = false;												// this ensures that after a person enters a room that they must leave before entering again
+						onlyEnteredGallery = false;												// this ensures that after a person enters a room that they must leave before entering again
 					} else if (currentLineSplit[i] == "L") {
 						personLastActionLine.push_back(currentLineSplit[i]);
-						justEnteredGallery = false;
+						onlyEnteredGallery = false;
 					}
 				}
 		} 
@@ -540,7 +585,7 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, std::fstream& 
 	//Check if the person is entering or leaving
 	if (commandLineArguments["-A"] == "A") {
 		//Check if the last action was a leave
-		if (personLastActionLine[actionVecSize - 1] == "L" || justEnteredGallery == true) {
+		if (personLastActionLine[actionVecSize - 1] == "L" || onlyEnteredGallery == true) {
 			//Valid
 			return true;
 		} else {
@@ -554,7 +599,7 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, std::fstream& 
 		// initial if statement is to check if the person has only entered the gallery, if so then we dont need to check for the room
 		// this is really ugly im sorry
 		if (roomVecSize == 0) {
-			if (personLastActionLine[actionVecSize - 1] == "A" && justEnteredGallery == false) {
+			if (personLastActionLine[actionVecSize - 1] == "A" && onlyEnteredGallery == false) {
 				//Valid
 				return true;
 			} else {
@@ -562,7 +607,7 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, std::fstream& 
 				return false;
 			}
 		} else {
-			if (personLastActionLine[actionVecSize - 1] == "A" && commandLineArguments["-R"] == personLastRoomLine[roomVecSize - 1] && justEnteredGallery == false) {
+			if (personLastActionLine[actionVecSize - 1] == "A" && commandLineArguments["-R"] == personLastRoomLine[roomVecSize - 1] && onlyEnteredGallery == false) {
 				//Valid
 				return true;
 		} else {
