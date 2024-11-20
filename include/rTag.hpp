@@ -35,6 +35,26 @@ static inline void trim(std::string &s) {
     ltrim(s);
     rtrim(s);
 }
+
+// Remove null characters from a string
+static inline void removeNulls(std::string &s) {
+    s.erase(std::remove(s.begin(), s.end(), '\0'), s.end());
+}
+
+// Function to split a string by a delimiter and return a vector of substrings
+vector<string> splitString2(const string& str, char delimiter) {
+    vector<string> tokens;
+    std::istringstream stream(str);
+    string token;
+    
+    while (getline(stream, token, delimiter)) {
+        removeNulls(token); // Remove null characters
+        trim(token); // Trim whitespace
+        tokens.push_back(token);
+    }
+    
+    return tokens;
+}
 // Function to split a string by a delimiter and return a vector of substrings
 vector<string>   splitString(const string& str, char delimiter) {
     vector<string> tokens;
@@ -61,13 +81,11 @@ vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode) {
 		//Guest name
 		isEmployee = false;
 		name = cmdLine[G];
-		cout << "name: " << name << endl;
-	} else {
+	} else if (cmdLine.find(E) != cmdLine.end()) {
 		//Employee name
 		isEmployee = true;
 		name = cmdLine[E];	
-		cout << "name: " << name << endl;
-	}
+	} 
 
 	//Open the file
 	ifstream logFile;
@@ -108,36 +126,15 @@ vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode) {
 				currentLine = decrypt(currentLine, cmdLine["-K"], cmdLine);
 			}
 
-			cout << "currentLine: " << currentLine << endl;
-
 			// split the line by space
-			vector<string> line = splitString(currentLine, ' ');
+			vector<string> line = splitString2(currentLine, ' ');
 
-			for (auto& i : line) {
-				rtrim(i);
-			}
-
-			cout << "ASCII values of name: ";
-			for (char c : name) {
-				cout << static_cast<int>(c) << " ";
-			}
-			cout << endl;
-
-			
-				cout << "ASCII values of element: ";
-				for (char c : line[3]) {
-					cout << static_cast<int>(c) << " ";
-				}
-				cout << endl;
-			
-
-			cout << "line size: " << line.size() << endl;
+			// cout << "line size: " << line.size() << endl;
 			// check if a room number is input. if it doesnt the vector will have a size of 4
-			if (line.size() >= 4) {
+			if (line.size() > 4) {
 				// check if the name is in the line
 				auto nameIt = find(line.begin(), line.end(), name);
 				if (nameIt != line.end()) {
-					cout << "found name in 102" << endl;
 					// check if the person entered a room 
 					auto roomIt = find(line.begin(), line.end(), "A");
 					if (roomIt != line.end()) {
