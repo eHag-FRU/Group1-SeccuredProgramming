@@ -17,8 +17,8 @@ bool sanatizeInput(int argc, char* argv[], std::map<std::string, std::string>& r
 
 
 void resultMapToString(std::map<std::string,std::string>& sanatizedResult);
-bool validTimeStamp(std::map<std::string, std::string>& commandLineArguments, bool debugMode);
-bool validArrivalLeave(std::map<std::string, std::string>& commandLineArguments, std::fstream& logFileT, std::string name, bool testFlag);
+bool validTimeStamp(std::map<std::string, std::string>& commandLineArguments);
+bool validArrivalLeave(std::map<std::string, std::string>& commandLineArguments, std::string name, bool testFlag);
 std::vector<std::string> splitStringT(const std::string& str, char delimiter);
 
 
