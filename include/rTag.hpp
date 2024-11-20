@@ -75,7 +75,7 @@ vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode) {
 	string name;
 	bool isEmployee;
 
-	cout << "in rTagFunctionality" << endl;
+	//cout << "in rTagFunctionality" << endl;
 
 	if (cmdLine.find(G) != cmdLine.end()) {
 		//Guest name
@@ -94,7 +94,7 @@ vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode) {
 
 	if (!logFile.is_open()) {
 		//Could not open the file
-		std::cerr << "File could not be opened for reading in rTagFunctionality!" << std::endl;
+		//std::cerr << "File could not be opened for reading in rTagFunctionality!" << std::endl;
 	} 
 
 	
@@ -111,7 +111,7 @@ vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode) {
 	// Check if the file is empty
     logFile.seekg(0, std::ios::end);
     if (logFile.tellg() == 0) {
-        std::cerr << "The file is empty." << std::endl;
+        //std::cerr << "The file is empty." << std::endl;
 		roomNumbers.push_back("-1");
         return roomNumbers;
     }
@@ -163,7 +163,7 @@ vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode) {
 
 		// check if the name was never found in the log file
 		if (roomNumbers.size() == 0) {
-			std::cerr << "Name not found in the log file or never entered a room!" << std::endl;
+			//std::cerr << "Name not found in the log file or never entered a room!" << std::endl;
 			roomNumbers.push_back("-1");
 		}
 		
