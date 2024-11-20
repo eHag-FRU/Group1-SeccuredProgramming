@@ -22,7 +22,7 @@ bool sTagFunctionality(map<string, string> input, bool debugMode) {
     //Holds the guest and employee names
     vector<string> employees;
     vector<string> guests;
-    map<int, vector<string>> roomOccupency;
+    map<int, vector<string> > roomOccupency;
 
     //Open the file
     ifstream log(input["logFile"], std::ios::in | std::ios::binary);
@@ -104,7 +104,7 @@ bool sTagFunctionality(map<string, string> input, bool debugMode) {
                 vector<string> peopleInRoom = {name};
 
                 //Now insert into map
-                roomOccupency.insert(pair<int, vector<string>>(roomNumberKey, peopleInRoom));
+                roomOccupency.insert(pair<int, vector<string> >(roomNumberKey, peopleInRoom));
             } else if (!roomNumber.empty()) {
                 //Exists, just tack onto the vector
                 roomOccupency[stoi(roomNumber)].push_back(name);
