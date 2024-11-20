@@ -12,6 +12,13 @@ using std::cout; using std::endl; using std::map; using std::string; using std::
 using std::fstream; using std::getline; using std::strtok; using std::vector; using std::ios; using std::pair;
 using std::ifstream; using std::stoi; using std::cerr;
 
+
+//
+//
+//  This meets the sanitization part of secure coding practices
+//  This also checks to ensure valid input ranges too
+//
+
 bool sanatizeTime(int argc, char* argv[], map<string,string>& result) {
     //Now we have a valid time flag
     //Now check the time stamp
@@ -381,6 +388,10 @@ bool validTimeStamp(map<string, string>& commandLineArguments) {
     //Need to decrypt the line to be able to read it
     lastLine = decrypt(lastLine, commandLineArguments["-K"], commandLineArguments);
 
+    if (lastLine == "") {
+        return false;
+    }
+
     //cout << "logFile at EOF?: " << logFile.eof() << endl;
     //cout << "lastLine: "<< lastLine << endl;
 
@@ -474,6 +485,12 @@ bool validArrivalLeave(map<string, string>& commandLineArguments, std::fstream& 
         //Decrypt the line
         if (!testFlag) {
             currentLine = decrypt(currentLine, commandLineArguments["-K"], commandLineArguments);
+
+             //Error check
+            if (currentLine == "") {
+                return false;
+            }
+
         }
         
 

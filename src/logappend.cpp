@@ -125,9 +125,17 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
     //Encrypt with the key
     encryptedLine = encrypt(logLine, sanatizedResult["-K"], sanatizedResult);
 
+    if (encryptedLine == "") {
+        return false;
+    }
+
    // cout << "ENCYRPTED LINE (329 logappend.cpp): " << encryptedLine << endl;
 
     decryptedLine = decrypt(encryptedLine, sanatizedResult["-K"], sanatizedResult);
+
+    if (decryptedLine == "") {
+        return false;
+    }
 
    // cout << "DECRYPTED LINE (335 logappend.cpp): " << decryptedLine << endl;
 

@@ -4,6 +4,13 @@
 #include <modes.h>
 #include <filters.h>
 
+// Encrypt and Decrypt code from the following blog post:
+// https://yingo.ca/articles/exploring-cryptographic-examples-using-crypto-library
+//
+//
+// The padKey function was written from scratch from the understanding of what
+// encrypt and decrypt do in their functions
+
 using std::string; using std::map; using std::cout; using std::endl;
 
 std::string padKey(std::string& key) {
@@ -63,6 +70,7 @@ std::string encrypt(const std::string& message, const std::string& key, map<stri
     {
         // Handle exception
         std::cerr << "ENCRYPTION ERROR: " << ex.GetWhat() << endl;
+        return "";
     }
     return encryptedMessage;
 }
@@ -98,6 +106,7 @@ std::string decrypt(const std::string& encryptedMessage, const std::string& key,
     {
         // Handle exception
         std::cerr << "DECRYPTION ERROR: " << ex.GetWhat() << endl;
+        return "";
 
     }
 

@@ -22,7 +22,7 @@ bool sTagFunctionality(map<string, string> input, bool debugMode) {
     //Holds the guest and employee names
     vector<string> employees;
     vector<string> guests;
-    multimap<int, string> roomOccupency;
+    map<int, vector<string>> roomOccupency;
 
     //Open the file
     ifstream log(input["logFile"], std::ios::in | std::ios::binary);
@@ -35,8 +35,13 @@ bool sTagFunctionality(map<string, string> input, bool debugMode) {
         previousLine = currentLine;
 
        //decrypt the line
-       cout << decrypt(previousLine, input["-K"], input) << endl;
+       //cout << decrypt(previousLine, input["-K"], input) << endl;
        previousLine = decrypt(previousLine, input["-K"], input);
+
+       //Error check
+       if (previousLine == "") {
+        return false;
+       }
 
        //Now tokenize
        vector<string> tokens = splitString(previousLine, ' ');
@@ -77,57 +82,128 @@ bool sTagFunctionality(map<string, string> input, bool debugMode) {
        //Build employee / Guest list
        if (employeeGuestTag == "E") {
         //Check if its an arrival or leave
+        //cout << "Its an employee" << endl;
         if (arrivalLeaveTag == "A") {
+            //cout << "Its an arrival" << endl;
             //Its an arrival, so add in
-            employees.push_back(name);
-
-
-            //Add to the map with roomNumber
-            if(!roomNumber.empty()) {
-                cout << "Adding to room occupency multimap" << endl;
-                //We have a room number
-                //Add in the person with their room number they are in as the key
-                roomOccupency.insert(pair<int, string>(stoi(roomNumber), name));
+            //Only do on actual gallery arrivals
+            if (roomNumber.empty()) {
+                employees.push_back(name);
             }
+            
+            
+            //cout << "Room number: " << roomNumber << endl;
+            //cout << "Room number empty?: " << roomNumber.empty() << endl;
+
+
+            //Check if the room number vector is already there
+            if (!roomNumber.empty() && roomOccupency.find(stoi(roomNumber)) == roomOccupency.end()) {
+                //Doesn't exist, create it
+                int roomNumberKey = stoi(roomNumber);
+                
+                vector<string> peopleInRoom = {name};
+
+                //Now insert into map
+                roomOccupency.insert(pair<int, vector<string>>(roomNumberKey, peopleInRoom));
+            } else if (!roomNumber.empty()) {
+                //Exists, just tack onto the vector
+                roomOccupency[stoi(roomNumber)].push_back(name);
+            }
+
         } else if (arrivalLeaveTag == "L") {
             //Its an leave
-            //Check if name is in the employees vector
-            auto employeeNamePostion = find(employees.begin(), employees.end(), name);
-            if (employeeNamePostion != employees.end()) {
-                //Found the element, remove it
-                employees.erase(employeeNamePostion);
-            } else {
+            //cout << "Its an leave" << endl;
+            //Its an leave, check if the room number is empty
+            //if so, just remove from the employee vector
+            if (roomNumber.empty()) {
+                //Just remove the name from the vector
+                auto namePosition = find(employees.begin(), employees.end(), name);
+                if ( namePosition != employees.end()) {
+                    //Found the name
+                    employees.erase(namePosition);
+                }
+            } else if (!roomNumber.empty()) {
+                //Leaving a room
+                
+                //Grab the names position in the room numbers vector
+                auto nameLocation = find(roomOccupency[stoi(roomNumber)].begin(),
+                    roomOccupency[stoi(roomNumber)].end(), name);
+
+                if (nameLocation != roomOccupency[stoi(roomNumber)].end()) {
+                    //Now remove it
+                    roomOccupency[stoi(roomNumber)].erase(nameLocation);
+                } else {
+                    //Could not find the name, so integ violation
+                    return false;
+                }
+            }
+
+            
+        } else {
                 //Could not find employee, LOG NOT VALID!!
                 return false;
             }
-        }
-        
-       } else if (employeeGuestTag == "G") {
-         //Check if its an arrival or leave
-        if (arrivalLeaveTag == "A") {
-            //Its an arrival, so add in
-            guests.push_back(name);
-            //roomOccupency.insert(pair<int, string>(stoi(roomNumber), name));
-            //Add to the map with roomNumber
-            // if(!roomNumber.empty()) {
-            //     //We have a room number
-            //     //Add in the person with their room number they are in as the key
-            //     roomOccupency.insert(pair<int, string>(stoi(roomNumber), name));
-            // }
-        } else if (arrivalLeaveTag == "L") {
-            //Its an leave
-            //Check if name is in the employees vector
-            auto guestNamePostion = find(guests.begin(), guests.end(), name);
-            //Can only remove if leaving the gallery fully and NOT JUST A ROOM!!!!
-            if (guestNamePostion != guests.end()) {
-                //Found the element, remove it
-                guests.erase(guestNamePostion);
-            } else {
-                //Could not find employee, LOG NOT VALID!!
+        } else if (employeeGuestTag == "G") {            
+            //Check if its an arrival or leave
+            if (arrivalLeaveTag == "A") {
+                //cout << "Its an arrival" << endl;
+                //Its an arrival, so add in
+                //Only do on actual gallery arrivals
+                if (roomNumber.empty()) {
+                    guests.push_back(name);
+                }
+                
+                
+                //cout << "Room number: " << roomNumber << endl;
+                //cout << "Room number empty?: " << roomNumber.empty() << endl;
+
+
+                //Check if the room number vector is already there
+                if (!roomNumber.empty() && roomOccupency.find(stoi(roomNumber)) == roomOccupency.end()) {
+                    //Doesn't exist, create it
+                    int roomNumberKey = stoi(roomNumber);
+                    
+                    vector<string> peopleInRoom = {name};
+
+                    //Now insert into map
+                    roomOccupency.insert(pair<int, vector<string>>(roomNumberKey, peopleInRoom));
+                } else if (!roomNumber.empty()) {
+                    //Exists, just tack onto the vector
+                    roomOccupency[stoi(roomNumber)].push_back(name);
+                }
+            }else if (arrivalLeaveTag == "L") {
+                //Its an leave
+                //cout << "Its an leave" << endl;
+                //Its an leave, check if the room number is empty
+                //if so, just remove from the employee vector
+                if (roomNumber.empty()) {
+                    //Just remove the name from the vector
+                    auto namePosition = find(employees.begin(), employees.end(), name);
+                    if ( namePosition != employees.end()) {
+                        //Found the name
+                        employees.erase(namePosition);
+                    }
+                } else if (!roomNumber.empty()) {
+                    //Leaving a room
+                    
+                    //Grab the names position in the room numbers vector
+                    auto nameLocation = find(roomOccupency[stoi(roomNumber)].begin(),
+                        roomOccupency[stoi(roomNumber)].end(), name);
+
+                    if (nameLocation != roomOccupency[stoi(roomNumber)].end()) {
+                        //Now remove it
+                        roomOccupency[stoi(roomNumber)].erase(nameLocation);
+                    } else {
+                        //Could not find the name, so integ violation
+                        return false;
+                    }
+                }
+            }
+            else {
+                //Could not find guest, LOG NOT VALID!!
                 return false;
             }
         }
-       }
     }
 
     //print out each of the lines
@@ -156,20 +232,39 @@ bool sTagFunctionality(map<string, string> input, bool debugMode) {
     cout << "\n";
 
     //Room
-    for (auto roomNumber = roomOccupency.begin(); roomNumber != roomOccupency.end(); ++roomNumber) {
-        //Now go through the values (people in it) of that key (room number)
-         cout << roomNumber->first << ": ";
-        for(auto person = roomOccupency.begin(); person != roomOccupency.end(); ++person) {
-            if (person->first == roomNumber->first) {
-                cout << person->second << " ";
+    for(auto itr = roomOccupency.begin(); itr != roomOccupency.end(); ++itr) {
+        //Print out the key as that is the room number
+        cout << itr->first << ": ";
+
+        //Check if the room is empty, if so, skip it, dont print anything
+        if (itr->second.size() == 0) {
+            continue;
+        } else {
+            //Now go through the names in the vector of guests
+            for (int personIndex = 0; personIndex < itr->second.size(); ++personIndex) {
+                cout << itr->second[personIndex];
+
+                if (personIndex == itr->second.size() - 1) {
+                    //Last element, dont print the comma
+                    cout << endl;
+                    break;
+                } else {
+                    cout << ", ";
+                }
+
             }
         }
+
+        
     }
 
     //Was successful
     return true;
 
 }
+
+
+
 
 //Versions for log read
 bool sanatizeLogReadToken(int argc, char* argv[], map<string,string>& result) {
@@ -299,6 +394,7 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
 
     regex dashSTokenMatcher("-S", std::regex_constants::ECMAScript);
     regex dashRTokenMatcher("-R", std::regex_constants::ECMAScript);
+    regex dash0TokenMatcher("-0", std::regex_constants::ECMAScript);
 
     regex dashITokenMatcher("-I", std::regex_constants::ECMAScript);
     regex dashTTokenMatcher("-T", std::regex_constants::ECMAScript);
@@ -310,15 +406,15 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
     //Not implemented and exit out
     if (argc == 5) {
         //-S is used
-        if(!regex_match(argv[3], dashSTokenMatcher)) {
+        if(!regex_match(argv[3], dashSTokenMatcher) && !regex_match(argv[3], dash0TokenMatcher)) {
             //Not Valid!!
-			std::cerr << "-S token not valid" << endl;
+			std::cerr << "-S OR -0 token not valid" << endl;
             return false;
         } else {
 			cout << "-S token is valid" << endl;
 		}
 
-       //Now add the -S token to the result
+       //Now add the -S OR -0 token to the result
        result.insert(pair<string,string>(argv[3], argv[3]));
 
     } else if (argc == 7) {
@@ -343,6 +439,8 @@ bool sanatizeLogReadInput(int argc, char* argv[], map<string, string>& result) {
             //Not implemented
             cout << "unimplemented" << endl;
             return false;
+        } else if (regex_match(argv[3], dash0TokenMatcher)) {
+            result.insert(pair<string,string>(argv[3], argv[3]));
         } else {
             //Invalid token
             return false;
@@ -386,12 +484,12 @@ int main(int argc, char* argv[]) {
     map<string, string> inputResult;
 
     //Check if the sanatize was valid
-    // if(!sanatizeInput(argc, argv, inputResult)) {
-    //     cout << "invaild" << endl;
-    //     return 255;
-    // }
+    if(!sanatizeLogReadInput(argc, argv, inputResult)) {
+        cout << "invaild" << endl;
+        return 255;
+    }
 
-    sanatizeLogReadInput(argc, argv, inputResult);
+   
 
 
     //resultMapToString(inputResult);
@@ -415,6 +513,27 @@ int main(int argc, char* argv[]) {
     } else if (inputResult.find("-R") != inputResult.end()) {
 		//cout << "-R command being handled" << endl;
         rTagFunctionality(inputResult, false);
+    } else if (inputResult.find("-0") != inputResult.end()) {
+        //Open the file
+        ifstream logFile(inputResult["logFile"], std::ios::in | std::ios::binary);
+
+        string currentLine;
+        string previousLine;
+
+        while (getline(logFile, currentLine) && !currentLine.empty()) {
+            previousLine = currentLine;
+
+            //Decrypt the line
+            string decryptedLine = decrypt(previousLine, inputResult["-K"], inputResult);
+
+            if (decryptedLine == "") {
+                cout << "invalid" << endl;
+                return 255;
+            }
+
+            cout << decryptedLine << endl;
+        }
+
     }
 
 
