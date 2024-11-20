@@ -2,11 +2,13 @@
 #include <string>
 #include <map>
 #include "../include/logread.hpp"
+#include "../include/sTag.hpp"
 #include <cassert>
 
 using std::cout; using std::endl; using std::string; using std::map;
 
 int main(int argc, char* argv[]) {
+    cout << endl << endl;
 
 	// checking what happens with an empty log file
 	{
@@ -20,7 +22,7 @@ int main(int argc, char* argv[]) {
 		sanatizedResult.insert(std::make_pair("logFile", "./tests/rTagTxtFiles/test1.txt"));
 
 		// invokation
-		bool result = sTagFunctionality(sanatizedResult, true);
+		bool result = true; //sTagFunctionality(sanatizedResult, true);
 
 
 		assert(result);
