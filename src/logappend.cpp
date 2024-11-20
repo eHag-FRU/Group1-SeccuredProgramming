@@ -44,7 +44,7 @@ bool commandExecuter(int argc, char* argv[], map<string, string>& sanatizedResul
 
 
     //Now open, now check if the timestamp is valid
-    if (!validTimeStamp(sanatizedResult)) {
+    if (!validTimeStamp(sanatizedResult, false)) {
 		std::cerr << "Invalid time stamp" << endl;
         return false;
     }

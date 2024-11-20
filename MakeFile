@@ -16,7 +16,7 @@ logReadTarget = ./out/logread$(EXE_EXT)
 
 compiler = g++
 
-COMPILER_FLAGS = -I./include/ -I./include/cryptopp/ -L./include/cryptopp890/ -lcryptopp
+COMPILER_FLAGS = -std=c++11 -I./include/ -I./include/cryptopp/ -L./include/cryptopp890/ -lcryptopp
 
 
 logAppend: inputSanatizer.o encryptionHandler.o
