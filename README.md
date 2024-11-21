@@ -10,3 +10,17 @@ Librarys used:
 
 Tools Used:
     Regular Expression => Built into C++, this allowed us to check formatting and sanitize.
+
+
+To Build & Run:
+
+LogAppend:
+   Build:  make logAppend
+   Run: ./out/logappend
+
+LogRead:
+  Build: make logRead
+  Run: ./out/logread
+  
+Tests:
+ Build & Run: make tests
