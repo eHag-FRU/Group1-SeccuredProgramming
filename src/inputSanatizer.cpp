@@ -1,5 +1,5 @@
-#include "inputSanatizer.hpp"
-#include "encryptionHandler.hpp"
+#include "../include/inputSanatizer.hpp"
+#include "../include/encryptionHandler.hpp"
 #include <iostream>
 #include <regex>
 #include <fstream>

@@ -1,3 +1,6 @@
+#ifndef RTAG_HPP
+#define RTAG_HPP
+
 #include <iostream>
 #include <map>
 #include <string>
@@ -186,3 +189,5 @@ vector<string> rTagFunctionality(map<string,string>& cmdLine, bool debugMode) {
 		return roomNumbers;
 	}
 }
+
+#endif

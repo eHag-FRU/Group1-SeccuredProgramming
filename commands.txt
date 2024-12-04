@@ -1,0 +1,42 @@
+=====Compile everything=====
+make logRead
+make logAppend
+
+======Show that you cannot enter a room without first entering the gallery=====
+./out/logappend -T 1 -K secret -A -E Fred -R 1 log1
+
+======Proper room arrival and using -S and -R logReads=====
+./out/logappend -T 1 -K secret -A -E Fred log1
+./out/logappend -T 1 -K secret -A -E Fred -R 1 log1
+./out/logread -K secret -S log1
+./out/logread -K secret -R -E Fred log1
+
+======More room arrivals and leaves with multiple people=====
+./out/logappend -T 2 -K secret -A -E Jeff log1
+./out/logappend -T 2 -K secret -A -E Jeff -R 2 log1
+./out/logappend -T 2 -K secret -L -E Fred -R 1 log1
+./out/logappend -T 2 -K secret -A -E Fred -R 2 log1
+./out/logread -K secret -S log1
+./out/logread -K secret -R -E Fred log1
+
+=====Trying to input incorrect information=====
+./out/logappend -T 3 -K secret -A -E %x%x%x%x log1
+
+=====Trying to make an employee move from a room they are not in=====
+./out/logappend -T 3 -K secret -L -E Fred -R 4 log1
+
+=====Improper time stamps=====
+./out/logappend -T 1 -K secret -L -E Fred -R 2 log1
+
+=====Using the wrong key=====
+./out/logappend -T 1 -K badsecret -L -E Fred -R 2 log1
+
+=====Prove that nothing has changed to the logfile=====
+./out/logread -K secret -S log1
+
+=====Run batch command=====
+./out/logappend -B batch
+./out/logread -K secret2 -S log2
+
+=====Run Unit Tests=====
+make tests
